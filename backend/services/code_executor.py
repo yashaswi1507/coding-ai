@@ -33,7 +33,8 @@ except Exception as e:
         with tempfile.NamedTemporaryFile(
             mode="w",
             suffix=".py",
-            delete=False
+            delete=False,
+            encoding="utf-8"
         ) as tmp:
             tmp.write(runner_script)
             tmp_path = tmp.name
