@@ -110,5 +110,19 @@
     "total_tests": 12,
     "labeled": false,
     "timestamp": "2026-06-11T23:24:27.564123"
+  },
+  {
+    "id": "f471fbc8-21df-4c9b-ad0b-720450a29cb8",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return  []",
+    "thinking_text": "I am using a hashmap approach. For each number, \nI check if its complement (target - num) exists \nin the hashmap. This gives O(n) time complexity \nand O(n) space complexity. Edge cases: empty array \nreturns empty list.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 91,
+    "approach": "optimized",
+    "passed_tests": 11,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T23:28:27.375191"
   }
 ]
