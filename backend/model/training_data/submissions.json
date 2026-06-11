@@ -26,5 +26,61 @@
     "total_tests": 12,
     "labeled": false,
     "timestamp": "2026-06-11T22:00:22.993353"
+  },
+  {
+    "id": "d60576cc-68f3-4ca1-9e85-4c4358b0cd7a",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    def solve(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []",
+    "thinking_text": "I am using a hashmap approach. For each number, \nI check if its complement (target - num) exists \nin the hashmap. This gives O(n) time complexity \nand O(n) space complexity. Edge cases: empty array \nreturns empty list.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 90,
+    "approach": "optimized",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T23:13:00.000931"
+  },
+  {
+    "id": "fbf914fb-5887-4992-b943-54586354ad2c",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    def solve(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    ",
+    "thinking_text": "I am using a hashmap approach. For each number, \nI check if its complement (target - num) exists \nin the hashmap. This gives O(n) time complexity \nand O(n) space complexity. Edge cases: empty array \nreturns empty list.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 90,
+    "approach": "optimized",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T23:13:45.919366"
+  },
+  {
+    "id": "c7879e92-ccb3-440f-8eb0-554ed8f5100b",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    ",
+    "thinking_text": "I am using a hashmap approach. For each number, \nI check if its complement (target - num) exists \nin the hashmap. This gives O(n) time complexity \nand O(n) space complexity. Edge cases: empty array \nreturns empty list.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 91,
+    "approach": "optimized",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T23:15:03.448833"
+  },
+  {
+    "id": "79e81f04-c826-4bb7-8923-f95557b37d7e",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return  []",
+    "thinking_text": "I am using a hashmap approach. For each number, \nI check if its complement (target - num) exists \nin the hashmap. This gives O(n) time complexity \nand O(n) space complexity. Edge cases: empty array \nreturns empty list.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 91,
+    "approach": "optimized",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T23:15:43.406184"
   }
 ]

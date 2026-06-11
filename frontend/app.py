@@ -215,10 +215,11 @@ if tab == "Solve":
         c4.metric("Thinking Score", f"{r.get('thinking_score',0)} / 100")
 
         for i, res in enumerate(r.get("results", [])):
-            if res["passed"]:
+            if res["passed"]: 
                 st.success(f"✅ Example {i+1}: Passed")
-            else:
+            else: 
                 st.error(f"❌ Example {i+1}: Expected `{res.get('expected')}` → Got `{res.get('got')}`")
+                st.caption(f"🔍 Error: {res.get('message', 'Unknown error')}")
 
         ht = r.get("hidden_total", 0)
         if ht > 0:
