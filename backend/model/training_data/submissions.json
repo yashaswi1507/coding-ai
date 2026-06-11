@@ -1,0 +1,30 @@
+[
+  {
+    "id": "57b5829a-e408-4cf3-b75b-db9b5c46c20d",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n  def twoSum(arr, target):\n    n = len(arr)\n\n    for i in range(n):\n      \n        # For each element arr[i], check every\n        # other element arr[j] that comes after it\n        for j in range(i + 1, n):\n          \n            # Check if the sum of the current pair\n            # equals the target\n            if arr[i] + arr[j] == target:\n                return True\n              \n    # If no pair is found after checking\n    # all possibilities\n    return False\n\nif __name__ == \"__main__\":\n    arr = [0, -1, 2, -3, 1]\n    target = -2\n\n    if twoSum(arr, target):\n        print(\"true\")\n    else:\n        print(\"false\")",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 40,
+    "approach": "brute_force",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T22:00:02.344433"
+  },
+  {
+    "id": "16806149-84b5-406c-a44c-ce9675d99c99",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n  def twoSum(arr, target):\n    n = len(arr)\n\n    for i in range(n):\n      \n        # For each element arr[i], check every\n        # other element arr[j] that comes after it\n        for j in range(i + 1, n):\n          \n            # Check if the sum of the current pair\n            # equals the target\n            if arr[i] + arr[j] == target:\n                return True\n              \n    # If no pair is found after checking\n    # all possibilities\n    return False",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 41,
+    "approach": "brute_force",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-11T22:00:22.993353"
+  }
+]

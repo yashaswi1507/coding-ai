@@ -1,0 +1,162 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
+
+from services.evaluator import evaluate_solution
+from services.analytics import (
+    get_streak_info, get_weakness_report,
+    get_next_recommended_problems, get_mentor_message,
+    get_leaderboard, update_leaderboard
+)
+from utils.problem_loader import (
+    load_problems, get_problem_by_id,
+    get_problems_by_topic, get_problems_by_difficulty
+)
+from database import create_tables, get_connection
+from model.data_collector import get_unlabeled_samples, manual_label, get_stats
+from model.inference import get_model_info
+
+app = FastAPI(title="ThinkCode AI", version="3.0.0")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+create_tables()
+
+class SubmitRequest(BaseModel):
+    problem_id: str
+    user_code: str
+    thinking_text: str = ""
+    user_id: str = "guest"
+    display_name: str = "Anonymous"
+
+class LabelRequest(BaseModel):
+    sample_id: str
+    thinking_score: int
+    approach: str
+    notes: str = ""
+
+class TrainRequest(BaseModel):
+    epochs: int = 150
+    seed_only: bool = False
+
+# ── Core ──────────────────────────────────────────────────────────────────────
+@app.get("/")
+def home():
+    return {"message": "ThinkCode AI v3.0 — Train Your Thinking, Not Just Your Coding"}
+
+@app.get("/problems/")
+def get_problems(topic: Optional[str]=None, difficulty: Optional[str]=None, company: Optional[str]=None):
+    problems = load_problems()
+    result = list(problems.values())
+    if topic:      result = [p for p in result if p["topic"] == topic]
+    if difficulty: result = [p for p in result if p["difficulty"] == difficulty]
+    if company:    result = [p for p in result if company in p.get("companies", [])]
+    return result
+
+@app.get("/problem/{problem_id}")
+def get_problem(problem_id: str):
+    problem = get_problem_by_id(problem_id)
+    if not problem:
+        raise HTTPException(status_code=404, detail="Problem not found")
+    return problem
+
+@app.post("/submit/")
+def submit_solution(body: SubmitRequest):
+    problem = get_problem_by_id(body.problem_id)
+    if not problem:
+        raise HTTPException(status_code=404, detail="Problem not found")
+    return evaluate_solution(problem, body.user_code, body.thinking_text, body.user_id)
+
+# ── Analytics ─────────────────────────────────────────────────────────────────
+@app.get("/streak/")
+def streak(user_id: str = "guest"):
+    return get_streak_info(user_id)
+
+@app.get("/weakness/")
+def weakness(user_id: str = "guest"):
+    return get_weakness_report(user_id)
+
+@app.get("/mentor/")
+def mentor(user_id: str = "guest"):
+    return get_mentor_message(user_id)
+
+@app.get("/recommended/")
+def recommended(user_id: str = "guest"):
+    problems = load_problems()
+    return get_next_recommended_problems(user_id, problems)
+
+@app.get("/leaderboard/")
+def leaderboard(limit: int = 10):
+    return get_leaderboard(limit)
+
+@app.get("/history/")
+def history(user_id: str = "guest", limit: int = 20):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("""
+        SELECT problem_id, thinking_score, code_score,
+               passed, total, topic, difficulty, submitted_at
+        FROM submissions WHERE user_id=?
+        ORDER BY submitted_at DESC LIMIT ?
+    """, (user_id, limit))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows
+
+@app.get("/dashboard/")
+def dashboard(user_id: str = "guest"):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) as count FROM submissions WHERE user_id=?", (user_id,))
+    total = c.fetchone()["count"]
+    c.execute("SELECT AVG(thinking_score) as avg FROM submissions WHERE user_id=?", (user_id,))
+    avg_t = round(c.fetchone()["avg"] or 0, 1)
+    c.execute("SELECT AVG(code_score) as avg FROM submissions WHERE user_id=?", (user_id,))
+    avg_c = round(c.fetchone()["avg"] or 0, 1)
+    c.execute("SELECT topic, COUNT(*) as count, AVG(thinking_score) as avg_score FROM submissions WHERE user_id=? GROUP BY topic", (user_id,))
+    topics = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return {"total_submissions": total, "average_thinking_score": avg_t, "average_code_score": avg_c, "topics": topics}
+
+@app.get("/companies/")
+def get_companies():
+    problems = load_problems()
+    companies = set()
+    for p in problems.values():
+        companies.update(p.get("companies", []))
+    return sorted(list(companies))
+
+@app.get("/stats/")
+def get_stats_route():
+    problems = load_problems()
+    by_diff, by_topic = {}, {}
+    for p in problems.values():
+        by_diff[p["difficulty"]] = by_diff.get(p["difficulty"], 0) + 1
+        by_topic[p["topic"]] = by_topic.get(p["topic"], 0) + 1
+    return {"total_problems": len(problems), "by_difficulty": by_diff, "by_topic": by_topic}
+
+# ── Admin ─────────────────────────────────────────────────────────────────────
+@app.get("/admin/stats/")
+def admin_stats():
+    return {**get_stats(), **get_model_info()}
+
+@app.get("/admin/unlabeled/")
+def admin_unlabeled(limit: int = 20):
+    return get_unlabeled_samples(limit)
+
+@app.post("/admin/label/")
+def admin_label(body: LabelRequest):
+    manual_label(body.sample_id, body.thinking_score, body.approach, body.notes)
+    return {"success": True}
+
+@app.post("/admin/train/")
+def admin_train(body: TrainRequest):
+    import threading
+    def run():
+        from model.trainer import train
+        train(epochs=body.epochs, seed_only=body.seed_only)
+    threading.Thread(target=run, daemon=True).start()
+    return {"success": True, "message": f"Training started — {body.epochs} epochs"}
+
+@app.get("/admin/model-info/")
+def admin_model_info():
+    return get_model_info()

@@ -1,0 +1,176 @@
+"""
+ThinkCode AI — Thinking Analyzer
+Uses OUR OWN PyTorch model. Zero external API dependency.
+"""
+
+from model.inference import predict, is_model_available
+from model.data_collector import collect_submission
+
+APPROACH_LABELS_FEEDBACK = {
+    "brute_force": "⚠️ Brute-force approach detected — O(n²) or worse",
+    "basic":       "🔵 Basic approach — correct but room for optimization",
+    "optimized":   "✅ Optimized approach — efficient use of data structures",
+    "optimal":     "🏆 Optimal approach — best possible complexity",
+}
+
+APPROACH_SUGGESTIONS = {
+    "brute_force": [
+        "You are checking all combinations manually — this is O(n²).",
+        "Think about how a hashmap could reduce repeated lookups to O(1).",
+        "Can you solve this in a single pass with extra memory?"
+    ],
+    "basic": [
+        "Your solution works but may not scale to large inputs.",
+        "Consider the time complexity — can it be reduced?",
+        "What data structure could make this more efficient?"
+    ],
+    "optimized": [
+        "Good use of data structures! This is much better than brute force.",
+        "Make sure you are explaining this tradeoff in interviews.",
+        "Can you reduce space complexity further?"
+    ],
+    "optimal": [
+        "Excellent! This is the best complexity achievable for this problem.",
+        "Focus on explaining WHY this is optimal in interviews.",
+        "Can you also handle follow-up variations of this problem?"
+    ]
+}
+
+THINKING_FEEDBACK_TEMPLATES = [
+    (0,  20,  "⚠️ Very little thinking explanation — interviewers need to hear your reasoning"),
+    (21, 40,  "⚠️ Weak explanation — add complexity analysis and approach justification"),
+    (41, 60,  "🔵 Decent explanation — mention time/space tradeoffs more explicitly"),
+    (61, 80,  "✅ Good thinking process — clear approach with technical depth"),
+    (81, 100, "🏆 Excellent thinking — clear, technical, and well-reasoned explanation"),
+]
+
+REFLECTION_QUESTIONS = {
+    "brute_force": [
+        "Why did you start with brute force — is it always a valid first step?",
+        "What is the time complexity of your current solution?",
+        "How would you optimize this if inputs were 10x larger?",
+        "What data structure could reduce your lookup time from O(n) to O(1)?",
+    ],
+    "basic": [
+        "What is the time complexity of your solution?",
+        "Can this be solved in fewer passes through the data?",
+        "What edge cases did you consider before writing code?",
+        "How would you explain this to a junior developer?",
+    ],
+    "optimized": [
+        "Why did you choose this particular data structure?",
+        "What is the space complexity tradeoff you made?",
+        "Can you prove why this is more efficient than the naive approach?",
+        "What happens with duplicate values in the input?",
+    ],
+    "optimal": [
+        "How would you prove this solution's complexity is optimal?",
+        "Can you implement this iteratively AND recursively?",
+        "What follow-up variations might an interviewer ask?",
+        "How does your solution handle all edge cases?",
+    ]
+}
+
+
+def analyze_thinking(user_code, thinking_text, problem,
+                     passed_tests=0, total_tests=0):
+    """Full thinking analysis using our own model. Zero external API."""
+
+    prediction = predict(user_code, thinking_text)
+    score    = prediction["thinking_score"]
+    approach = prediction["approach"]
+    source   = prediction["source"]
+
+    # Build feedback
+    feedback = []
+    for lo, hi, msg in THINKING_FEEDBACK_TEMPLATES:
+        if lo <= score <= hi:
+            feedback.append(msg)
+            break
+
+    feedback.append(APPROACH_LABELS_FEEDBACK.get(approach, ""))
+
+    if not thinking_text or not thinking_text.strip():
+        feedback.append("⚠️ No thinking explanation — major weakness in interviews")
+    elif len(thinking_text.split()) < 15:
+        feedback.append("⚠️ Explanation too brief — elaborate on your reasoning")
+    else:
+        feedback.append("✅ You explained your approach before coding — great habit")
+
+    if source == "neural_network":
+        feedback.append("🤖 Evaluated by ThinkCode AI neural network")
+    else:
+        feedback.append("📏 Rule-based engine — train model for better accuracy")
+
+    # Auto-collect for training
+    try:
+        collect_submission(
+            code=user_code, thinking_text=thinking_text,
+            problem_id=problem.get("id", "unknown"),
+            topic=problem.get("topic", "unknown"),
+            difficulty=problem.get("difficulty", "easy"),
+            rule_based_score=score, rule_based_approach=approach,
+            passed_tests=passed_tests, total_tests=total_tests,
+        )
+    except Exception:
+        pass
+
+    return {
+        "thinking_score":      score,
+        "code_approach":       approach,
+        "feedback":            [f for f in feedback if f],
+        "suggestions":         APPROACH_SUGGESTIONS.get(approach, []),
+        "strengths":           _detect_strengths(user_code, thinking_text, approach),
+        "areas_to_improve":    _detect_weaknesses(user_code, thinking_text, approach, score),
+        "reflection_questions":REFLECTION_QUESTIONS.get(approach, [])[:4],
+        "complexity_analysis": _estimate_complexity(user_code),
+        "model_source":        source,
+        "confidence":          prediction.get("confidence", 0.0),
+    }
+
+
+def _detect_strengths(code, thinking, approach):
+    s, t, c = [], (thinking or "").lower(), code.lower()
+    if approach in ("optimized", "optimal"):
+        s.append("Uses efficient data structures")
+    if "if not" in c or "len(" in c:
+        s.append("Handles edge cases in code")
+    if any(w in t for w in ["o(n", "complexity", "linear"]):
+        s.append("Demonstrates complexity awareness")
+    if any(w in t for w in ["tradeoff", "instead", "better than"]):
+        s.append("Shows optimization thinking")
+    if "#" in code:
+        s.append("Code is commented — good readability")
+    if thinking and len(thinking.split()) >= 30:
+        s.append("Provided thorough explanation")
+    return s
+
+
+def _detect_weaknesses(code, thinking, approach, score):
+    w, t, c = [], (thinking or "").lower(), code.lower()
+    if approach == "brute_force":
+        w.append("Brute-force approach — not scalable for large inputs")
+    if not t.strip():
+        w.append("No thinking explanation — critical weakness in interviews")
+    elif len(t.split()) < 15:
+        w.append("Explanation too brief — needs more depth")
+    if not any(x in t for x in ["o(n", "o(1", "complexity", "linear", "constant"]):
+        w.append("Never mentioned time/space complexity")
+    if not any(x in t for x in ["edge", "empty", "null", "zero"]):
+        w.append("No mention of edge cases in explanation")
+    return w
+
+
+def _estimate_complexity(code):
+    c = code.lower()
+    if "dp" in c and "for" in c:
+        return {"time": "O(n) or O(n²)", "space": "O(n)", "explanation": "DP-based approach"}
+    if c.count("for") >= 2:
+        return {"time": "O(n²)", "space": "O(1)", "explanation": "Nested loops detected"}
+    if "dict" in c or "{}" in c:
+        return {"time": "O(n)", "space": "O(n)", "explanation": "Single pass with hashmap"}
+    if ("lo" in c and "hi" in c) or ("left" in c and "right" in c and "mid" in c):
+        return {"time": "O(log n)", "space": "O(1)", "explanation": "Binary search pattern"}
+    if "sort" in c:
+        return {"time": "O(n log n)", "space": "O(1)", "explanation": "Sort-based approach"}
+    return {"time": "O(n)", "space": "O(1)", "explanation": "Single pass estimated"}

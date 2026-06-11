@@ -1,0 +1,4294 @@
+{
+  "two_sum": {
+    "id": "two_sum",
+    "title": "Two Sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution.",
+    "hints": [
+      "Think about what information you need to store as you traverse the array.",
+      "For each number, you need to find its complement (target - num). How can you check this quickly?",
+      "A hashmap lets you look up previously seen numbers in O(1) time."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            7,
+            11,
+            15
+          ],
+          "target": 9
+        },
+        "output": [
+          0,
+          1
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            4
+          ],
+          "target": 6
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            3
+          ],
+          "target": 6
+        },
+        "output": [
+          0,
+          1
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "target": 9
+        },
+        "output": [
+          3,
+          4
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            -2,
+            -3,
+            -4,
+            -5
+          ],
+          "target": -8
+        },
+        "output": [
+          2,
+          4
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            4,
+            3,
+            0
+          ],
+          "target": 0
+        },
+        "output": [
+          0,
+          3
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            5,
+            3,
+            2
+          ],
+          "target": 4
+        },
+        "output": [
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            5,
+            5,
+            11
+          ],
+          "target": 10
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2
+          ],
+          "target": 3
+        },
+        "output": [
+          0,
+          1
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            100,
+            200,
+            300,
+            400
+          ],
+          "target": 700
+        },
+        "output": [
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            -3,
+            4,
+            3,
+            90
+          ],
+          "target": 0
+        },
+        "output": [
+          0,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3,
+            4,
+            2
+          ],
+          "target": 6
+        },
+        "output": [
+          2,
+          3
+        ]
+      }
+    ],
+    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 \u2192 [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            7,
+            11,
+            15
+          ],
+          "target": 9
+        },
+        "output": [
+          0,
+          1
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            4
+          ],
+          "target": 6
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            3
+          ],
+          "target": 6
+        },
+        "output": [
+          0,
+          1
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "target": 9
+        },
+        "output": [
+          3,
+          4
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            -2,
+            -3,
+            -4,
+            -5
+          ],
+          "target": -8
+        },
+        "output": [
+          2,
+          4
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            4,
+            3,
+            0
+          ],
+          "target": 0
+        },
+        "output": [
+          0,
+          3
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            5,
+            3,
+            2
+          ],
+          "target": 4
+        },
+        "output": [
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            5,
+            5,
+            11
+          ],
+          "target": 10
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2
+          ],
+          "target": 3
+        },
+        "output": [
+          0,
+          1
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            100,
+            200,
+            300,
+            400
+          ],
+          "target": 700
+        },
+        "output": [
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            -3,
+            4,
+            3,
+            90
+          ],
+          "target": 0
+        },
+        "output": [
+          0,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3,
+            4,
+            2
+          ],
+          "target": 6
+        },
+        "output": [
+          2,
+          3
+        ]
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Microsoft",
+      "Apple"
+    ],
+    "optimal_solution": "def solve(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        if target - num in seen:\n            return [seen[target-num], i]\n        seen[num] = i",
+    "optimal_explanation": "Single pass hashmap. Store each number's index. For each num, check if complement exists. O(n) time, O(n) space."
+  },
+  "best_time_to_buy_stock": {
+    "id": "best_time_to_buy_stock",
+    "title": "Best Time to Buy and Sell Stock",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given an array prices where prices[i] is the price of a stock on day i, return the maximum profit you can achieve. You can only buy once and sell once. If no profit is possible, return 0.",
+    "hints": [
+      "You want to buy low and sell high. Track the minimum price seen so far.",
+      "At each day, calculate profit if you sold today (price - min_so_far).",
+      "Track the maximum profit seen across all days."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "prices": [
+            7,
+            1,
+            5,
+            3,
+            6,
+            4
+          ]
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "prices": [
+            7,
+            6,
+            4,
+            3,
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            1,
+            2
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "prices": [
+            2,
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            3,
+            1,
+            4,
+            8,
+            2,
+            9
+          ]
+        },
+        "output": 8
+      },
+      {
+        "input": {
+          "prices": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "prices": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            1,
+            4,
+            2,
+            7
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "prices": [
+            2,
+            4,
+            1,
+            7,
+            3,
+            9
+          ]
+        },
+        "output": 8
+      }
+    ],
+    "starter_code": "def solve(prices):\n    \"\"\"\n    Best Time to Buy and Sell Stock\n    --------------------------------\n    Input : prices -> list of integers (daily prices)\n    Output: integer (maximum profit, 0 if no profit)\n    \n    Example: prices=[7,1,5,3,6,4] \u2192 5\n    \"\"\"\n    # Hint: Track minimum price seen so far\n    # At each day: profit = price - min_so_far\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "prices": [
+            7,
+            1,
+            5,
+            3,
+            6,
+            4
+          ]
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "prices": [
+            7,
+            6,
+            4,
+            3,
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            1,
+            2
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "prices": [
+            2,
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            3,
+            1,
+            4,
+            8,
+            2,
+            9
+          ]
+        },
+        "output": 8
+      },
+      {
+        "input": {
+          "prices": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "prices": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "prices": [
+            1,
+            4,
+            2,
+            7
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "prices": [
+            2,
+            4,
+            1,
+            7,
+            3,
+            9
+          ]
+        },
+        "output": 8
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Goldman Sachs",
+      "Morgan Stanley"
+    ],
+    "optimal_solution": "def solve(prices):\n    min_p, profit = float('inf'), 0\n    for p in prices:\n        min_p = min(min_p, p)\n        profit = max(profit, p - min_p)\n    return profit",
+    "optimal_explanation": "One pass. Track min price seen so far. At each price compute potential profit. O(n) time, O(1) space."
+  },
+  "contains_duplicate": {
+    "id": "contains_duplicate",
+    "title": "Contains Duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given an integer array nums, return True if any value appears at least twice in the array, and return False if every element is distinct.",
+    "hints": [
+      "A brute force approach compares every pair \u2014 O(n\u00b2). Can you do better?",
+      "What data structure gives you O(1) lookup?",
+      "A set stores unique elements. If adding an element fails, it's a duplicate."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            1,
+            1,
+            3,
+            3,
+            4,
+            3,
+            2,
+            4,
+            2
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": []
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            0
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            -1,
+            0,
+            1
+          ]
+        },
+        "output": true
+      }
+    ],
+    "starter_code": "def solve(nums):\n    \"\"\"\n    Contains Duplicate\n    -------------------\n    Input : nums -> list of integers\n    Output: True if duplicate exists, False otherwise\n    \n    Example: nums=[1,2,3,1] \u2192 True\n    \"\"\"\n    # Think: What data structure finds duplicates in O(1)?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            1,
+            1,
+            3,
+            3,
+            4,
+            3,
+            2,
+            4,
+            2
+          ]
+        },
+        "output": true
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": []
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            0
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            -1,
+            0,
+            1
+          ]
+        },
+        "output": true
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Adobe"
+    ],
+    "optimal_solution": "def solve(nums):\n    return len(nums) != len(set(nums))",
+    "optimal_explanation": "Convert to set (removes duplicates). If lengths differ, duplicates exist. O(n) time, O(n) space."
+  },
+  "product_except_self": {
+    "id": "product_except_self",
+    "title": "Product of Array Except Self",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. You must solve it without using the division operator and in O(n) time.",
+    "hints": [
+      "Think about prefix products and suffix products separately.",
+      "answer[i] = product of all elements to the LEFT \u00d7 product of all elements to the RIGHT.",
+      "You can compute left products in one pass, then multiply by right products in another pass."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": [
+          24,
+          12,
+          8,
+          6
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            1,
+            0,
+            -3,
+            3
+          ]
+        },
+        "output": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ]
+      }
+    ],
+    "starter_code": "def solve(nums):\n    \"\"\"\n    Product of Array Except Self\n    ------------------------------\n    Input : nums -> list of integers\n    Output: list where output[i] = product of all except nums[i]\n    \n    Example: nums=[1,2,3,4] \u2192 [24,12,8,6]\n    \n    Constraint: No division operator allowed!\n    \"\"\"\n    # Think: Prefix products \u00d7 Suffix products\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": [
+          24,
+          12,
+          8,
+          6
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            1,
+            0,
+            -3,
+            3
+          ]
+        },
+        "output": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ]
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ]
+  },
+  "valid_anagram": {
+    "id": "valid_anagram",
+    "title": "Valid Anagram",
+    "topic": "strings",
+    "difficulty": "easy",
+    "question": "Given two strings s and t, return true if t is an anagram of s, and false otherwise. An anagram uses all the original letters exactly once.",
+    "hints": [
+      "Two anagrams have the same character frequencies.",
+      "Count character frequencies in both strings and compare.",
+      "A hashmap or Counter from Python's collections module works perfectly here."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "s": "anagram",
+          "t": "nagaram"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "rat",
+          "t": "car"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "a",
+          "t": "a"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "ab",
+          "t": "ba"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "aa",
+          "t": "a"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "abc",
+          "t": "cba"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "listen",
+          "t": "silent"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "hello",
+          "t": "world"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "aab",
+          "t": "aba"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "",
+          "t": ""
+        },
+        "output": true
+      }
+    ],
+    "starter_code": "def solve(s, t):\n    \"\"\"\n    Valid Anagram\n    --------------\n    Input : s -> string\n            t -> string\n    Output: True if t is anagram of s, False otherwise\n    \n    Example: s=\"anagram\", t=\"nagaram\" \u2192 True\n    \"\"\"\n    # Think: What makes two strings anagrams?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "anagram",
+          "t": "nagaram"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "rat",
+          "t": "car"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "a",
+          "t": "a"
+        },
+        "output": true
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s": "ab",
+          "t": "ba"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "aa",
+          "t": "a"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "abc",
+          "t": "cba"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "listen",
+          "t": "silent"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "hello",
+          "t": "world"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "aab",
+          "t": "aba"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "",
+          "t": ""
+        },
+        "output": true
+      }
+    ],
+    "companies": [
+      "Facebook",
+      "Amazon",
+      "Microsoft"
+    ],
+    "optimal_solution": "def solve(s, t):\n    from collections import Counter\n    return Counter(s) == Counter(t)",
+    "optimal_explanation": "Count character frequencies in both strings. Compare. O(n) time, O(1) space (at most 26 chars)."
+  },
+  "longest_substring_without_repeating": {
+    "id": "longest_substring_without_repeating",
+    "title": "Longest Substring Without Repeating Characters",
+    "topic": "strings",
+    "difficulty": "medium",
+    "question": "Given a string s, find the length of the longest substring without repeating characters.",
+    "hints": [
+      "Think about a sliding window approach with two pointers.",
+      "Expand the right pointer, and when you see a duplicate, shrink from the left.",
+      "A hashmap can store the last seen index of each character for efficient shrinking."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "s": "abcabcbb"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "bbbbb"
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "s": "pwwkew"
+        },
+        "output": 3
+      }
+    ],
+    "starter_code": "def solve(s):\n    \"\"\"\n    Longest Substring Without Repeating Characters\n    ------------------------------------------------\n    Input : s -> string\n    Output: integer (length of longest valid substring)\n    \n    Example: s=\"abcabcbb\" \u2192 3  (abc)\n    \"\"\"\n    # Think: Sliding window with two pointers\n    # left pointer shrinks when duplicate found\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "abcabcbb"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "bbbbb"
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "s": "pwwkew"
+        },
+        "output": 3
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Bloomberg"
+    ]
+  },
+  "reverse_linked_list": {
+    "id": "reverse_linked_list",
+    "title": "Reverse a Linked List",
+    "topic": "linked-lists",
+    "difficulty": "easy",
+    "question": "Given the head of a singly linked list as an array (for simplicity), return the list reversed. Input: list of values. Output: reversed list of values.",
+    "hints": [
+      "Think about what you need to track: previous node, current node, next node.",
+      "At each step: save next, point current to previous, advance both pointers.",
+      "Iterative reversal uses O(1) extra space. Recursive uses O(n) stack space."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": [
+          2,
+          1
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": [
+          1
+        ]
+      }
+    ],
+    "starter_code": "def solve(head):\n    \"\"\"\n    Reverse a Linked List\n    ----------------------\n    Input : head -> list of values  e.g. [1,2,3,4,5]\n    Output: reversed list           e.g. [5,4,3,2,1]\n    \n    Example: [1,2,3,4,5] \u2192 [5,4,3,2,1]\n    \"\"\"\n    # Think: Three pointers \u2014 prev, curr, next\n    # At each step: curr.next = prev, then advance\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": [
+          2,
+          1
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": [
+          1
+        ]
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Microsoft",
+      "Adobe"
+    ]
+  },
+  "maximum_subarray": {
+    "id": "maximum_subarray",
+    "title": "Maximum Subarray (Kadane's Algorithm)",
+    "topic": "dynamic-programming",
+    "difficulty": "medium",
+    "question": "Given an integer array nums, find the contiguous subarray which has the largest sum and return its sum.",
+    "hints": [
+      "A brute force checks all subarrays \u2014 O(n\u00b2). Kadane's algorithm does it in O(n).",
+      "At each position, decide: should I extend the previous subarray or start fresh?",
+      "current_sum = max(num, current_sum + num). Track the global maximum."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            -2,
+            1,
+            -3,
+            4,
+            -1,
+            2,
+            1,
+            -5,
+            4
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            5,
+            4,
+            -1,
+            7,
+            8
+          ]
+        },
+        "output": 23
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            -2,
+            -3,
+            -4
+          ]
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            -2,
+            -1
+          ]
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": 15
+      },
+      {
+        "input": {
+          "nums": [
+            -5,
+            4,
+            -1,
+            2,
+            1,
+            -3
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            -1,
+            2,
+            -1
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            -2,
+            5
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            0
+          ]
+        },
+        "output": 0
+      }
+    ],
+    "starter_code": "def solve(nums):\n    \"\"\"\n    Maximum Subarray (Kadane's Algorithm)\n    ---------------------------------------\n    Input : nums -> list of integers\n    Output: integer (maximum subarray sum)\n    \n    Example: nums=[-2,1,-3,4,-1,2,1,-5,4] \u2192 6\n    \"\"\"\n    # Think: At each element, should I extend or start fresh?\n    # curr_sum = max(num, curr_sum + num)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            -2,
+            1,
+            -3,
+            4,
+            -1,
+            2,
+            1,
+            -5,
+            4
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            5,
+            4,
+            -1,
+            7,
+            8
+          ]
+        },
+        "output": 23
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            -1,
+            -2,
+            -3,
+            -4
+          ]
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            -2,
+            -1
+          ]
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": 15
+      },
+      {
+        "input": {
+          "nums": [
+            -5,
+            4,
+            -1,
+            2,
+            1,
+            -3
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            -1,
+            2,
+            -1
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            -2,
+            5
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            0
+          ]
+        },
+        "output": 0
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "LinkedIn"
+    ],
+    "optimal_solution": "def solve(nums):\n    curr = best = nums[0]\n    for n in nums[1:]:\n        curr = max(n, curr+n)\n        best = max(best, curr)\n    return best",
+    "optimal_explanation": "Kadane's algorithm. At each step: extend or start fresh. O(n) time, O(1) space."
+  },
+  "climbing_stairs": {
+    "id": "climbing_stairs",
+    "title": "Climbing Stairs",
+    "topic": "dynamic-programming",
+    "difficulty": "easy",
+    "question": "You are climbing a staircase. It takes n steps to reach the top. Each time you can climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "hints": [
+      "Think recursively: ways(n) = ways(n-1) + ways(n-2).",
+      "This is Fibonacci! dp[i] = dp[i-1] + dp[i-2].",
+      "You only need the last two values \u2014 optimize space to O(1)."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "n": 1
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "n": 2
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "n": 3
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "n": 4
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "n": 5
+        },
+        "output": 8
+      },
+      {
+        "input": {
+          "n": 6
+        },
+        "output": 13
+      },
+      {
+        "input": {
+          "n": 7
+        },
+        "output": 21
+      },
+      {
+        "input": {
+          "n": 8
+        },
+        "output": 34
+      },
+      {
+        "input": {
+          "n": 10
+        },
+        "output": 89
+      },
+      {
+        "input": {
+          "n": 15
+        },
+        "output": 987
+      },
+      {
+        "input": {
+          "n": 20
+        },
+        "output": 10946
+      },
+      {
+        "input": {
+          "n": 30
+        },
+        "output": 1346269
+      }
+    ],
+    "starter_code": "def solve(n):\n    \"\"\"\n    Climbing Stairs\n    ----------------\n    Input : n -> integer (number of stairs)\n    Output: integer (number of distinct ways)\n    \n    Example: n=3 \u2192 3  (1+1+1, 1+2, 2+1)\n    \"\"\"\n    # Think: ways(n) = ways(n-1) + ways(n-2)\n    # This is the Fibonacci pattern!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "n": 1
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "n": 2
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "n": 3
+        },
+        "output": 3
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "n": 4
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "n": 5
+        },
+        "output": 8
+      },
+      {
+        "input": {
+          "n": 6
+        },
+        "output": 13
+      },
+      {
+        "input": {
+          "n": 7
+        },
+        "output": 21
+      },
+      {
+        "input": {
+          "n": 8
+        },
+        "output": 34
+      },
+      {
+        "input": {
+          "n": 10
+        },
+        "output": 89
+      },
+      {
+        "input": {
+          "n": 15
+        },
+        "output": 987
+      },
+      {
+        "input": {
+          "n": 20
+        },
+        "output": 10946
+      },
+      {
+        "input": {
+          "n": 30
+        },
+        "output": 1346269
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Adobe"
+    ],
+    "optimal_solution": "def solve(n):\n    a, b = 1, 1\n    for _ in range(n-1):\n        a, b = b, a+b\n    return b",
+    "optimal_explanation": "Fibonacci with O(1) space. Only keep last two values. O(n) time, O(1) space."
+  },
+  "coin_change": {
+    "id": "coin_change",
+    "title": "Coin Change",
+    "topic": "dynamic-programming",
+    "difficulty": "medium",
+    "question": "Given an array of coin denominations and an amount, return the fewest number of coins needed to make up that amount. Return -1 if it cannot be done.",
+    "hints": [
+      "This is a classic bottom-up DP problem.",
+      "dp[i] = minimum coins to make amount i.",
+      "For each amount, try every coin: dp[i] = min(dp[i], dp[i - coin] + 1)."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "coins": [
+            1,
+            5,
+            6,
+            9
+          ],
+          "amount": 11
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "coins": [
+            2
+          ],
+          "amount": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "coins": [
+            1,
+            2,
+            5
+          ],
+          "amount": 11
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "coins": [
+            1
+          ],
+          "amount": 0
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "coins": [
+            1
+          ],
+          "amount": 1
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "coins": [
+            1
+          ],
+          "amount": 5
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "coins": [
+            2,
+            5,
+            10,
+            1
+          ],
+          "amount": 27
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "coins": [
+            5,
+            10
+          ],
+          "amount": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "coins": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "amount": 36
+        },
+        "output": 3
+      }
+    ],
+    "starter_code": "def solve(coins, amount):\n    \"\"\"\n    Coin Change\n    ------------\n    Input : coins  -> list of coin denominations\n            amount -> target amount (integer)\n    Output: integer (min coins needed, -1 if impossible)\n    \n    Example: coins=[1,5,6,9], amount=11 \u2192 2\n    \"\"\"\n    # Think: Bottom-up DP\n    # dp[i] = min coins to make amount i\n    # dp[i] = min(dp[i], dp[i - coin] + 1)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "coins": [
+            1,
+            5,
+            6,
+            9
+          ],
+          "amount": 11
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "coins": [
+            2
+          ],
+          "amount": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "coins": [
+            1,
+            2,
+            5
+          ],
+          "amount": 11
+        },
+        "output": 3
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "coins": [
+            1
+          ],
+          "amount": 0
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "coins": [
+            1
+          ],
+          "amount": 1
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "coins": [
+            1
+          ],
+          "amount": 5
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "coins": [
+            2,
+            5,
+            10,
+            1
+          ],
+          "amount": 27
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "coins": [
+            5,
+            10
+          ],
+          "amount": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "coins": [
+            1,
+            5,
+            10,
+            25
+          ],
+          "amount": 36
+        },
+        "output": 3
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Uber"
+    ],
+    "optimal_solution": "def solve(coins, amount):\n    dp = [float('inf')] * (amount+1)\n    dp[0] = 0\n    for i in range(1, amount+1):\n        for c in coins:\n            if c <= i:\n                dp[i] = min(dp[i], dp[i-c]+1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
+    "optimal_explanation": "Bottom-up DP. dp[i] = min coins for amount i. Try every coin at each amount. O(amount\u00d7coins) time."
+  },
+  "binary_search": {
+    "id": "binary_search",
+    "title": "Binary Search",
+    "topic": "binary-search",
+    "difficulty": "easy",
+    "question": "Given a sorted array of integers nums and an integer target, write a function to search for target. Return its index if found, or -1 if not found. Must be O(log n).",
+    "hints": [
+      "Split the search space in half each time.",
+      "If nums[mid] == target, return mid. If less, search right. If more, search left.",
+      "Be careful with integer overflow: mid = left + (right - left) // 2."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            -1,
+            0,
+            3,
+            5,
+            9,
+            12
+          ],
+          "target": 9
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            0,
+            3,
+            5,
+            9,
+            12
+          ],
+          "target": 2
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            5
+          ],
+          "target": 5
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            5
+          ],
+          "target": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            -5,
+            -3,
+            -1,
+            0,
+            2
+          ],
+          "target": -3
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 7
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 1
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 10
+        },
+        "output": 9
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 11
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3
+          ],
+          "target": 3
+        },
+        "output": 1
+      }
+    ],
+    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Binary Search\n    --------------\n    Input : nums   -> sorted list of integers\n            target -> integer to search\n    Output: integer (index if found, -1 if not)\n    \n    Example: nums=[-1,0,3,5,9,12], target=9 \u2192 4\n    \n    Constraint: Must be O(log n)!\n    \"\"\"\n    # Think: Split search space in half each time\n    # lo, hi, mid = ?, ?, lo + (hi-lo)//2\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            -1,
+            0,
+            3,
+            5,
+            9,
+            12
+          ],
+          "target": 9
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            0,
+            3,
+            5,
+            9,
+            12
+          ],
+          "target": 2
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            5
+          ],
+          "target": 5
+        },
+        "output": 0
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            5
+          ],
+          "target": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            -5,
+            -3,
+            -1,
+            0,
+            2
+          ],
+          "target": -3
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 7
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 1
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 10
+        },
+        "output": 9
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "target": 11
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3
+          ],
+          "target": 3
+        },
+        "output": 1
+      }
+    ],
+    "companies": [
+      "Google",
+      "Amazon",
+      "Microsoft",
+      "Apple"
+    ],
+    "optimal_solution": "def solve(nums, target):\n    lo, hi = 0, len(nums)-1\n    while lo <= hi:\n        mid = lo + (hi-lo)//2\n        if nums[mid] == target: return mid\n        elif nums[mid] < target: lo = mid+1\n        else: hi = mid-1\n    return -1",
+    "optimal_explanation": "Classic binary search. lo+(hi-lo)//2 avoids overflow. O(log n) time, O(1) space."
+  },
+  "valid_parentheses": {
+    "id": "valid_parentheses",
+    "title": "Valid Parentheses",
+    "topic": "stack",
+    "difficulty": "easy",
+    "question": "Given a string s containing just '(', ')', '{', '}', '[' and ']', determine if the input string is valid. Brackets must be closed in the correct order.",
+    "hints": [
+      "A stack is perfect for matching opening and closing brackets.",
+      "Push opening brackets. When you see a closing bracket, check if it matches the top of the stack.",
+      "At the end, the stack must be empty for the string to be valid."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "s": "()"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "()[]{}"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "(]"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "([)]"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "{[]}"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": ""
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "((("
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": ")))"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "({[]})"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "((()()))"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "[({})]"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "[({})](]"
+        },
+        "output": false
+      }
+    ],
+    "starter_code": "def solve(s):\n    \"\"\"\n    Valid Parentheses\n    ------------------\n    Input : s -> string with only ()[]{}\n    Output: True if valid, False otherwise\n    \n    Example: s=\"()[]{}\" \u2192 True\n             s=\"(]\"     \u2192 False\n    \"\"\"\n    # Think: Stack \u2014 push opening, pop on closing\n    # At end: stack must be empty\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "()"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "()[]{}"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "(]"
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s": "([)]"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "{[]}"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": ""
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "((("
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": ")))"
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "s": "({[]})"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "((()()))"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "[({})]"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s": "[({})](]"
+        },
+        "output": false
+      }
+    ],
+    "companies": [
+      "Google",
+      "Facebook",
+      "Amazon",
+      "Bloomberg"
+    ],
+    "optimal_solution": "def solve(s):\n    stack, pairs = [], {')':'(',']':'[','}':'{'}\n    for c in s:\n        if c in '([{':\n            stack.append(c)\n        elif not stack or stack[-1] != pairs[c]:\n            return False\n        else:\n            stack.pop()\n    return not stack",
+    "optimal_explanation": "Stack-based matching. Push opening brackets. On closing bracket, check top matches. O(n) time, O(n) space."
+  },
+  "min_stack": {
+    "id": "min_stack",
+    "title": "Min Stack",
+    "topic": "stack",
+    "difficulty": "medium",
+    "question": "Implement a stack that supports push, pop, top, and retrieving the minimum element in O(1) time. Input is a list of operations like ['push:5','push:3','min','pop','min']. Return list of results for 'top' and 'min' operations.",
+    "hints": [
+      "Use two stacks: one for values, one to track minimums.",
+      "When pushing, also push to min_stack if value <= current minimum.",
+      "When popping, if popped value equals min_stack top, pop min_stack too."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "operations": [
+            "push:5",
+            "push:3",
+            "push:7",
+            "min",
+            "pop",
+            "min"
+          ]
+        },
+        "output": [
+          3,
+          3
+        ]
+      },
+      {
+        "input": {
+          "operations": [
+            "push:1",
+            "push:2",
+            "min",
+            "top"
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      }
+    ],
+    "starter_code": "def solve(operations):\n    \"\"\"\n    Min Stack\n    ----------\n    Input : operations -> list like [\"push:5\",\"push:3\",\"min\",\"pop\",\"min\"]\n    Output: list of results for \"min\" and \"top\" operations\n    \n    Example: [\"push:5\",\"push:3\",\"min\"] \u2192 [3]\n    \"\"\"\n    # Think: Two stacks \u2014 one for values, one for minimums\n    # Push to min_stack only if val <= current min\n    \n    # Write your solution below\n    # -----------------------------------\n    stack = []\n    min_stack = []\n    results = []\n    \n    # Process each operation:\n    for op in operations:\n        pass  # replace this with your code\n    \n    return results",
+    "visible_test_cases": [
+      {
+        "input": {
+          "operations": [
+            "push:5",
+            "push:3",
+            "push:7",
+            "min",
+            "pop",
+            "min"
+          ]
+        },
+        "output": [
+          3,
+          3
+        ]
+      },
+      {
+        "input": {
+          "operations": [
+            "push:1",
+            "push:2",
+            "min",
+            "top"
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Bloomberg",
+      "Microsoft"
+    ]
+  },
+  "number_of_islands": {
+    "id": "number_of_islands",
+    "title": "Number of Islands",
+    "topic": "graphs",
+    "difficulty": "medium",
+    "question": "Given an m x n 2D binary grid representing a map of 1s (land) and 0s (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.",
+    "hints": [
+      "Think about graph traversal. Each island is a connected component of 1s.",
+      "When you find a 1, do a DFS/BFS to mark all connected land as visited.",
+      "Count how many times you start a fresh DFS \u2014 that's your answer."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "grid": [
+            [
+              "1",
+              "1",
+              "1",
+              "1",
+              "0"
+            ],
+            [
+              "1",
+              "1",
+              "0",
+              "1",
+              "0"
+            ],
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "0"
+            ]
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "grid": [
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "1",
+              "1"
+            ]
+          ]
+        },
+        "output": 3
+      }
+    ],
+    "starter_code": "def solve(grid):\n    \"\"\"\n    Number of Islands\n    ------------------\n    Input : grid -> 2D list of \"1\" (land) and \"0\" (water)\n    Output: integer (count of islands)\n    \n    Example: grid with one connected land mass \u2192 1\n    \"\"\"\n    # Think: DFS/BFS \u2014 when you find a \"1\", explore all connected land\n    # Mark visited cells to avoid counting twice\n    \n    # Write your solution below\n    # -----------------------------------\n    if not grid:\n        return 0\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "grid": [
+            [
+              "1",
+              "1",
+              "1",
+              "1",
+              "0"
+            ],
+            [
+              "1",
+              "1",
+              "0",
+              "1",
+              "0"
+            ],
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "0",
+              "0"
+            ]
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "grid": [
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0",
+              "1",
+              "1"
+            ]
+          ]
+        },
+        "output": 3
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Microsoft"
+    ],
+    "optimal_solution": "def solve(grid):\n    if not grid: return 0\n    count = 0\n    def dfs(i,j):\n        if i<0 or i>=len(grid) or j<0 or j>=len(grid[0]) or grid[i][j]!='1': return\n        grid[i][j]='0'\n        for di,dj in [(0,1),(0,-1),(1,0),(-1,0)]: dfs(i+di,j+dj)\n    for i in range(len(grid)):\n        for j in range(len(grid[0])):\n            if grid[i][j]=='1': dfs(i,j); count+=1\n    return count",
+    "optimal_explanation": "DFS from each unvisited land cell. Mark visited by changing '1' to '0'. Count DFS starts. O(m\u00d7n) time."
+  },
+  "invert_binary_tree": {
+    "id": "invert_binary_tree",
+    "title": "Invert Binary Tree",
+    "topic": "trees",
+    "difficulty": "easy",
+    "question": "Given a binary tree as a level-order list (None for missing nodes), invert the tree and return the level-order list.",
+    "hints": [
+      "At each node, swap the left and right children.",
+      "Recursively invert both subtrees.",
+      "This can also be done iteratively using a queue (BFS)."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "root": [
+            4,
+            2,
+            7,
+            1,
+            3,
+            6,
+            9
+          ]
+        },
+        "output": [
+          4,
+          7,
+          2,
+          9,
+          6,
+          3,
+          1
+        ]
+      },
+      {
+        "input": {
+          "root": [
+            2,
+            1,
+            3
+          ]
+        },
+        "output": [
+          2,
+          3,
+          1
+        ]
+      },
+      {
+        "input": {
+          "root": []
+        },
+        "output": []
+      }
+    ],
+    "starter_code": "def solve(root):\n    \"\"\"\n    Invert Binary Tree\n    -------------------\n    Input : root -> level-order list  e.g. [4,2,7,1,3,6,9]\n    Output: level-order list of inverted tree\n    \n    Example: [4,2,7,1,3,6,9] \u2192 [4,7,2,9,6,3,1]\n    \"\"\"\n    # Think: At each node, swap left and right children\n    # Do this recursively for every node\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "root": [
+            4,
+            2,
+            7,
+            1,
+            3,
+            6,
+            9
+          ]
+        },
+        "output": [
+          4,
+          7,
+          2,
+          9,
+          6,
+          3,
+          1
+        ]
+      },
+      {
+        "input": {
+          "root": [
+            2,
+            1,
+            3
+          ]
+        },
+        "output": [
+          2,
+          3,
+          1
+        ]
+      },
+      {
+        "input": {
+          "root": []
+        },
+        "output": []
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Google",
+      "Facebook",
+      "Apple"
+    ]
+  },
+  "max_depth_binary_tree": {
+    "id": "max_depth_binary_tree",
+    "title": "Maximum Depth of Binary Tree",
+    "topic": "trees",
+    "difficulty": "easy",
+    "question": "Given a binary tree as a level-order list, return its maximum depth (number of nodes along the longest path from root to leaf).",
+    "hints": [
+      "Think recursively: max_depth(node) = 1 + max(max_depth(left), max_depth(right)).",
+      "Base case: if node is None, depth is 0.",
+      "Can also be solved with BFS, counting levels."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "root": [
+            3,
+            9,
+            20,
+            null,
+            null,
+            15,
+            7
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            null,
+            2
+          ]
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "root": []
+        },
+        "output": 0
+      }
+    ],
+    "starter_code": "def solve(root):\n    \"\"\"\n    Maximum Depth of Binary Tree\n    ------------------------------\n    Input : root -> level-order list\n    Output: integer (max depth)\n    \n    Example: [3,9,20,null,null,15,7] \u2192 3\n    \"\"\"\n    # Think recursively:\n    # max_depth(node) = 1 + max(left_depth, right_depth)\n    # Base case: empty node \u2192 depth 0\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "root": [
+            3,
+            9,
+            20,
+            null,
+            null,
+            15,
+            7
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            null,
+            2
+          ]
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "root": []
+        },
+        "output": 0
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ]
+  },
+  "merge_two_sorted_lists": {
+    "id": "merge_two_sorted_lists",
+    "title": "Merge Two Sorted Lists",
+    "topic": "linked-lists",
+    "difficulty": "easy",
+    "question": "Given two sorted arrays (representing linked lists), merge them into one sorted array.",
+    "hints": [
+      "Use two pointers, one for each list.",
+      "Compare the current elements of both lists and take the smaller one.",
+      "Don't forget to append remaining elements from the non-empty list."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "list1": [
+            1,
+            2,
+            4
+          ],
+          "list2": [
+            1,
+            3,
+            4
+          ]
+        },
+        "output": [
+          1,
+          1,
+          2,
+          3,
+          4,
+          4
+        ]
+      },
+      {
+        "input": {
+          "list1": [],
+          "list2": []
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "list1": [],
+          "list2": [
+            0
+          ]
+        },
+        "output": [
+          0
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1
+          ],
+          "list2": [
+            2
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            2
+          ],
+          "list2": [
+            1
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            3,
+            5
+          ],
+          "list2": [
+            2,
+            4,
+            6
+          ]
+        },
+        "output": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            2,
+            3
+          ],
+          "list2": []
+        },
+        "output": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            1,
+            1
+          ],
+          "list2": [
+            1,
+            1,
+            1
+          ]
+        },
+        "output": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            2,
+            4,
+            7
+          ],
+          "list2": [
+            1,
+            3,
+            4,
+            6
+          ]
+        },
+        "output": [
+          1,
+          1,
+          2,
+          3,
+          4,
+          4,
+          6,
+          7
+        ]
+      }
+    ],
+    "starter_code": "def solve(list1, list2):\n    \"\"\"\n    Merge Two Sorted Lists\n    -----------------------\n    Input : list1 -> sorted list of integers\n            list2 -> sorted list of integers\n    Output: merged sorted list\n    \n    Example: [1,2,4] + [1,3,4] \u2192 [1,1,2,3,4,4]\n    \"\"\"\n    # Think: Two pointers \u2014 compare heads, take smaller\n    # Don't forget remaining elements!\n    \n    # Write your solution below\n    # -----------------------------------\n    result = []\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "list1": [
+            1,
+            2,
+            4
+          ],
+          "list2": [
+            1,
+            3,
+            4
+          ]
+        },
+        "output": [
+          1,
+          1,
+          2,
+          3,
+          4,
+          4
+        ]
+      },
+      {
+        "input": {
+          "list1": [],
+          "list2": []
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "list1": [],
+          "list2": [
+            0
+          ]
+        },
+        "output": [
+          0
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "list1": [
+            1
+          ],
+          "list2": [
+            2
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            2
+          ],
+          "list2": [
+            1
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            3,
+            5
+          ],
+          "list2": [
+            2,
+            4,
+            6
+          ]
+        },
+        "output": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            2,
+            3
+          ],
+          "list2": []
+        },
+        "output": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            1,
+            1
+          ],
+          "list2": [
+            1,
+            1,
+            1
+          ]
+        },
+        "output": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "input": {
+          "list1": [
+            1,
+            2,
+            4,
+            7
+          ],
+          "list2": [
+            1,
+            3,
+            4,
+            6
+          ]
+        },
+        "output": [
+          1,
+          1,
+          2,
+          3,
+          4,
+          4,
+          6,
+          7
+        ]
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Microsoft",
+      "Google",
+      "Apple"
+    ]
+  },
+  "three_sum": {
+    "id": "three_sum",
+    "title": "3Sum",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j != k, and nums[i] + nums[j] + nums[k] == 0. The solution must not contain duplicate triplets.",
+    "hints": [
+      "Sort the array first \u2014 this lets you use two pointers efficiently.",
+      "Fix one element, then use two pointers on the remaining sorted subarray.",
+      "Skip duplicates carefully to avoid duplicate triplets in the result."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            -1,
+            0,
+            1,
+            2,
+            -1,
+            -4
+          ]
+        },
+        "output": [
+          [
+            -1,
+            -1,
+            2
+          ],
+          [
+            -1,
+            0,
+            1
+          ]
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            1
+          ]
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            0
+          ]
+        },
+        "output": [
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "starter_code": "def solve(nums):\n    \"\"\"\n    3Sum\n    -----\n    Input : nums -> list of integers\n    Output: list of unique triplets that sum to 0\n    \n    Example: [-1,0,1,2,-1,-4] \u2192 [[-1,-1,2],[-1,0,1]]\n    \"\"\"\n    # Think: Sort first, then fix one element + two pointers\n    # Skip duplicates carefully!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            -1,
+            0,
+            1,
+            2,
+            -1,
+            -4
+          ]
+        },
+        "output": [
+          [
+            -1,
+            -1,
+            2
+          ],
+          [
+            -1,
+            0,
+            1
+          ]
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            1
+          ]
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            0
+          ]
+        },
+        "output": [
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Facebook",
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "optimal_solution": "def solve(nums):\n    nums.sort()\n    res = []\n    for i in range(len(nums)-2):\n        if i>0 and nums[i]==nums[i-1]: continue\n        l,r = i+1,len(nums)-1\n        while l<r:\n            s = nums[i]+nums[l]+nums[r]\n            if s==0: res.append([nums[i],nums[l],nums[r]]); l+=1; r-=1\n            elif s<0: l+=1\n            else: r-=1\n    return res",
+    "optimal_explanation": "Sort + two pointers. Fix one element, use two pointers for rest. Skip duplicates. O(n\u00b2) time, O(1) space."
+  },
+  "find_median_sorted_arrays": {
+    "id": "find_median_sorted_arrays",
+    "title": "Find Median of Two Sorted Arrays",
+    "topic": "binary-search",
+    "difficulty": "hard",
+    "question": "Given two sorted arrays nums1 and nums2, return the median of the two sorted arrays combined. The overall run time complexity should be O(log(m+n)).",
+    "hints": [
+      "Merging both arrays naively is O(m+n). Think binary search.",
+      "Binary search on the smaller array to find the correct partition point.",
+      "After partitioning, max_left elements must be <= min_right elements on both sides."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums1": [
+            1,
+            3
+          ],
+          "nums2": [
+            2
+          ]
+        },
+        "output": 2.0
+      },
+      {
+        "input": {
+          "nums1": [
+            1,
+            2
+          ],
+          "nums2": [
+            3,
+            4
+          ]
+        },
+        "output": 2.5
+      },
+      {
+        "input": {
+          "nums1": [
+            0,
+            0
+          ],
+          "nums2": [
+            0,
+            0
+          ]
+        },
+        "output": 0.0
+      }
+    ],
+    "starter_code": "def solve(nums1, nums2):\n    \"\"\"\n    Median of Two Sorted Arrays\n    ----------------------------\n    Input : nums1 -> sorted list\n            nums2 -> sorted list\n    Output: float (median of combined arrays)\n    \n    Example: nums1=[1,3], nums2=[2] \u2192 2.0\n    \n    Constraint: Must be O(log(m+n))!\n    \"\"\"\n    # Think: Binary search on the smaller array\n    # Find the correct partition point\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums1": [
+            1,
+            3
+          ],
+          "nums2": [
+            2
+          ]
+        },
+        "output": 2.0
+      },
+      {
+        "input": {
+          "nums1": [
+            1,
+            2
+          ],
+          "nums2": [
+            3,
+            4
+          ]
+        },
+        "output": 2.5
+      },
+      {
+        "input": {
+          "nums1": [
+            0,
+            0
+          ],
+          "nums2": [
+            0,
+            0
+          ]
+        },
+        "output": 0.0
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Google",
+      "Amazon",
+      "Microsoft"
+    ]
+  },
+  "word_search": {
+    "id": "word_search",
+    "title": "Word Search",
+    "topic": "graphs",
+    "difficulty": "medium",
+    "question": "Given an m x n grid of characters board and a string word, return true if word exists in the grid. The word can be constructed from sequentially adjacent cells (horizontally or vertically). Each cell may not be used more than once.",
+    "hints": [
+      "Use DFS/backtracking starting from every cell that matches word[0].",
+      "Mark cells as visited during DFS, then unmark when backtracking.",
+      "Check all 4 directions (up, down, left, right) at each step."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "board": [
+            [
+              "A",
+              "B",
+              "C",
+              "E"
+            ],
+            [
+              "S",
+              "F",
+              "C",
+              "S"
+            ],
+            [
+              "A",
+              "D",
+              "E",
+              "E"
+            ]
+          ],
+          "word": "ABCCED"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "board": [
+            [
+              "A",
+              "B",
+              "C",
+              "E"
+            ],
+            [
+              "S",
+              "F",
+              "C",
+              "S"
+            ],
+            [
+              "A",
+              "D",
+              "E",
+              "E"
+            ]
+          ],
+          "word": "SEE"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "board": [
+            [
+              "A",
+              "B",
+              "C",
+              "E"
+            ],
+            [
+              "S",
+              "F",
+              "C",
+              "S"
+            ],
+            [
+              "A",
+              "D",
+              "E",
+              "E"
+            ]
+          ],
+          "word": "ABCB"
+        },
+        "output": false
+      }
+    ],
+    "starter_code": "def solve(board, word):\n    \"\"\"\n    Word Search\n    ------------\n    Input : board -> 2D list of characters\n            word  -> string to search\n    Output: True if word exists in grid, False otherwise\n    \n    Example: board=[[\"A\",\"B\",\"C\"],[\"S\",\"F\",\"C\"]], word=\"ABC\" \u2192 True\n    \"\"\"\n    # Think: DFS + Backtracking\n    # Start from every cell matching word[0]\n    # Mark visited, explore 4 directions, unmark on backtrack\n    \n    # Write your solution below\n    # -----------------------------------\n    rows, cols = len(board), len(board[0])\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "board": [
+            [
+              "A",
+              "B",
+              "C",
+              "E"
+            ],
+            [
+              "S",
+              "F",
+              "C",
+              "S"
+            ],
+            [
+              "A",
+              "D",
+              "E",
+              "E"
+            ]
+          ],
+          "word": "ABCCED"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "board": [
+            [
+              "A",
+              "B",
+              "C",
+              "E"
+            ],
+            [
+              "S",
+              "F",
+              "C",
+              "S"
+            ],
+            [
+              "A",
+              "D",
+              "E",
+              "E"
+            ]
+          ],
+          "word": "SEE"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "board": [
+            [
+              "A",
+              "B",
+              "C",
+              "E"
+            ],
+            [
+              "S",
+              "F",
+              "C",
+              "S"
+            ],
+            [
+              "A",
+              "D",
+              "E",
+              "E"
+            ]
+          ],
+          "word": "ABCB"
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ]
+  },
+  "house_robber": {
+    "id": "house_robber",
+    "title": "House Robber",
+    "topic": "dynamic-programming",
+    "difficulty": "medium",
+    "question": "You are a robber planning to rob houses along a street. Adjacent houses have security systems that alert police if both are robbed. Given an array nums representing money in each house, return the maximum amount you can rob without robbing adjacent houses.",
+    "hints": [
+      "At each house, you have two choices: rob it (add to prev_prev) or skip it (take prev).",
+      "dp[i] = max(dp[i-1], dp[i-2] + nums[i]).",
+      "You only need the previous two values \u2014 optimize space to O(1)."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            1
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            7,
+            9,
+            3,
+            1
+          ]
+        },
+        "output": 12
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            1
+          ]
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            0
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            5,
+            1,
+            1,
+            5
+          ]
+        },
+        "output": 10
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3,
+            1,
+            3,
+            100
+          ]
+        },
+        "output": 103
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            10,
+            3,
+            6,
+            8,
+            1
+          ]
+        },
+        "output": 19
+      },
+      {
+        "input": {
+          "nums": [
+            10,
+            1,
+            10
+          ]
+        },
+        "output": 20
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        "output": 30
+      }
+    ],
+    "starter_code": "def solve(nums):\n    \"\"\"\n    House Robber\n    -------------\n    Input : nums -> list of integers (money in each house)\n    Output: integer (maximum money without robbing adjacent)\n    \n    Example: nums=[2,7,9,3,1] \u2192 12\n    \"\"\"\n    # Think: dp[i] = max(dp[i-1], dp[i-2] + nums[i])\n    # You only need last two values \u2014 O(1) space!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            1
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            7,
+            9,
+            3,
+            1
+          ]
+        },
+        "output": 12
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            1
+          ]
+        },
+        "output": 2
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            0
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            5,
+            1,
+            1,
+            5
+          ]
+        },
+        "output": 10
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3,
+            1,
+            3,
+            100
+          ]
+        },
+        "output": 103
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            10,
+            3,
+            6,
+            8,
+            1
+          ]
+        },
+        "output": 19
+      },
+      {
+        "input": {
+          "nums": [
+            10,
+            1,
+            10
+          ]
+        },
+        "output": 20
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        },
+        "output": 30
+      }
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Airbnb"
+    ],
+    "optimal_solution": "def solve(nums):\n    prev2, prev1 = 0, 0\n    for n in nums:\n        prev2, prev1 = prev1, max(prev1, prev2+n)\n    return prev1",
+    "optimal_explanation": "DP with O(1) space. prev1=best including current, prev2=best excluding. O(n) time, O(1) space."
+  },
+  "top_k_frequent_elements": {
+    "id": "top_k_frequent_elements",
+    "title": "Top K Frequent Elements",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.",
+    "hints": [
+      "Count frequencies using a hashmap.",
+      "Then find the top-k elements by frequency.",
+      "Bucket sort by frequency gives O(n) time \u2014 frequencies range from 1 to n."
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            1,
+            1,
+            2,
+            2,
+            3
+          ],
+          "k": 2
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ],
+          "k": 1
+        },
+        "output": [
+          1
+        ]
+      }
+    ],
+    "starter_code": "def solve(nums, k):\n    \"\"\"\n    Top K Frequent Elements\n    ------------------------\n    Input : nums -> list of integers\n            k    -> integer\n    Output: list of k most frequent elements\n    \n    Example: nums=[1,1,1,2,2,3], k=2 \u2192 [1,2]\n    \"\"\"\n    # Think: Count frequencies with hashmap\n    # Then find top-k by frequency\n    # Bucket sort gives O(n)!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            1,
+            1,
+            2,
+            2,
+            3
+          ],
+          "k": 2
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ],
+          "k": 1
+        },
+        "output": [
+          1
+        ]
+      }
+    ],
+    "hidden_test_cases": [],
+    "companies": [
+      "Amazon",
+      "Facebook",
+      "Google",
+      "Uber"
+    ]
+  }
+}
