@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
 import time
+import os 
 
-BASE = "http://127.0.0.1:8000"
+BASE = os.environ.get("BACKEND_URL", "http://127.0.0.1:8000")
 USER_ID = "guest"
 
 st.set_page_config(page_title="ThinkCode AI", layout="wide", page_icon="🧠")
