@@ -215,12 +215,32 @@ if tab == "Solve":
         c4.metric("Thinking Score", f"{r.get('thinking_score',0)} / 100")
 
         for i, res in enumerate(r.get("results", [])):
-            if res["passed"]: 
+            if res["passed"]:
                 st.success(f"✅ Example {i+1}: Passed")
-            else: 
-                st.error(f"❌ Example {i+1}: Expected `{res.get('expected')}` → Got `{res.get('got')}`")
-                st.caption(f"🔍 Error: {res.get('message', 'Unknown error')}")
-
+            else:
+                st.error(f"❌ Example {i+1}: Wrong Answer")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Expected:**")
+                    st.code(str(res.get('expected')), language="python")
+                with col2:
+                    st.markdown("**Your Output:**")
+                    st.code(str(res.get('got')), language="python")
+                
+                # Hint kya galat hua
+                exp = res.get('expected')
+                got = res.get('got')
+                if got is None:
+                    st.warning("⚠️ Your function returned nothing — make sure solve() returns a value!")
+                elif type(exp) != type(got):
+                    st.warning(f"⚠️ Wrong data type — expected `{type(exp).__name__}` but got `{type(got).__name__}`")
+                elif isinstance(exp, list) and sorted(exp) == sorted(got):
+                    st.info("💡 Values sahi hain but order galat hai — check karo!")
+                else:
+                    st.warning("⚠️ Output galat hai — apna logic check karo")
+                
+                if res.get('message') and res.get('message') != 'Wrong Answer':
+                    st.caption(f"🔍 {res.get('message')}")
         ht = r.get("hidden_total", 0)
         if ht > 0:
             hp = r.get("hidden_passed", 0)
