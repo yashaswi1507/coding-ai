@@ -187,7 +187,8 @@ def admin_train(body: TrainRequest):
 
 # ── XP & Evolution ────────────────────────────────────────────────────────────
 from services.analytics import (
-    get_user_xp, get_weakness_evolution, get_thinking_replay
+    get_user_xp, get_weakness_evolution, get_thinking_replay,
+    add_xp_tables
 )
 from database import add_xp_tables as _add_xp
 
@@ -208,3 +209,88 @@ def weakness_evolution(user_id: str = "guest"):
 @app.get("/thinking-replay/")
 def thinking_replay(user_id: str = "guest", problem_id: str = "two_sum"):
     return get_thinking_replay(user_id, problem_id)
+
+
+# ── Reflection & Interview Score Tracking ─────────────────────────────────────
+class SaveScoreRequest(BaseModel):
+    user_id: str = "guest"
+    problem_id: str = "unknown"
+    avg_score: int = 0
+    score_type: str = "reflection"  # "reflection" or "interview"
+
+@app.post("/save-score/")
+def save_score(body: SaveScoreRequest):
+    conn = get_connection()
+    c = conn.cursor()
+    if body.score_type == "reflection":
+        c.execute("""INSERT INTO reflection_scores (user_id, problem_id, avg_score)
+                      VALUES (?, ?, ?)""", (body.user_id, body.problem_id, body.avg_score))
+    else:
+        c.execute("""INSERT INTO interview_scores (user_id, problem_id, avg_score)
+                      VALUES (?, ?, ?)""", (body.user_id, body.problem_id, body.avg_score))
+    conn.commit()
+    conn.close()
+    return {"success": True}
+
+@app.get("/reflection-trend/")
+def reflection_trend(user_id: str = "guest", limit: int = 20):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("""SELECT problem_id, avg_score, scored_at
+                  FROM reflection_scores WHERE user_id=?
+                  ORDER BY scored_at DESC LIMIT ?""", (user_id, limit))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows
+
+@app.get("/interview-trend/")
+def interview_trend(user_id: str = "guest", limit: int = 20):
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("""SELECT problem_id, avg_score, scored_at
+                  FROM interview_scores WHERE user_id=?
+                  ORDER BY scored_at DESC LIMIT ?""", (user_id, limit))
+    rows = [dict(r) for r in c.fetchall()]
+    conn.close()
+    return rows
+
+@app.get("/cognitive-report/")
+def cognitive_report(user_id: str = "guest"):
+    conn = get_connection()
+    c = conn.cursor()
+
+    c.execute("SELECT AVG(thinking_score) as avg, COUNT(*) as cnt FROM submissions WHERE user_id=?", (user_id,))
+    row = c.fetchone()
+    avg_thinking = round(row["avg"] or 0, 1)
+    total_subs   = row["cnt"] or 0
+
+    c.execute("SELECT AVG(code_score) as avg FROM submissions WHERE user_id=?", (user_id,))
+    avg_code = round(c.fetchone()["avg"] or 0, 1)
+
+    c.execute("SELECT AVG(avg_score) as avg FROM reflection_scores WHERE user_id=?", (user_id,))
+    avg_reflection = round(c.fetchone()["avg"] or 0, 1)
+
+    c.execute("SELECT AVG(avg_score) as avg FROM interview_scores WHERE user_id=?", (user_id,))
+    avg_interview = round(c.fetchone()["avg"] or 0, 1)
+
+    c.execute("SELECT COUNT(*) as cnt FROM user_achievements WHERE user_id=?", (user_id,))
+    achievements = c.fetchone()["cnt"] or 0
+
+    conn.close()
+
+    # Overall cognitive score
+    scores = [s for s in [avg_thinking, avg_code, avg_reflection, avg_interview] if s > 0]
+    overall = round(sum(scores) / len(scores), 1) if scores else 0
+
+    grade = "S" if overall >= 90 else "A" if overall >= 80 else "B" if overall >= 70 else "C" if overall >= 60 else "D" if overall >= 40 else "F"
+
+    return {
+        "overall_score":    overall,
+        "grade":            grade,
+        "thinking_score":   avg_thinking,
+        "code_score":       avg_code,
+        "reflection_score": avg_reflection,
+        "interview_score":  avg_interview,
+        "total_submissions": total_subs,
+        "achievements":     achievements,
+    }

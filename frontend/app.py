@@ -323,6 +323,13 @@ if tab == "🧩 Solve":
             if reflection_answers:
                 avg_ref = total_ref_score // len(reflection_answers)
                 st.metric("Overall Reflection Score", f"{avg_ref}/100")
+                # Save reflection score for trend tracking
+                api("/save-score/", "POST", {
+                    "user_id": USER_ID,
+                    "problem_id": selected_id,
+                    "avg_score": avg_ref,
+                    "score_type": "reflection"
+                })
 
         # ── AI Interviewer — Step by Step ──────────────────────────────
         st.divider()
@@ -622,6 +629,83 @@ elif tab == "📜 History":
                 heatmap_df.style.applymap(color_score),
                 use_container_width=True
             )
+
+    # ── Final Cognitive Report ───────────────────────────────────────────────
+    st.divider()
+    st.subheader("🧠 Final Cognitive Report")
+    st.caption("Your complete performance summary across all dimensions")
+    report = api(f"/cognitive-report/?user_id={USER_ID}")
+    if report and report.get("total_submissions", 0) > 0:
+        grade = report.get("grade", "?")
+        overall = report.get("overall_score", 0)
+        grade_color = (
+            "#FFD700" if grade in ("S","A") else
+            "#4AFF91" if grade == "B" else
+            "#FFB547" if grade == "C" else "#FF5B6B"
+        )
+        st.markdown(
+            f"<div style='text-align:center; padding:16px; background:#1a1a2e; "
+            f"border-radius:12px; border:1px solid #333'>"
+            f"<span style='font-size:48px; font-weight:700; color:{grade_color}'>{grade}</span>"
+            f"<br><span style='font-size:14px; color:#aaa'>Overall Cognitive Score: {overall}/100</span>"
+            f"</div>",
+            unsafe_allow_html=True
+        )
+        st.divider()
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("🧠 Thinking",   f"{report.get('thinking_score',0)}/100")
+        col2.metric("💻 Code",       f"{report.get('code_score',0)}/100")
+        col3.metric("🪞 Reflection", f"{report.get('reflection_score',0)}/100")
+        col4.metric("🎤 Interview",  f"{report.get('interview_score',0)}/100")
+
+        # Radar-style bar chart
+        import pandas as pd
+        score_df = pd.DataFrame({
+            "Dimension": ["Thinking", "Code", "Reflection", "Interview"],
+            "Score": [
+                report.get("thinking_score", 0),
+                report.get("code_score", 0),
+                report.get("reflection_score", 0),
+                report.get("interview_score", 0),
+            ]
+        })
+        st.bar_chart(score_df.set_index("Dimension"))
+    else:
+        st.info("Submit at least one solution to generate your Cognitive Report!")
+
+    # ── Reflection Trend Analytics ────────────────────────────────────────────
+    st.divider()
+    st.subheader("🪞 Reflection Trend Analytics")
+    ref_trend = api(f"/reflection-trend/?user_id={USER_ID}&limit=20") or []
+    if len(ref_trend) >= 2:
+        import pandas as pd
+        ref_trend_rev = ref_trend[::-1]
+        ref_df = pd.DataFrame({
+            "Attempt": [f"#{i+1}" for i in range(len(ref_trend_rev))],
+            "Reflection Score": [r["avg_score"] for r in ref_trend_rev]
+        })
+        st.line_chart(ref_df.set_index("Attempt"))
+        avg_ref = sum(r["avg_score"] for r in ref_trend) // len(ref_trend)
+        st.caption(f"Average reflection score: {avg_ref}/100 across {len(ref_trend)} attempts")
+    else:
+        st.info("Answer reflection questions after solving to see your trend!")
+
+    # ── Interview Trend Analytics ─────────────────────────────────────────────
+    st.divider()
+    st.subheader("🎤 Interview Trend Analytics")
+    int_trend = api(f"/interview-trend/?user_id={USER_ID}&limit=20") or []
+    if len(int_trend) >= 2:
+        import pandas as pd
+        int_trend_rev = int_trend[::-1]
+        int_df = pd.DataFrame({
+            "Attempt": [f"#{i+1}" for i in range(len(int_trend_rev))],
+            "Interview Score": [r["avg_score"] for r in int_trend_rev]
+        })
+        st.line_chart(int_df.set_index("Attempt"))
+        avg_int = sum(r["avg_score"] for r in int_trend) // len(int_trend)
+        st.caption(f"Average interview score: {avg_int}/100 across {len(int_trend)} mock interviews")
+    else:
+        st.info("Complete mock interviews after solving to see your trend!")
 
     # ── Thinking Patterns ────────────────────────────────────────────────────
     st.divider()

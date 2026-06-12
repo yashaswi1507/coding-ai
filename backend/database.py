@@ -82,5 +82,21 @@ def add_xp_tables():
         reason TEXT,
         earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )""")
+    c.execute("""CREATE TABLE IF NOT EXISTS reflection_scores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT DEFAULT 'guest',
+        problem_id TEXT,
+        avg_score INTEGER DEFAULT 0,
+        scored_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
+
+    c.execute("""CREATE TABLE IF NOT EXISTS interview_scores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT DEFAULT 'guest',
+        problem_id TEXT,
+        avg_score INTEGER DEFAULT 0,
+        scored_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
+
     conn.commit()
     conn.close()
