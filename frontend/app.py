@@ -889,10 +889,8 @@ elif tab == "🎖️ Achievements":
         for i, a in enumerate(earned):
             with cols[i % 3]:
                 st.success(
-                    f"{a['icon']} **{a['title']}**  
-"
-                    f"{a['desc']}  
-"
+                    f"{a['icon']} **{a['title']}**"
+                    f"{a['desc']}"
                     f"*Earned: {a.get('earned_at','')[:10]}*"
                 )
 
