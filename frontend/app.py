@@ -491,10 +491,13 @@ elif tab == "🗺️ Learning Path":
 # TAB: HISTORY
 # ═══════════════════════════════════════════════════════
 elif tab == "📜 History":
+    import pandas as pd
+
     st.subheader("📜 My Progress")
 
     dashboard = api(f"/dashboard/?user_id={USER_ID}") or {}
     level = dashboard.get("thinker_level", {})
+    history = api(f"/history/?user_id={USER_ID}&limit=50") or []
 
     if level:
         st.markdown(f"### {level.get('icon','')} {level.get('level','')}")
@@ -505,39 +508,118 @@ elif tab == "📜 History":
     c2.metric("Avg Thinking Score", f"{dashboard.get('average_thinking_score',0)}/100")
     c3.metric("Avg Code Score",     f"{dashboard.get('average_code_score',0)}/100")
 
-    # XP & Level
+    # ── 1. XP Progress Dashboard ─────────────────────────────────────────────
     xp_data = api(f"/xp/?user_id={USER_ID}")
     if xp_data:
         st.divider()
+        st.subheader("⚡ XP Progress Dashboard")
         col1, col2, col3 = st.columns(3)
-        col1.metric(f"{xp_data.get('icon','')} Level", f"{xp_data.get('level',1)} — {xp_data.get('title','')}")
+        col1.metric(f"{xp_data.get('icon','')} Level",
+                    f"{xp_data.get('level',1)} — {xp_data.get('title','')}")
         col2.metric("Total XP", xp_data.get("total_xp", 0))
         col3.metric("Next Level", f"{xp_data.get('xp_to_next',0)} XP needed")
         st.progress(xp_data.get("progress_to_next", 0) / 100,
                     text=f"Progress to next level: {xp_data.get('progress_to_next',0)}%")
-        if xp_data.get("history"):
-            with st.expander("XP History", expanded=False):
-                for h in xp_data["history"][:5]:
-                    st.caption(f"+{h['xp_gained']} XP — {h['reason'][:60]}")
 
-    # Weakness Evolution
+        # XP History Bar Chart
+        if xp_data.get("history") and len(xp_data["history"]) >= 2:
+            xp_hist = xp_data["history"][:10][::-1]
+            xp_df = pd.DataFrame({
+                "Submission": [f"#{i+1}" for i in range(len(xp_hist))],
+                "XP Gained":  [h["xp_gained"] for h in xp_hist]
+            })
+            st.bar_chart(xp_df.set_index("Submission"))
+
+    # ── 2. Thinking Score Trend Graph ────────────────────────────────────────
+    if history and len(history) >= 2:
+        st.divider()
+        st.subheader("📈 Thinking Score Trend")
+        trend_df = pd.DataFrame({
+            "Submission": [f"#{i+1}" for i in range(len(history[:20][::-1]))],
+            "Thinking Score": [h["thinking_score"] for h in history[:20][::-1]]
+        })
+        st.line_chart(trend_df.set_index("Submission"))
+
+    # ── 3. Topic-wise Analytics Chart ────────────────────────────────────────
+    topics = dashboard.get("topics", [])
+    if topics:
+        st.divider()
+        st.subheader("📊 Topic-wise Analytics")
+        topic_df = pd.DataFrame({
+            "Topic":          [t["topic"] for t in topics],
+            "Thinking Score": [round(t.get("avg_score") or 0, 1) for t in topics],
+            "Attempts":       [t["count"] for t in topics]
+        })
+        st.bar_chart(topic_df.set_index("Topic")["Thinking Score"])
+        # Detailed table
+        for t in topics:
+            score = round(t.get("avg_score") or 0, 1)
+            color = "🟢" if score >= 70 else "🟡" if score >= 40 else "🔴"
+            col1, col2 = st.columns([4, 1])
+            col1.progress(score/100,
+                          text=f"{color} {t['topic']} ({t['count']} attempts)")
+            col2.markdown(f"**{score}/100**")
+
+    # ── 4. Weakness Evolution Visualization ──────────────────────────────────
     st.divider()
-    st.subheader("Weakness Evolution")
+    st.subheader("📉 Weakness Evolution")
     evolution = api(f"/weakness-evolution/?user_id={USER_ID}")
     if evolution and evolution.get("evolution"):
         if evolution.get("most_improved"):
-            st.success(f"Most improved: {evolution['most_improved']}")
+            st.success(f"📈 Most improved: **{evolution['most_improved']}**")
         if evolution.get("needs_attention"):
-            st.warning(f"Needs attention: {evolution['needs_attention']}")
-        for e in evolution["evolution"]:
+            st.warning(f"⚠️ Needs attention: **{evolution['needs_attention']}**")
+        evo_list = evolution["evolution"]
+        if len(evo_list) >= 2:
+            evo_df = pd.DataFrame({
+                "Topic":      [e["topic"] for e in evo_list],
+                "This Week":  [e["recent"] for e in evo_list],
+                "Last Week":  [e["prev"] for e in evo_list],
+            })
+            st.bar_chart(evo_df.set_index("Topic"))
+        for e in evo_list:
             col1, col2, col3 = st.columns([3, 1, 1])
             col1.markdown(f"**{e['topic']}** — {e['trend']}")
             col2.metric("This week", f"{e['recent']}/100")
-            col3.metric("Change", f"{'+' if e['change']>0 else ''}{e['change']}")
+            col3.metric("Change",
+                        f"{'+' if e['change']>0 else ''}{e['change']}")
     else:
-        st.info("Solve more problems to see your evolution!")
+        st.info("Solve more problems across topics to see evolution!")
 
-    # ── FEATURE 2: Thinking Patterns ───────────────────────────────────────
+    # ── 5. Performance Heatmap ────────────────────────────────────────────────
+    if history and topics:
+        st.divider()
+        st.subheader("🗺️ Performance Heatmap")
+        st.caption("Topic vs Difficulty — average thinking score")
+        heatmap_data = {}
+        for h in history:
+            t = h.get("topic", "unknown")
+            d = h.get("difficulty", "easy")
+            key = (t, d)
+            if key not in heatmap_data:
+                heatmap_data[key] = []
+            heatmap_data[key].append(h["thinking_score"])
+
+        all_topics = list(set(k[0] for k in heatmap_data))
+        diffs = ["easy", "medium", "hard"]
+        rows = []
+        for topic in all_topics:
+            row = {"Topic": topic}
+            for d in diffs:
+                scores = heatmap_data.get((topic, d), [])
+                row[d.title()] = round(sum(scores)/len(scores), 0) if scores else 0
+            rows.append(row)
+
+        if rows:
+            heatmap_df = pd.DataFrame(rows).set_index("Topic")
+            st.dataframe(
+                heatmap_df.style.background_gradient(cmap="RdYlGn",
+                                                     vmin=0, vmax=100),
+                use_container_width=True
+            )
+
+    # ── Thinking Patterns ────────────────────────────────────────────────────
+    st.divider()
     st.subheader("🔍 Your Thinking Patterns")
     patterns = api(f"/patterns/?user_id={USER_ID}")
     if patterns:
@@ -545,14 +627,6 @@ elif tab == "📜 History":
         for p in patterns.get("patterns", []):
             if p["type"] == "strength": st.success(p["msg"])
             else: st.warning(p["msg"])
-
-    # Topic performance
-    st.subheader("📊 Topic Performance")
-    for t in dashboard.get("topics", []):
-        score = round(t.get("avg_score") or 0, 1)
-        c1, c2 = st.columns([4, 1])
-        c1.progress(score/100, text=f"{t['topic']} ({t['count']} attempts)")
-        c2.markdown(f"**{score}/100**")
 
     # History list
     st.subheader("Recent Submissions")
