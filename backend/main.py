@@ -187,8 +187,7 @@ def admin_train(body: TrainRequest):
 
 # ── XP & Evolution ────────────────────────────────────────────────────────────
 from services.analytics import (
-    get_user_xp, get_weakness_evolution, get_thinking_replay,
-    add_xp_tables
+    get_user_xp, get_weakness_evolution, get_thinking_replay
 )
 from database import add_xp_tables as _add_xp
 
