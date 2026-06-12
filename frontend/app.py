@@ -888,11 +888,8 @@ elif tab == "🎖️ Achievements":
         cols = st.columns(3)
         for i, a in enumerate(earned):
             with cols[i % 3]:
-                st.success(
-                    f"{a['icon']} **{a['title']}**"
-                    f"{a['desc']}"
-                    f"*Earned: {a.get('earned_at','')[:10]}*"
-                )
+                earned_date = a.get("earned_at","")[:10]
+                st.success(f"{a['icon']} **{a['title']}** — {a['desc']} | {earned_date}")
 
     if unearned:
         st.divider()
