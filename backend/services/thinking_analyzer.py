@@ -81,6 +81,9 @@ def analyze_thinking(user_code, thinking_text, problem,
     approach = prediction["approach"]
     source   = prediction["source"]
 
+    # Override approach if set/dict detected (fix for set-based solutions)
+    approach = _detect_approach_override(user_code, approach)
+
     # Build feedback
     feedback = []
     for lo, hi, msg in THINKING_FEEDBACK_TEMPLATES:
@@ -129,12 +132,58 @@ def analyze_thinking(user_code, thinking_text, problem,
     }
 
 
+def _detect_approach_override(code: str, current_approach: str) -> str:
+    """
+    Override model's approach if code clearly uses efficient data structures.
+    Fixes cases where set/dict usage is misclassified as brute_force.
+    """
+    c = code.lower()
+
+    # Set usage — O(n) lookup
+    if ("set()" in c or "= set(" in c or "set(nums" in c or
+            "set(s" in c or ".add(" in c):
+        return "optimized"
+
+    # Dict/hashmap usage
+    if ("dict" in c or "{}" in c or "defaultdict" in c or
+            "counter" in c or "= {}" in c):
+        return "optimized"
+
+    # Binary search pattern
+    if (("lo" in c and "hi" in c) or
+            ("left" in c and "right" in c and "mid" in c)):
+        return "optimal"
+
+    # One-liner optimal solutions
+    if len([l for l in code.split("\n") if l.strip()]) <= 3:
+        if "return" in c and ("len(" in c or "set(" in c):
+            return "optimal"
+
+    return current_approach
+
+
 def _detect_strengths(code, thinking, approach):
-    s, t, c = [], (thinking or "").lower(), code.lower()
+    s = []
+    t = (thinking or "").lower()
+    c = code.lower()
+
+    # Approach-based strengths
     if approach in ("optimized", "optimal"):
         s.append("Uses efficient data structures")
-    if "if not" in c or "len(" in c:
+
+    # Set detection
+    if "set(" in c or "set()" in c or ".add(" in c:
+        s.append("Used Set — O(1) lookup, smart choice!")
+
+    # Hashmap detection
+    if "dict" in c or "{}" in c or "defaultdict" in c:
+        s.append("Used Hashmap — efficient O(n) solution")
+
+    # Edge case handling in code
+    if "if not" in c or "len(" in c or "is none" in c:
         s.append("Handles edge cases in code")
+
+    # Thinking quality
     if any(w in t for w in ["o(n", "complexity", "linear"]):
         s.append("Demonstrates complexity awareness")
     if any(w in t for w in ["tradeoff", "instead", "better than"]):
@@ -143,11 +192,15 @@ def _detect_strengths(code, thinking, approach):
         s.append("Code is commented — good readability")
     if thinking and len(thinking.split()) >= 30:
         s.append("Provided thorough explanation")
+
     return s
 
 
 def _detect_weaknesses(code, thinking, approach, score):
-    w, t, c = [], (thinking or "").lower(), code.lower()
+    w = []
+    t = (thinking or "").lower()
+    c = code.lower()
+
     if approach == "brute_force":
         w.append("Brute-force approach — not scalable for large inputs")
     if not t.strip():
@@ -163,14 +216,35 @@ def _detect_weaknesses(code, thinking, approach, score):
 
 def _estimate_complexity(code):
     c = code.lower()
+
+    # One-liner with set — O(n)
+    if "len(" in c and "set(" in c:
+        return {"time": "O(n)", "space": "O(n)",
+                "explanation": "Set conversion — O(n) time and space"}
+
+    # Set with loop
+    if "set(" in c or ".add(" in c:
+        return {"time": "O(n)", "space": "O(n)",
+                "explanation": "Single pass with set — O(1) lookup"}
+
     if "dp" in c and "for" in c:
-        return {"time": "O(n) or O(n²)", "space": "O(n)", "explanation": "DP-based approach"}
+        return {"time": "O(n) or O(n²)", "space": "O(n)",
+                "explanation": "DP-based approach"}
+
     if c.count("for") >= 2:
-        return {"time": "O(n²)", "space": "O(1)", "explanation": "Nested loops detected"}
+        return {"time": "O(n²)", "space": "O(1)",
+                "explanation": "Nested loops detected"}
+
     if "dict" in c or "{}" in c:
-        return {"time": "O(n)", "space": "O(n)", "explanation": "Single pass with hashmap"}
+        return {"time": "O(n)", "space": "O(n)",
+                "explanation": "Single pass with hashmap"}
+
     if ("lo" in c and "hi" in c) or ("left" in c and "right" in c and "mid" in c):
-        return {"time": "O(log n)", "space": "O(1)", "explanation": "Binary search pattern"}
+        return {"time": "O(log n)", "space": "O(1)",
+                "explanation": "Binary search pattern"}
+
     if "sort" in c:
-        return {"time": "O(n log n)", "space": "O(1)", "explanation": "Sort-based approach"}
+        return {"time": "O(n log n)", "space": "O(1)",
+                "explanation": "Sort-based approach"}
+
     return {"time": "O(n)", "space": "O(1)", "explanation": "Single pass estimated"}

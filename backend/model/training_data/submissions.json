@@ -292,5 +292,47 @@
     "total_tests": 10,
     "labeled": false,
     "timestamp": "2026-06-12T13:01:07.159740"
+  },
+  {
+    "id": "7f23f47d-e358-46bb-98ee-7a59de0d39a3",
+    "code": "def containsDuplicate(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False\n",
+    "thinking_text": "",
+    "problem_id": "contains_duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 39,
+    "approach": "brute_force",
+    "passed_tests": 0,
+    "total_tests": 10,
+    "labeled": false,
+    "timestamp": "2026-06-12T13:25:27.246957"
+  },
+  {
+    "id": "899242d6-7ac1-4a70-ab52-657a890baa4a",
+    "code": "def  solve(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False\n",
+    "thinking_text": "",
+    "problem_id": "contains_duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 39,
+    "approach": "brute_force",
+    "passed_tests": 10,
+    "total_tests": 10,
+    "labeled": false,
+    "timestamp": "2026-06-12T13:27:16.596171"
+  },
+  {
+    "id": "6dda74c9-543e-484e-a952-356a42cb1477",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 63,
+    "approach": "optimal",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T13:45:19.982104"
   }
 ]
