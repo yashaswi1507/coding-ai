@@ -187,9 +187,14 @@ if tab == "🧩 Solve":
     # Code
     st.subheader("💻 Your Code")
     default_code = problem.get("starter_code", "def solve():\n    pass")
-    code = st.text_area("Write inside solve():", height=320,
-                        value=default_code, key=f"code_{selected_id}")
 
+    # Reset code when problem changes
+    if f"code_{selected_id}" not in st.session_state:
+        st.session_state[f"code_{selected_id}"] = default_code
+
+    code = st.text_area("Write inside solve():", height=320,
+                        key=f"code_{selected_id}")
+    
     if st.button("🚀 Submit & Get AI Feedback", type="primary", use_container_width=True):
         # Reset interview state for new submission
         st.session_state.interview_q_idx = 0
