@@ -348,5 +348,33 @@
     "total_tests": 10,
     "labeled": false,
     "timestamp": "2026-06-12T15:11:01.930379"
+  },
+  {
+    "id": "6a9dec07-b30d-4ad4-bf9b-66f75d9e9930",
+    "code": "def  solve(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False\n",
+    "thinking_text": "",
+    "problem_id": "contains_duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 39,
+    "approach": "optimized",
+    "passed_tests": 10,
+    "total_tests": 10,
+    "labeled": false,
+    "timestamp": "2026-06-12T15:28:33.622341"
+  },
+  {
+    "id": "269f2fe0-c70b-49e7-aea3-a668d39bfbc5",
+    "code": "def  solve(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False\n",
+    "thinking_text": "",
+    "problem_id": "contains_duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 39,
+    "approach": "optimized",
+    "passed_tests": 10,
+    "total_tests": 10,
+    "labeled": false,
+    "timestamp": "2026-06-12T15:29:19.591736"
   }
 ]
