@@ -612,9 +612,14 @@ elif tab == "📜 History":
 
         if rows:
             heatmap_df = pd.DataFrame(rows).set_index("Topic")
+            # Color cells manually without matplotlib
+            def color_score(val):
+                if val >= 70: return "background-color: #1a472a; color: white"
+                elif val >= 40: return "background-color: #7d6608; color: white"
+                elif val > 0:  return "background-color: #641e16; color: white"
+                return ""
             st.dataframe(
-                heatmap_df.style.background_gradient(cmap="RdYlGn",
-                                                     vmin=0, vmax=100),
+                heatmap_df.style.applymap(color_score),
                 use_container_width=True
             )
 
