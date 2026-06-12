@@ -189,7 +189,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 \u2192 [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -383,7 +383,7 @@
     "approaches": [
       {
         "name": "Brute Force",
-        "complexity": "O(n\u00b2) time, O(1) space",
+        "complexity": "O(n²) time, O(1) space",
         "desc": "Check every pair of numbers. Simple but slow for large inputs."
       },
       {
@@ -523,7 +523,7 @@
         "output": 8
       }
     ],
-    "starter_code": "def solve(prices):\n    \"\"\"\n    Best Time to Buy and Sell Stock\n    --------------------------------\n    Input : prices -> list of integers (daily prices)\n    Output: integer (maximum profit, 0 if no profit)\n    \n    Example: prices=[7,1,5,3,6,4] \u2192 5\n    \"\"\"\n    # Hint: Track minimum price seen so far\n    # At each day: profit = price - min_so_far\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(prices):\n    \"\"\"\n    Best Time to Buy and Sell Stock\n    --------------------------------\n    Input : prices -> list of integers (daily prices)\n    Output: integer (maximum profit, 0 if no profit)\n    \n    Example: prices=[7,1,5,3,6,4] → 5\n    \"\"\"\n    # Hint: Track minimum price seen so far\n    # At each day: profit = price - min_so_far\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -647,7 +647,19 @@
       "Morgan Stanley"
     ],
     "optimal_solution": "def solve(prices):\n    min_p, profit = float('inf'), 0\n    for p in prices:\n        min_p = min(min_p, p)\n        profit = max(profit, p - min_p)\n    return profit",
-    "optimal_explanation": "One pass. Track min price seen so far. At each price compute potential profit. O(n) time, O(1) space."
+    "optimal_explanation": "One pass. Track min price seen so far. At each price compute potential profit. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n²) time, O(1) space",
+        "desc": "Check every pair of buy/sell days. Very slow for large inputs."
+      },
+      {
+        "name": "Min Price Tracking",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Track min price seen so far. At each day compute profit = price - min. Single pass."
+      }
+    ]
   },
   "contains_duplicate": {
     "id": "contains_duplicate",
@@ -656,7 +668,7 @@
     "difficulty": "easy",
     "question": "Given an integer array nums, return True if any value appears at least twice in the array, and return False if every element is distinct.",
     "hints": [
-      "A brute force approach compares every pair \u2014 O(n\u00b2). Can you do better?",
+      "A brute force approach compares every pair — O(n²). Can you do better?",
       "What data structure gives you O(1) lookup?",
       "A set stores unique elements. If adding an element fails, it's a duplicate."
     ],
@@ -958,7 +970,7 @@
         "output": true
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    Contains Duplicate\n    -------------------\n    Input : nums -> list of integers\n    Output: True if duplicate exists, False otherwise\n    \n    Example: nums=[1,2,3,1] \u2192 True\n    \"\"\"\n    # Think: What data structure finds duplicates in O(1)?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums):\n    \"\"\"\n    Contains Duplicate\n    -------------------\n    Input : nums -> list of integers\n    Output: True if duplicate exists, False otherwise\n    \n    Example: nums=[1,2,3,1] → True\n    \"\"\"\n    # Think: What data structure finds duplicates in O(1)?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -1265,7 +1277,29 @@
       "Adobe"
     ],
     "optimal_solution": "def solve(nums):\n    return len(nums) != len(set(nums))",
-    "optimal_explanation": "Convert to set (removes duplicates). If lengths differ, duplicates exist. O(n) time, O(n) space."
+    "optimal_explanation": "Convert to set (removes duplicates). If lengths differ, duplicates exist. O(n) time, O(n) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n²) time, O(1) space",
+        "desc": "Compare every pair of elements. Very slow."
+      },
+      {
+        "name": "Sorting",
+        "complexity": "O(n log n) time, O(1) space",
+        "desc": "Sort array, check adjacent elements for duplicates."
+      },
+      {
+        "name": "HashSet",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Add each element to set. If already exists, duplicate found. Fastest approach."
+      },
+      {
+        "name": "One-liner Set",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Compare len(nums) with len(set(nums)). Most Pythonic."
+      }
+    ]
   },
   "product_except_self": {
     "id": "product_except_self",
@@ -1275,7 +1309,7 @@
     "question": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. You must solve it without using the division operator and in O(n) time.",
     "hints": [
       "Think about prefix products and suffix products separately.",
-      "answer[i] = product of all elements to the LEFT \u00d7 product of all elements to the RIGHT.",
+      "answer[i] = product of all elements to the LEFT × product of all elements to the RIGHT.",
       "You can compute left products in one pass, then multiply by right products in another pass."
     ],
     "test_cases": [
@@ -1314,7 +1348,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    Product of Array Except Self\n    ------------------------------\n    Input : nums -> list of integers\n    Output: list where output[i] = product of all except nums[i]\n    \n    Example: nums=[1,2,3,4] \u2192 [24,12,8,6]\n    \n    Constraint: No division operator allowed!\n    \"\"\"\n    # Think: Prefix products \u00d7 Suffix products\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums):\n    \"\"\"\n    Product of Array Except Self\n    ------------------------------\n    Input : nums -> list of integers\n    Output: list where output[i] = product of all except nums[i]\n    \n    Example: nums=[1,2,3,4] → [24,12,8,6]\n    \n    Constraint: No division operator allowed!\n    \"\"\"\n    # Think: Prefix products × Suffix products\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -1356,6 +1390,23 @@
       "Amazon",
       "Google",
       "Facebook"
+    ],
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n²) time, O(1) space",
+        "desc": "For each element, multiply all others. Division not used but slow."
+      },
+      {
+        "name": "Prefix & Suffix",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "answer[i] = product of all left × product of all right. Two passes."
+      },
+      {
+        "name": "Optimized (O(1) space)",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Build prefix in output array. Then multiply suffix on the fly. No extra array needed."
+      }
     ]
   },
   "valid_anagram": {
@@ -1441,7 +1492,7 @@
         "output": true
       }
     ],
-    "starter_code": "def solve(s, t):\n    \"\"\"\n    Valid Anagram\n    --------------\n    Input : s -> string\n            t -> string\n    Output: True if t is anagram of s, False otherwise\n    \n    Example: s=\"anagram\", t=\"nagaram\" \u2192 True\n    \"\"\"\n    # Think: What makes two strings anagrams?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(s, t):\n    \"\"\"\n    Valid Anagram\n    --------------\n    Input : s -> string\n            t -> string\n    Output: True if t is anagram of s, False otherwise\n    \n    Example: s=\"anagram\", t=\"nagaram\" → True\n    \"\"\"\n    # Think: What makes two strings anagrams?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -1522,7 +1573,24 @@
       "Microsoft"
     ],
     "optimal_solution": "def solve(s, t):\n    from collections import Counter\n    return Counter(s) == Counter(t)",
-    "optimal_explanation": "Count character frequencies in both strings. Compare. O(n) time, O(1) space (at most 26 chars)."
+    "optimal_explanation": "Count character frequencies in both strings. Compare. O(n) time, O(1) space (at most 26 chars).",
+    "approaches": [
+      {
+        "name": "Sorting",
+        "complexity": "O(n log n) time, O(1) space",
+        "desc": "Sort both strings and compare. Simple but slower."
+      },
+      {
+        "name": "Frequency Counter",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Count character frequencies using array of 26. Compare counts. Fastest."
+      },
+      {
+        "name": "Counter (Python)",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Use Python Counter — Counter(s) == Counter(t). Most Pythonic."
+      }
+    ]
   },
   "longest_substring_without_repeating": {
     "id": "longest_substring_without_repeating",
@@ -1555,7 +1623,7 @@
         "output": 3
       }
     ],
-    "starter_code": "def solve(s):\n    \"\"\"\n    Longest Substring Without Repeating Characters\n    ------------------------------------------------\n    Input : s -> string\n    Output: integer (length of longest valid substring)\n    \n    Example: s=\"abcabcbb\" \u2192 3  (abc)\n    \"\"\"\n    # Think: Sliding window with two pointers\n    # left pointer shrinks when duplicate found\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(s):\n    \"\"\"\n    Longest Substring Without Repeating Characters\n    ------------------------------------------------\n    Input : s -> string\n    Output: integer (length of longest valid substring)\n    \n    Example: s=\"abcabcbb\" → 3  (abc)\n    \"\"\"\n    # Think: Sliding window with two pointers\n    # left pointer shrinks when duplicate found\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -1582,6 +1650,23 @@
       "Google",
       "Facebook",
       "Bloomberg"
+    ],
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n³) time, O(n) space",
+        "desc": "Check all substrings for uniqueness. Very slow."
+      },
+      {
+        "name": "Sliding Window (Set)",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Two pointers with set. Shrink window when duplicate found."
+      },
+      {
+        "name": "Sliding Window (HashMap)",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Store last seen index of each char. Jump left pointer directly. More efficient."
+      }
     ]
   },
   "reverse_linked_list": {
@@ -1637,7 +1722,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(head):\n    \"\"\"\n    Reverse a Linked List\n    ----------------------\n    Input : head -> list of values  e.g. [1,2,3,4,5]\n    Output: reversed list           e.g. [5,4,3,2,1]\n    \n    Example: [1,2,3,4,5] \u2192 [5,4,3,2,1]\n    \"\"\"\n    # Think: Three pointers \u2014 prev, curr, next\n    # At each step: curr.next = prev, then advance\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(head):\n    \"\"\"\n    Reverse a Linked List\n    ----------------------\n    Input : head -> list of values  e.g. [1,2,3,4,5]\n    Output: reversed list           e.g. [5,4,3,2,1]\n    \n    Example: [1,2,3,4,5] → [5,4,3,2,1]\n    \"\"\"\n    # Think: Three pointers — prev, curr, next\n    # At each step: curr.next = prev, then advance\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -1685,6 +1770,18 @@
       "Amazon",
       "Microsoft",
       "Adobe"
+    ],
+    "approaches": [
+      {
+        "name": "Iterative",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Three pointers: prev, curr, next. Reverse links one by one. Best approach."
+      },
+      {
+        "name": "Recursive",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Recursively reverse rest, then fix current link. Uses call stack."
+      }
     ]
   },
   "maximum_subarray": {
@@ -1694,7 +1791,7 @@
     "difficulty": "medium",
     "question": "Given an integer array nums, find the contiguous subarray which has the largest sum and return its sum.",
     "hints": [
-      "A brute force checks all subarrays \u2014 O(n\u00b2). Kadane's algorithm does it in O(n).",
+      "A brute force checks all subarrays — O(n²). Kadane's algorithm does it in O(n).",
       "At each position, decide: should I extend the previous subarray or start fresh?",
       "current_sum = max(num, current_sum + num). Track the global maximum."
     ],
@@ -1812,7 +1909,7 @@
         "output": 0
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    Maximum Subarray (Kadane's Algorithm)\n    ---------------------------------------\n    Input : nums -> list of integers\n    Output: integer (maximum subarray sum)\n    \n    Example: nums=[-2,1,-3,4,-1,2,1,-5,4] \u2192 6\n    \"\"\"\n    # Think: At each element, should I extend or start fresh?\n    # curr_sum = max(num, curr_sum + num)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums):\n    \"\"\"\n    Maximum Subarray (Kadane's Algorithm)\n    ---------------------------------------\n    Input : nums -> list of integers\n    Output: integer (maximum subarray sum)\n    \n    Example: nums=[-2,1,-3,4,-1,2,1,-5,4] → 6\n    \"\"\"\n    # Think: At each element, should I extend or start fresh?\n    # curr_sum = max(num, curr_sum + num)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -1940,7 +2037,7 @@
     "approaches": [
       {
         "name": "Brute Force",
-        "complexity": "O(n\u00b2) time, O(1) space",
+        "complexity": "O(n²) time, O(1) space",
         "desc": "Check all subarrays and track maximum sum."
       },
       {
@@ -1964,7 +2061,7 @@
     "hints": [
       "Think recursively: ways(n) = ways(n-1) + ways(n-2).",
       "This is Fibonacci! dp[i] = dp[i-1] + dp[i-2].",
-      "You only need the last two values \u2014 optimize space to O(1)."
+      "You only need the last two values — optimize space to O(1)."
     ],
     "test_cases": [
       {
@@ -2040,7 +2137,7 @@
         "output": 1346269
       }
     ],
-    "starter_code": "def solve(n):\n    \"\"\"\n    Climbing Stairs\n    ----------------\n    Input : n -> integer (number of stairs)\n    Output: integer (number of distinct ways)\n    \n    Example: n=3 \u2192 3  (1+1+1, 1+2, 2+1)\n    \"\"\"\n    # Think: ways(n) = ways(n-1) + ways(n-2)\n    # This is the Fibonacci pattern!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(n):\n    \"\"\"\n    Climbing Stairs\n    ----------------\n    Input : n -> integer (number of stairs)\n    Output: integer (number of distinct ways)\n    \n    Example: n=3 → 3  (1+1+1, 1+2, 2+1)\n    \"\"\"\n    # Think: ways(n) = ways(n-1) + ways(n-2)\n    # This is the Fibonacci pattern!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -2127,8 +2224,8 @@
     "approaches": [
       {
         "name": "Recursion (naive)",
-        "complexity": "O(2\u207f) time, O(n) space",
-        "desc": "Pure recursion \u2014 exponential time due to repeated subproblems."
+        "complexity": "O(2ⁿ) time, O(n) space",
+        "desc": "Pure recursion — exponential time due to repeated subproblems."
       },
       {
         "name": "Memoization (top-down)",
@@ -2248,7 +2345,7 @@
         "output": 3
       }
     ],
-    "starter_code": "def solve(coins, amount):\n    \"\"\"\n    Coin Change\n    ------------\n    Input : coins  -> list of coin denominations\n            amount -> target amount (integer)\n    Output: integer (min coins needed, -1 if impossible)\n    \n    Example: coins=[1,5,6,9], amount=11 \u2192 2\n    \"\"\"\n    # Think: Bottom-up DP\n    # dp[i] = min coins to make amount i\n    # dp[i] = min(dp[i], dp[i - coin] + 1)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(coins, amount):\n    \"\"\"\n    Coin Change\n    ------------\n    Input : coins  -> list of coin denominations\n            amount -> target amount (integer)\n    Output: integer (min coins needed, -1 if impossible)\n    \n    Example: coins=[1,5,6,9], amount=11 → 2\n    \"\"\"\n    # Think: Bottom-up DP\n    # dp[i] = min coins to make amount i\n    # dp[i] = min(dp[i], dp[i - coin] + 1)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -2353,7 +2450,7 @@
       "Uber"
     ],
     "optimal_solution": "def solve(coins, amount):\n    dp = [float('inf')] * (amount+1)\n    dp[0] = 0\n    for i in range(1, amount+1):\n        for c in coins:\n            if c <= i:\n                dp[i] = min(dp[i], dp[i-c]+1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
-    "optimal_explanation": "Bottom-up DP. dp[i] = min coins for amount i. Try every coin at each amount. O(amount\u00d7coins) time.",
+    "optimal_explanation": "Bottom-up DP. dp[i] = min coins for amount i. Try every coin at each amount. O(amount×coins) time.",
     "approaches": [
       {
         "name": "Brute Force (recursion)",
@@ -2362,12 +2459,12 @@
       },
       {
         "name": "Top-down DP (memoization)",
-        "complexity": "O(S\u00d7n) time, O(S) space",
+        "complexity": "O(S×n) time, O(S) space",
         "desc": "Recursion + cache. Store results of subproblems."
       },
       {
         "name": "Bottom-up DP",
-        "complexity": "O(S\u00d7n) time, O(S) space",
+        "complexity": "O(S×n) time, O(S) space",
         "desc": "Build solution from amount 0 to target. Most efficient."
       }
     ]
@@ -2526,7 +2623,7 @@
         "output": 1
       }
     ],
-    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Binary Search\n    --------------\n    Input : nums   -> sorted list of integers\n            target -> integer to search\n    Output: integer (index if found, -1 if not)\n    \n    Example: nums=[-1,0,3,5,9,12], target=9 \u2192 4\n    \n    Constraint: Must be O(log n)!\n    \"\"\"\n    # Think: Split search space in half each time\n    # lo, hi, mid = ?, ?, lo + (hi-lo)//2\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Binary Search\n    --------------\n    Input : nums   -> sorted list of integers\n            target -> integer to search\n    Output: integer (index if found, -1 if not)\n    \n    Example: nums=[-1,0,3,5,9,12], target=9 → 4\n    \n    Constraint: Must be O(log n)!\n    \"\"\"\n    # Think: Split search space in half each time\n    # lo, hi, mid = ?, ?, lo + (hi-lo)//2\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -2783,7 +2880,7 @@
         "output": false
       }
     ],
-    "starter_code": "def solve(s):\n    \"\"\"\n    Valid Parentheses\n    ------------------\n    Input : s -> string with only ()[]{}\n    Output: True if valid, False otherwise\n    \n    Example: s=\"()[]{}\" \u2192 True\n             s=\"(]\"     \u2192 False\n    \"\"\"\n    # Think: Stack \u2014 push opening, pop on closing\n    # At end: stack must be empty\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(s):\n    \"\"\"\n    Valid Parentheses\n    ------------------\n    Input : s -> string with only ()[]{}\n    Output: True if valid, False otherwise\n    \n    Example: s=\"()[]{}\" → True\n             s=\"(]\"     → False\n    \"\"\"\n    # Think: Stack — push opening, pop on closing\n    # At end: stack must be empty\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -2924,7 +3021,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(operations):\n    \"\"\"\n    Min Stack\n    ----------\n    Input : operations -> list like [\"push:5\",\"push:3\",\"min\",\"pop\",\"min\"]\n    Output: list of results for \"min\" and \"top\" operations\n    \n    Example: [\"push:5\",\"push:3\",\"min\"] \u2192 [3]\n    \"\"\"\n    # Think: Two stacks \u2014 one for values, one for minimums\n    # Push to min_stack only if val <= current min\n    \n    # Write your solution below\n    # -----------------------------------\n    stack = []\n    min_stack = []\n    results = []\n    \n    # Process each operation:\n    for op in operations:\n        pass  # replace this with your code\n    \n    return results",
+    "starter_code": "def solve(operations):\n    \"\"\"\n    Min Stack\n    ----------\n    Input : operations -> list like [\"push:5\",\"push:3\",\"min\",\"pop\",\"min\"]\n    Output: list of results for \"min\" and \"top\" operations\n    \n    Example: [\"push:5\",\"push:3\",\"min\"] → [3]\n    \"\"\"\n    # Think: Two stacks — one for values, one for minimums\n    # Push to min_stack only if val <= current min\n    \n    # Write your solution below\n    # -----------------------------------\n    stack = []\n    min_stack = []\n    results = []\n    \n    # Process each operation:\n    for op in operations:\n        pass  # replace this with your code\n    \n    return results",
     "visible_test_cases": [
       {
         "input": {
@@ -2963,6 +3060,18 @@
       "Google",
       "Bloomberg",
       "Microsoft"
+    ],
+    "approaches": [
+      {
+        "name": "Two Stacks",
+        "complexity": "O(1) all ops, O(n) space",
+        "desc": "One stack for values, one for minimums. Push to min_stack only when value <= current min."
+      },
+      {
+        "name": "Single Stack with pairs",
+        "complexity": "O(1) all ops, O(n) space",
+        "desc": "Store (value, current_min) pairs in one stack. Simpler implementation."
+      }
     ]
   },
   "number_of_islands": {
@@ -2974,7 +3083,7 @@
     "hints": [
       "Think about graph traversal. Each island is a connected component of 1s.",
       "When you find a 1, do a DFS/BFS to mark all connected land as visited.",
-      "Count how many times you start a fresh DFS \u2014 that's your answer."
+      "Count how many times you start a fresh DFS — that's your answer."
     ],
     "test_cases": [
       {
@@ -3048,7 +3157,7 @@
         "output": 3
       }
     ],
-    "starter_code": "def solve(grid):\n    \"\"\"\n    Number of Islands\n    ------------------\n    Input : grid -> 2D list of \"1\" (land) and \"0\" (water)\n    Output: integer (count of islands)\n    \n    Example: grid with one connected land mass \u2192 1\n    \"\"\"\n    # Think: DFS/BFS \u2014 when you find a \"1\", explore all connected land\n    # Mark visited cells to avoid counting twice\n    \n    # Write your solution below\n    # -----------------------------------\n    if not grid:\n        return 0\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(grid):\n    \"\"\"\n    Number of Islands\n    ------------------\n    Input : grid -> 2D list of \"1\" (land) and \"0\" (water)\n    Output: integer (count of islands)\n    \n    Example: grid with one connected land mass → 1\n    \"\"\"\n    # Think: DFS/BFS — when you find a \"1\", explore all connected land\n    # Mark visited cells to avoid counting twice\n    \n    # Write your solution below\n    # -----------------------------------\n    if not grid:\n        return 0\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -3129,7 +3238,24 @@
       "Microsoft"
     ],
     "optimal_solution": "def solve(grid):\n    if not grid: return 0\n    count = 0\n    def dfs(i,j):\n        if i<0 or i>=len(grid) or j<0 or j>=len(grid[0]) or grid[i][j]!='1': return\n        grid[i][j]='0'\n        for di,dj in [(0,1),(0,-1),(1,0),(-1,0)]: dfs(i+di,j+dj)\n    for i in range(len(grid)):\n        for j in range(len(grid[0])):\n            if grid[i][j]=='1': dfs(i,j); count+=1\n    return count",
-    "optimal_explanation": "DFS from each unvisited land cell. Mark visited by changing '1' to '0'. Count DFS starts. O(m\u00d7n) time."
+    "optimal_explanation": "DFS from each unvisited land cell. Mark visited by changing '1' to '0'. Count DFS starts. O(m×n) time.",
+    "approaches": [
+      {
+        "name": "DFS",
+        "complexity": "O(m×n) time, O(m×n) space",
+        "desc": "For each unvisited land cell, do DFS to mark entire island. Count DFS calls."
+      },
+      {
+        "name": "BFS",
+        "complexity": "O(m×n) time, O(m×n) space",
+        "desc": "Same idea but uses queue instead of recursion. Avoids recursion limit issues."
+      },
+      {
+        "name": "Union Find",
+        "complexity": "O(m×n×α) time",
+        "desc": "Advanced — union adjacent land cells. Count components. Best for dynamic graphs."
+      }
+    ]
   },
   "invert_binary_tree": {
     "id": "invert_binary_tree",
@@ -3186,7 +3312,7 @@
         "output": []
       }
     ],
-    "starter_code": "def solve(root):\n    \"\"\"\n    Invert Binary Tree\n    -------------------\n    Input : root -> level-order list  e.g. [4,2,7,1,3,6,9]\n    Output: level-order list of inverted tree\n    \n    Example: [4,2,7,1,3,6,9] \u2192 [4,7,2,9,6,3,1]\n    \"\"\"\n    # Think: At each node, swap left and right children\n    # Do this recursively for every node\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(root):\n    \"\"\"\n    Invert Binary Tree\n    -------------------\n    Input : root -> level-order list  e.g. [4,2,7,1,3,6,9]\n    Output: level-order list of inverted tree\n    \n    Example: [4,2,7,1,3,6,9] → [4,7,2,9,6,3,1]\n    \"\"\"\n    # Think: At each node, swap left and right children\n    # Do this recursively for every node\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -3236,6 +3362,18 @@
       "Google",
       "Facebook",
       "Apple"
+    ],
+    "approaches": [
+      {
+        "name": "Recursive DFS",
+        "complexity": "O(n) time, O(h) space",
+        "desc": "At each node swap left and right, then recurse. Simplest approach."
+      },
+      {
+        "name": "Iterative BFS",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Use queue, process level by level, swap children at each node."
+      }
     ]
   },
   "max_depth_binary_tree": {
@@ -3281,7 +3419,7 @@
         "output": 0
       }
     ],
-    "starter_code": "def solve(root):\n    \"\"\"\n    Maximum Depth of Binary Tree\n    ------------------------------\n    Input : root -> level-order list\n    Output: integer (max depth)\n    \n    Example: [3,9,20,null,null,15,7] \u2192 3\n    \"\"\"\n    # Think recursively:\n    # max_depth(node) = 1 + max(left_depth, right_depth)\n    # Base case: empty node \u2192 depth 0\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(root):\n    \"\"\"\n    Maximum Depth of Binary Tree\n    ------------------------------\n    Input : root -> level-order list\n    Output: integer (max depth)\n    \n    Example: [3,9,20,null,null,15,7] → 3\n    \"\"\"\n    # Think recursively:\n    # max_depth(node) = 1 + max(left_depth, right_depth)\n    # Base case: empty node → depth 0\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -3319,6 +3457,23 @@
       "Amazon",
       "Google",
       "Facebook"
+    ],
+    "approaches": [
+      {
+        "name": "Recursive DFS",
+        "complexity": "O(n) time, O(h) space",
+        "desc": "depth(node) = 1 + max(depth(left), depth(right)). Simplest."
+      },
+      {
+        "name": "Iterative BFS",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Level-order traversal. Count levels. Each level = +1 depth."
+      },
+      {
+        "name": "Iterative DFS (Stack)",
+        "complexity": "O(n) time, O(h) space",
+        "desc": "Use stack to simulate recursion. Track max depth seen."
+      }
     ]
   },
   "merge_two_sorted_lists": {
@@ -3487,7 +3642,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(list1, list2):\n    \"\"\"\n    Merge Two Sorted Lists\n    -----------------------\n    Input : list1 -> sorted list of integers\n            list2 -> sorted list of integers\n    Output: merged sorted list\n    \n    Example: [1,2,4] + [1,3,4] \u2192 [1,1,2,3,4,4]\n    \"\"\"\n    # Think: Two pointers \u2014 compare heads, take smaller\n    # Don't forget remaining elements!\n    \n    # Write your solution below\n    # -----------------------------------\n    result = []\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(list1, list2):\n    \"\"\"\n    Merge Two Sorted Lists\n    -----------------------\n    Input : list1 -> sorted list of integers\n            list2 -> sorted list of integers\n    Output: merged sorted list\n    \n    Example: [1,2,4] + [1,3,4] → [1,1,2,3,4,4]\n    \"\"\"\n    # Think: Two pointers — compare heads, take smaller\n    # Don't forget remaining elements!\n    \n    # Write your solution below\n    # -----------------------------------\n    result = []\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -3650,6 +3805,18 @@
       "Microsoft",
       "Google",
       "Apple"
+    ],
+    "approaches": [
+      {
+        "name": "Two Pointers (Iterative)",
+        "complexity": "O(m+n) time, O(1) space",
+        "desc": "Compare heads, take smaller, advance that pointer. Best approach."
+      },
+      {
+        "name": "Recursive",
+        "complexity": "O(m+n) time, O(m+n) space",
+        "desc": "Pick smaller head, recurse on rest. Clean but uses call stack."
+      }
     ]
   },
   "three_sum": {
@@ -3659,7 +3826,7 @@
     "difficulty": "medium",
     "question": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j != k, and nums[i] + nums[j] + nums[k] == 0. The solution must not contain duplicate triplets.",
     "hints": [
-      "Sort the array first \u2014 this lets you use two pointers efficiently.",
+      "Sort the array first — this lets you use two pointers efficiently.",
       "Fix one element, then use two pointers on the remaining sorted subarray.",
       "Skip duplicates carefully to avoid duplicate triplets in the result."
     ],
@@ -3715,7 +3882,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    3Sum\n    -----\n    Input : nums -> list of integers\n    Output: list of unique triplets that sum to 0\n    \n    Example: [-1,0,1,2,-1,-4] \u2192 [[-1,-1,2],[-1,0,1]]\n    \"\"\"\n    # Think: Sort first, then fix one element + two pointers\n    # Skip duplicates carefully!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums):\n    \"\"\"\n    3Sum\n    -----\n    Input : nums -> list of integers\n    Output: list of unique triplets that sum to 0\n    \n    Example: [-1,0,1,2,-1,-4] → [[-1,-1,2],[-1,0,1]]\n    \"\"\"\n    # Think: Sort first, then fix one element + two pointers\n    # Skip duplicates carefully!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -3776,7 +3943,24 @@
       "Microsoft"
     ],
     "optimal_solution": "def solve(nums):\n    nums.sort()\n    res = []\n    for i in range(len(nums)-2):\n        if i>0 and nums[i]==nums[i-1]: continue\n        l,r = i+1,len(nums)-1\n        while l<r:\n            s = nums[i]+nums[l]+nums[r]\n            if s==0: res.append([nums[i],nums[l],nums[r]]); l+=1; r-=1\n            elif s<0: l+=1\n            else: r-=1\n    return res",
-    "optimal_explanation": "Sort + two pointers. Fix one element, use two pointers for rest. Skip duplicates. O(n\u00b2) time, O(1) space."
+    "optimal_explanation": "Sort + two pointers. Fix one element, use two pointers for rest. Skip duplicates. O(n²) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n³) time, O(1) space",
+        "desc": "Check all triplets. Way too slow for large inputs."
+      },
+      {
+        "name": "Sort + Two Pointers",
+        "complexity": "O(n²) time, O(1) space",
+        "desc": "Sort array. Fix one element, use two pointers for rest. Skip duplicates carefully."
+      },
+      {
+        "name": "HashSet",
+        "complexity": "O(n²) time, O(n) space",
+        "desc": "Fix one element, use hashset for complement. Harder to handle duplicates."
+      }
+    ]
   },
   "find_median_sorted_arrays": {
     "id": "find_median_sorted_arrays",
@@ -3829,7 +4013,7 @@
         "output": 0.0
       }
     ],
-    "starter_code": "def solve(nums1, nums2):\n    \"\"\"\n    Median of Two Sorted Arrays\n    ----------------------------\n    Input : nums1 -> sorted list\n            nums2 -> sorted list\n    Output: float (median of combined arrays)\n    \n    Example: nums1=[1,3], nums2=[2] \u2192 2.0\n    \n    Constraint: Must be O(log(m+n))!\n    \"\"\"\n    # Think: Binary search on the smaller array\n    # Find the correct partition point\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums1, nums2):\n    \"\"\"\n    Median of Two Sorted Arrays\n    ----------------------------\n    Input : nums1 -> sorted list\n            nums2 -> sorted list\n    Output: float (median of combined arrays)\n    \n    Example: nums1=[1,3], nums2=[2] → 2.0\n    \n    Constraint: Must be O(log(m+n))!\n    \"\"\"\n    # Think: Binary search on the smaller array\n    # Find the correct partition point\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -3875,6 +4059,18 @@
       "Google",
       "Amazon",
       "Microsoft"
+    ],
+    "approaches": [
+      {
+        "name": "Merge & Find",
+        "complexity": "O(m+n) time, O(m+n) space",
+        "desc": "Merge both arrays, find middle element. Simple but not optimal."
+      },
+      {
+        "name": "Binary Search",
+        "complexity": "O(log(min(m,n))) time, O(1) space",
+        "desc": "Binary search on smaller array to find correct partition. Optimal solution."
+      }
     ]
   },
   "word_search": {
@@ -3968,7 +4164,7 @@
         "output": false
       }
     ],
-    "starter_code": "def solve(board, word):\n    \"\"\"\n    Word Search\n    ------------\n    Input : board -> 2D list of characters\n            word  -> string to search\n    Output: True if word exists in grid, False otherwise\n    \n    Example: board=[[\"A\",\"B\",\"C\"],[\"S\",\"F\",\"C\"]], word=\"ABC\" \u2192 True\n    \"\"\"\n    # Think: DFS + Backtracking\n    # Start from every cell matching word[0]\n    # Mark visited, explore 4 directions, unmark on backtrack\n    \n    # Write your solution below\n    # -----------------------------------\n    rows, cols = len(board), len(board[0])\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(board, word):\n    \"\"\"\n    Word Search\n    ------------\n    Input : board -> 2D list of characters\n            word  -> string to search\n    Output: True if word exists in grid, False otherwise\n    \n    Example: board=[[\"A\",\"B\",\"C\"],[\"S\",\"F\",\"C\"]], word=\"ABC\" → True\n    \"\"\"\n    # Think: DFS + Backtracking\n    # Start from every cell matching word[0]\n    # Mark visited, explore 4 directions, unmark on backtrack\n    \n    # Write your solution below\n    # -----------------------------------\n    rows, cols = len(board), len(board[0])\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -4054,6 +4250,18 @@
       "Amazon",
       "Google",
       "Facebook"
+    ],
+    "approaches": [
+      {
+        "name": "DFS + Backtracking",
+        "complexity": "O(m×n×4^L) time",
+        "desc": "Start DFS from each matching cell. Mark visited, explore 4 directions, unmark on backtrack."
+      },
+      {
+        "name": "Trie + DFS",
+        "complexity": "O(m×n×4^L) time",
+        "desc": "Advanced — used when searching multiple words. Build trie, then DFS."
+      }
     ]
   },
   "house_robber": {
@@ -4065,7 +4273,7 @@
     "hints": [
       "At each house, you have two choices: rob it (add to prev_prev) or skip it (take prev).",
       "dp[i] = max(dp[i-1], dp[i-2] + nums[i]).",
-      "You only need the previous two values \u2014 optimize space to O(1)."
+      "You only need the previous two values — optimize space to O(1)."
     ],
     "test_cases": [
       {
@@ -4182,7 +4390,7 @@
         "output": 30
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    House Robber\n    -------------\n    Input : nums -> list of integers (money in each house)\n    Output: integer (maximum money without robbing adjacent)\n    \n    Example: nums=[2,7,9,3,1] \u2192 12\n    \"\"\"\n    # Think: dp[i] = max(dp[i-1], dp[i-2] + nums[i])\n    # You only need last two values \u2014 O(1) space!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums):\n    \"\"\"\n    House Robber\n    -------------\n    Input : nums -> list of integers (money in each house)\n    Output: integer (maximum money without robbing adjacent)\n    \n    Example: nums=[2,7,9,3,1] → 12\n    \"\"\"\n    # Think: dp[i] = max(dp[i-1], dp[i-2] + nums[i])\n    # You only need last two values — O(1) space!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -4310,7 +4518,7 @@
     "approaches": [
       {
         "name": "Brute Force",
-        "complexity": "O(2\u207f) time",
+        "complexity": "O(2ⁿ) time",
         "desc": "Try all possible combinations of houses."
       },
       {
@@ -4321,7 +4529,7 @@
       {
         "name": "DP optimized",
         "complexity": "O(n) time, O(1) space",
-        "desc": "Only keep two variables \u2014 prev2 and prev1."
+        "desc": "Only keep two variables — prev2 and prev1."
       }
     ]
   },
@@ -4334,7 +4542,7 @@
     "hints": [
       "Count frequencies using a hashmap.",
       "Then find the top-k elements by frequency.",
-      "Bucket sort by frequency gives O(n) time \u2014 frequencies range from 1 to n."
+      "Bucket sort by frequency gives O(n) time — frequencies range from 1 to n."
     ],
     "test_cases": [
       {
@@ -4366,7 +4574,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums, k):\n    \"\"\"\n    Top K Frequent Elements\n    ------------------------\n    Input : nums -> list of integers\n            k    -> integer\n    Output: list of k most frequent elements\n    \n    Example: nums=[1,1,1,2,2,3], k=2 \u2192 [1,2]\n    \"\"\"\n    # Think: Count frequencies with hashmap\n    # Then find top-k by frequency\n    # Bucket sort gives O(n)!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "def solve(nums, k):\n    \"\"\"\n    Top K Frequent Elements\n    ------------------------\n    Input : nums -> list of integers\n            k    -> integer\n    Output: list of k most frequent elements\n    \n    Example: nums=[1,1,1,2,2,3], k=2 → [1,2]\n    \"\"\"\n    # Think: Count frequencies with hashmap\n    # Then find top-k by frequency\n    # Bucket sort gives O(n)!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
     "visible_test_cases": [
       {
         "input": {
@@ -4403,6 +4611,23 @@
       "Facebook",
       "Google",
       "Uber"
+    ],
+    "approaches": [
+      {
+        "name": "Sort by frequency",
+        "complexity": "O(n log n) time, O(n) space",
+        "desc": "Count frequencies, sort by count, take top k."
+      },
+      {
+        "name": "Min Heap",
+        "complexity": "O(n log k) time, O(n) space",
+        "desc": "Count frequencies, maintain heap of size k. Better when k << n."
+      },
+      {
+        "name": "Bucket Sort",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Frequencies range 1 to n. Use index as frequency bucket. Linear time."
+      }
     ]
   }
 }

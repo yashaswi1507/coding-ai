@@ -570,6 +570,61 @@ elif tab == "📜 History":
     else:
         st.info("No submissions yet!")
 
+    # ── Thinking Replay ──────────────────────────────────────────────────────
+    st.divider()
+    st.subheader("🎬 Thinking Replay")
+    st.caption("See how your thinking evolved across attempts on the same problem")
+
+    if history:
+        problem_ids = list(dict.fromkeys([h["problem_id"] for h in history]))
+        selected_replay = st.selectbox(
+            "Select problem to replay:",
+            problem_ids,
+            format_func=lambda x: x.replace("_", " ").title()
+        )
+
+        replay = api(f"/thinking-replay/?user_id={USER_ID}&problem_id={selected_replay}") or []
+
+        if len(replay) == 0:
+            st.info("No attempts found for this problem.")
+        elif len(replay) == 1:
+            st.info("Only 1 attempt — solve again to see your progress!")
+        else:
+            st.success(f"📈 {len(replay)} attempts found — see how you improved!")
+            for attempt in replay:
+                num = attempt["attempt_num"]
+                score = attempt["thinking_score"]
+                change = attempt.get("score_change", 0)
+                improved = attempt.get("improved", False)
+                approach = attempt.get("code_approach", "?")
+                date = attempt.get("submitted_at", "")[:10]
+
+                change_str = f"+{change}" if change > 0 else str(change)
+                icon = "📈" if improved else "📉" if change < 0 else "➡️"
+
+                with st.expander(
+                    f"{icon} Attempt {num} — 🧠 {score}/100 ({change_str}) · {date}",
+                    expanded=(num == len(replay))
+                ):
+                    c1, c2 = st.columns(2)
+                    c1.metric("Thinking Score", f"{score}/100")
+                    c2.metric("Approach", approach.replace("_", " ").title())
+
+                    if attempt.get("thinking_text"):
+                        st.markdown("**Your Thinking:**")
+                        st.info(attempt["thinking_text"])
+                    else:
+                        st.caption("No thinking explanation was provided")
+
+                    passed = attempt.get("passed", 0)
+                    total = attempt.get("total", 0)
+                    if passed == total and total > 0:
+                        st.success(f"✅ All {total} tests passed")
+                    else:
+                        st.warning(f"⚠️ {passed}/{total} tests passed")
+    else:
+        st.info("Solve problems first to see your thinking replay!")
+
 # ═══════════════════════════════════════════════════════
 # TAB: LEADERBOARD
 # ═══════════════════════════════════════════════════════
