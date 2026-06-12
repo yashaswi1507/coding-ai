@@ -46,28 +46,28 @@ THINKING_FEEDBACK_TEMPLATES = [
 
 REFLECTION_QUESTIONS = {
     "brute_force": [
-        "Why did you start with brute force — is it always a valid first step?",
-        "What is the time complexity of your current solution?",
-        "How would you optimize this if inputs were 10x larger?",
-        "What data structure could reduce your lookup time from O(n) to O(1)?",
+        "After seeing the optimal solution, what would you change in your approach?",
+        "What did you learn from solving this problem?",
+        "How would you explain the difference between your approach and the optimal one to a fresher?",
+        "Can you think of another problem where the same optimization applies?",
     ],
     "basic": [
-        "What is the time complexity of your solution?",
-        "Can this be solved in fewer passes through the data?",
-        "What edge cases did you consider before writing code?",
-        "How would you explain this to a junior developer?",
+        "After solving this, what would you do differently next time?",
+        "What was the hardest part of this problem and how did you overcome it?",
+        "How would you explain your solution to someone who has never seen this problem?",
+        "What similar problems can this approach be applied to?",
     ],
     "optimized": [
-        "Why did you choose this particular data structure?",
-        "What is the space complexity tradeoff you made?",
-        "Can you prove why this is more efficient than the naive approach?",
-        "What happens with duplicate values in the input?",
+        "What was your thought process when you decided to use this data structure?",
+        "After solving this, what follow-up problem would you practice next?",
+        "How would you teach this approach to a beginner?",
+        "What would break your solution — and how would you handle it?",
     ],
     "optimal": [
-        "How would you prove this solution's complexity is optimal?",
-        "Can you implement this iteratively AND recursively?",
-        "What follow-up variations might an interviewer ask?",
-        "How does your solution handle all edge cases?",
+        "What made you confident this was the best approach?",
+        "How would you extend this solution if the problem had additional constraints?",
+        "What other problems use the same core idea?",
+        "How would you explain this solution in a real interview setting?",
     ]
 }
 

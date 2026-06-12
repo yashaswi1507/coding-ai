@@ -1,9 +1,9 @@
+import os
 import streamlit as st
 import requests
 import time
-import os 
 
-BASE = os.environ.get("BACKEND_URL", "http://127.0.0.1:8000")  # ← yeh
+BASE = os.environ.get("BACKEND_URL", "http://127.0.0.1:8000")
 USER_ID = "guest"
 
 st.set_page_config(page_title="ThinkCode AI", layout="wide", page_icon="🧠")
@@ -161,17 +161,28 @@ if tab == "🧩 Solve":
                 st.warning(f"💡 {hint}")
 
     # Thinking
-    st.subheader("🧠 Your Thinking")
-    st.caption("⭐ This is the CORE of ThinkCode AI — explain before you code!")
+    st.subheader("🧠 Think Before You Code")
+    st.caption("Explain your plan BEFORE writing code — this is what separates great engineers from average ones!")
+
+    col_t1, col_t2, col_t3 = st.columns(3)
+    col_t1.markdown("**Plan your approach**")
+    col_t2.markdown("**State complexity**")
+    col_t3.markdown("**Spot edge cases**")
+
     thinking = st.text_area(
-        "Explain your approach:",
-        placeholder="• Why this approach?\n• Time & space complexity?\n• Edge cases?\n• Can it be optimized?",
-        height=130, key=f"think_{selected_id}"
+        "Your thinking:",
+        placeholder="Example: I'll use a hashmap to store each number's index as I traverse. This gives O(n) time since lookup is O(1). Edge cases: empty array returns []. Space is O(n) for the hashmap.",
+        height=110, key=f"think_{selected_id}"
     )
     wc = len(thinking.split()) if thinking.strip() else 0
-    if wc > 0:
-        q = "🏆 Excellent!" if wc>=60 else "✅ Good!" if wc>=25 else "⚠️ Elaborate more..."
-        st.caption(f"{wc} words — {q}")
+    if wc == 0:
+        st.caption("⚠️ No explanation = lower thinking score — interviewers always want to hear your reasoning!")
+    elif wc < 15:
+        st.caption(f"⚠️ {wc} words — too brief, elaborate more")
+    elif wc < 40:
+        st.caption(f"🔵 {wc} words — good start, mention complexity too!")
+    else:
+        st.caption(f"✅ {wc} words — great explanation!")
 
     # Code
     st.subheader("💻 Your Code")
@@ -212,8 +223,7 @@ if tab == "🧩 Solve":
         c1.metric("Tests Passed", f"{r.get('passed',0)}/{r.get('total',0)}")
         c2.metric("Visible",      f"{r.get('visible_passed',0)}/{r.get('visible_total',0)}")
         c3.metric("Hidden 🔒",    f"{r.get('hidden_passed',0)}/{r.get('hidden_total',0)}")
-        code_pct = int((r.get('passed',0) / r.get('total',1)) * 100)
-        c4.metric("💻 Code Score", f"{code_pct}%")
+        c4.metric("🧠 Thinking",  f"{r.get('thinking_score',0)}/100")
 
         # ── FEATURE 1: Score Breakdown ──────────────────────────────────────
         breakdown = r.get("score_breakdown", {}).get("breakdown", {})
@@ -287,8 +297,8 @@ if tab == "🧩 Solve":
                     st.info(f"💡 {problem['optimal_explanation']}")
 
         # ── FEATURE 5: Reflection Scoring ──────────────────────────────────
-        st.subheader("🪞 Reflection Questions")
-        st.caption("Answer these — your answers will be scored!")
+        st.subheader("🪞 Post-Solve Reflection")
+        st.caption("Now that you have solved it — reflect and deepen your understanding!")
         with st.form(key=f"ref_{selected_id}"):
             reflection_answers = []
             for idx, q in enumerate(r.get("reflection_questions",[])):

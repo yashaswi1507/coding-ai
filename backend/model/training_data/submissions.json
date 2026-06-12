@@ -334,5 +334,19 @@
     "total_tests": 12,
     "labeled": false,
     "timestamp": "2026-06-12T13:45:19.982104"
+  },
+  {
+    "id": "8ea0c988-84e8-42a0-ac32-e4e6b89ebfc6",
+    "code": "def  solve(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False\n",
+    "thinking_text": "",
+    "problem_id": "contains_duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 39,
+    "approach": "optimized",
+    "passed_tests": 10,
+    "total_tests": 10,
+    "labeled": false,
+    "timestamp": "2026-06-12T15:11:01.930379"
   }
 ]
