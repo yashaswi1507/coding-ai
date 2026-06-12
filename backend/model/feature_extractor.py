@@ -42,15 +42,50 @@ ALGORITHM_WORDS = [
 def extract_features(user_code: str, thinking_text: str) -> list:
     """
     Extract a 25-dimensional feature vector from code + thinking text.
-    All values are normalized to [0, 1] range for stable training.
-
-    Feature layout:
-        [0-14]  Code features (15 features)
-        [15-24] Thinking text features (10 features)
+    Supports both plain solve() and LeetCode-style class Solution format.
     """
-    code_feats = _extract_code_features(user_code or "")
+    # Extract actual solution code from class Solution if present
+    clean_code = _extract_solution_code(user_code or "")
+    code_feats  = _extract_code_features(clean_code)
     think_feats = _extract_thinking_features(thinking_text or "")
     return code_feats + think_feats
+
+
+def _extract_solution_code(code: str) -> str:
+    """
+    Extract the core solution logic from either:
+    - Plain solve() function
+    - LeetCode-style class Solution with method
+    Returns the inner method body for analysis.
+    """
+    if "class Solution" not in code:
+        return code
+
+    lines = code.split("\n")
+    solution_lines = []
+    inside_method = False
+    method_indent = 0
+
+    for line in lines:
+        stripped = line.strip()
+        # Skip class definition and solve() wrapper at bottom
+        if stripped.startswith("class Solution") or stripped.startswith("def solve("):
+            continue
+        # Find method definition inside class
+        if stripped.startswith("def ") and not inside_method:
+            inside_method = True
+            method_indent = len(line) - len(line.lstrip())
+            continue
+        # Collect method body
+        if inside_method:
+            if stripped and len(line) - len(line.lstrip()) <= method_indent and not stripped.startswith("#"):
+                inside_method = False
+            else:
+                solution_lines.append(line)
+
+    extracted = "\n".join(solution_lines)
+    # Fallback to full code if extraction failed
+    return extracted if extracted.strip() else code
 
 
 # ── Code Feature Extraction (15 features) ────────────────────────────────────

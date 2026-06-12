@@ -7,11 +7,35 @@ from services.analytics import (
     check_and_award_achievements, get_score_breakdown,
     detect_missing_edge_cases, award_xp
 )
+from model.auto_trainer import trigger_if_needed
 from database import get_connection
 import json
 
 def evaluate_solution(problem, user_code, thinking_text,
                       user_id="guest", is_daily=False):
+
+    # No code written — return early, no XP, no score
+    actual_code = user_code.replace("pass", "").replace("#", "").strip()
+    if not actual_code or len(actual_code.splitlines()) <= 2:
+        return {
+            "passed": 0, "visible_passed": 0, "hidden_passed": 0,
+            "total": len(problem.get("test_cases", [])),
+            "visible_total": len(problem.get("visible_test_cases", [])),
+            "hidden_total": len(problem.get("hidden_test_cases", [])),
+            "all_passed": False,
+            "results": [],
+            "thinking_score": 0,
+            "code_approach": "none",
+            "feedback": ["❌ No code written — write your solution first!"],
+            "suggestions": ["Write your solution inside the solve() function"],
+            "strengths": [], "areas_to_improve": ["Write actual code to get feedback"],
+            "reflection_questions": [], "complexity_analysis": {},
+            "model_source": "none", "followup_questions": [],
+            "score_breakdown": {}, "missing_edge_cases": [],
+            "new_achievements": [], "xp": {},
+            "error": "no_code"
+        }
+
     visible_cases = problem.get("visible_test_cases", problem.get("test_cases", []))
     hidden_cases  = problem.get("hidden_test_cases", [])
     all_cases     = visible_cases + hidden_cases
@@ -87,6 +111,12 @@ def evaluate_solution(problem, user_code, thinking_text,
     except Exception:
         new_achievements = []
         xp_result = {}
+
+    # Auto-train if enough new data collected
+    try:
+        trigger_if_needed()
+    except Exception:
+        pass
 
     return {
         "passed": total_passed, "visible_passed": visible_pass,

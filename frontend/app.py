@@ -936,6 +936,18 @@ elif tab == "🛠 Admin":
     c3.metric("Unlabeled",   admin_stats.get("unlabeled",0))
     c4.metric("Engine", "🤖 Neural Net" if admin_stats.get("model_available") else "📏 Rule-Based")
 
+    # Auto training status
+    train_status = api("/training-status/") or {}
+    if train_status:
+        is_training = train_status.get("is_training", False)
+        next_at     = train_status.get("next_train_at", 10)
+        model_exists = train_status.get("model_exists", False)
+
+        if is_training:
+            st.info("🔄 Auto-training running in background...")
+        else:
+            st.success(f"✅ Model {'ready' if model_exists else 'not trained yet'} · Auto-trains every 10 submissions · Next in {next_at} submissions")
+
     st.subheader("🧠 Train Model")
     c1, c2 = st.columns(2)
     epochs    = c1.number_input("Epochs", 10, 1000, 150, step=10)

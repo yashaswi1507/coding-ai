@@ -432,5 +432,19 @@
     "total_tests": 12,
     "labeled": false,
     "timestamp": "2026-06-12T17:20:19.025808"
+  },
+  {
+    "id": "af2f00ca-cd22-4f58-9303-fa9a13e9b313",
+    "code": "def solve(nums, target):\n     n = len(nums)\n\n    for i in range(n):\n      \n        # For each element [i], check every\n        # other element arr[j] that comes after it\n        for j in range(i + 1, n):\n          \n            # Check if the sum of the current pair\n            # equals the target\n            if nums[i] + nums[j] == target:\n                return True\n              \n    # If no pair is found after checking\n    # all possibilities\n    return False",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 30,
+    "approach": "brute_force",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T21:32:33.645748"
   }
 ]

@@ -189,7 +189,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        # Write your solution here\n        pass\n\n# DO NOT change below — required for evaluation\ndef solve(nums, target):\n    return Solution().twoSum(nums, target)",
     "visible_test_cases": [
       {
         "input": {
@@ -523,7 +523,7 @@
         "output": 8
       }
     ],
-    "starter_code": "def solve(prices):\n    \"\"\"\n    Best Time to Buy and Sell Stock\n    --------------------------------\n    Input : prices -> list of integers (daily prices)\n    Output: integer (maximum profit, 0 if no profit)\n    \n    Example: prices=[7,1,5,3,6,4] → 5\n    \"\"\"\n    # Hint: Track minimum price seen so far\n    # At each day: profit = price - min_so_far\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def maxProfit(self, prices: List[int]) -> int:\n        # Write your solution here\n        pass\n\ndef solve(prices):\n    return Solution().maxProfit(prices)",
     "visible_test_cases": [
       {
         "input": {
@@ -970,7 +970,7 @@
         "output": true
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    Contains Duplicate\n    -------------------\n    Input : nums -> list of integers\n    Output: True if duplicate exists, False otherwise\n    \n    Example: nums=[1,2,3,1] → True\n    \"\"\"\n    # Think: What data structure finds duplicates in O(1)?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def containsDuplicate(self, nums: List[int]) -> bool:\n        # Write your solution here\n        pass\n\ndef solve(nums):\n    return Solution().containsDuplicate(nums)",
     "visible_test_cases": [
       {
         "input": {
@@ -1348,7 +1348,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    Product of Array Except Self\n    ------------------------------\n    Input : nums -> list of integers\n    Output: list where output[i] = product of all except nums[i]\n    \n    Example: nums=[1,2,3,4] → [24,12,8,6]\n    \n    Constraint: No division operator allowed!\n    \"\"\"\n    # Think: Prefix products × Suffix products\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def productExceptSelf(self, nums: List[int]) -> List[int]:\n        # Write your solution here\n        pass\n\ndef solve(nums):\n    return Solution().productExceptSelf(nums)",
     "visible_test_cases": [
       {
         "input": {
@@ -1492,7 +1492,7 @@
         "output": true
       }
     ],
-    "starter_code": "def solve(s, t):\n    \"\"\"\n    Valid Anagram\n    --------------\n    Input : s -> string\n            t -> string\n    Output: True if t is anagram of s, False otherwise\n    \n    Example: s=\"anagram\", t=\"nagaram\" → True\n    \"\"\"\n    # Think: What makes two strings anagrams?\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "class Solution:\n    def isAnagram(self, s: str, t: str) -> bool:\n        # Write your solution here\n        pass\n\ndef solve(s, t):\n    return Solution().isAnagram(s, t)",
     "visible_test_cases": [
       {
         "input": {
@@ -1623,7 +1623,7 @@
         "output": 3
       }
     ],
-    "starter_code": "def solve(s):\n    \"\"\"\n    Longest Substring Without Repeating Characters\n    ------------------------------------------------\n    Input : s -> string\n    Output: integer (length of longest valid substring)\n    \n    Example: s=\"abcabcbb\" → 3  (abc)\n    \"\"\"\n    # Think: Sliding window with two pointers\n    # left pointer shrinks when duplicate found\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        # Write your solution here\n        pass\n\ndef solve(s):\n    return Solution().lengthOfLongestSubstring(s)",
     "visible_test_cases": [
       {
         "input": {
@@ -1722,7 +1722,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(head):\n    \"\"\"\n    Reverse a Linked List\n    ----------------------\n    Input : head -> list of values  e.g. [1,2,3,4,5]\n    Output: reversed list           e.g. [5,4,3,2,1]\n    \n    Example: [1,2,3,4,5] → [5,4,3,2,1]\n    \"\"\"\n    # Think: Three pointers — prev, curr, next\n    # At each step: curr.next = prev, then advance\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def reverseList(self, head: List[int]) -> List[int]:\n        # Input/Output is list for simplicity\n        # Write your solution here\n        pass\n\ndef solve(head):\n    return Solution().reverseList(head)",
     "visible_test_cases": [
       {
         "input": {
@@ -1909,7 +1909,7 @@
         "output": 0
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    Maximum Subarray (Kadane's Algorithm)\n    ---------------------------------------\n    Input : nums -> list of integers\n    Output: integer (maximum subarray sum)\n    \n    Example: nums=[-2,1,-3,4,-1,2,1,-5,4] → 6\n    \"\"\"\n    # Think: At each element, should I extend or start fresh?\n    # curr_sum = max(num, curr_sum + num)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def maxSubArray(self, nums: List[int]) -> int:\n        # Write your solution here\n        pass\n\ndef solve(nums):\n    return Solution().maxSubArray(nums)",
     "visible_test_cases": [
       {
         "input": {
@@ -2137,7 +2137,7 @@
         "output": 1346269
       }
     ],
-    "starter_code": "def solve(n):\n    \"\"\"\n    Climbing Stairs\n    ----------------\n    Input : n -> integer (number of stairs)\n    Output: integer (number of distinct ways)\n    \n    Example: n=3 → 3  (1+1+1, 1+2, 2+1)\n    \"\"\"\n    # Think: ways(n) = ways(n-1) + ways(n-2)\n    # This is the Fibonacci pattern!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        # Write your solution here\n        pass\n\ndef solve(n):\n    return Solution().climbStairs(n)",
     "visible_test_cases": [
       {
         "input": {
@@ -2345,7 +2345,7 @@
         "output": 3
       }
     ],
-    "starter_code": "def solve(coins, amount):\n    \"\"\"\n    Coin Change\n    ------------\n    Input : coins  -> list of coin denominations\n            amount -> target amount (integer)\n    Output: integer (min coins needed, -1 if impossible)\n    \n    Example: coins=[1,5,6,9], amount=11 → 2\n    \"\"\"\n    # Think: Bottom-up DP\n    # dp[i] = min coins to make amount i\n    # dp[i] = min(dp[i], dp[i - coin] + 1)\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def coinChange(self, coins: List[int], amount: int) -> int:\n        # Write your solution here\n        pass\n\ndef solve(coins, amount):\n    return Solution().coinChange(coins, amount)",
     "visible_test_cases": [
       {
         "input": {
@@ -2623,7 +2623,7 @@
         "output": 1
       }
     ],
-    "starter_code": "def solve(nums, target):\n    \"\"\"\n    Binary Search\n    --------------\n    Input : nums   -> sorted list of integers\n            target -> integer to search\n    Output: integer (index if found, -1 if not)\n    \n    Example: nums=[-1,0,3,5,9,12], target=9 → 4\n    \n    Constraint: Must be O(log n)!\n    \"\"\"\n    # Think: Split search space in half each time\n    # lo, hi, mid = ?, ?, lo + (hi-lo)//2\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def search(self, nums: List[int], target: int) -> int:\n        # Write your solution here\n        pass\n\ndef solve(nums, target):\n    return Solution().search(nums, target)",
     "visible_test_cases": [
       {
         "input": {
@@ -2880,7 +2880,7 @@
         "output": false
       }
     ],
-    "starter_code": "def solve(s):\n    \"\"\"\n    Valid Parentheses\n    ------------------\n    Input : s -> string with only ()[]{}\n    Output: True if valid, False otherwise\n    \n    Example: s=\"()[]{}\" → True\n             s=\"(]\"     → False\n    \"\"\"\n    # Think: Stack — push opening, pop on closing\n    # At end: stack must be empty\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "class Solution:\n    def isValid(self, s: str) -> bool:\n        # Write your solution here\n        pass\n\ndef solve(s):\n    return Solution().isValid(s)",
     "visible_test_cases": [
       {
         "input": {
@@ -3021,7 +3021,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(operations):\n    \"\"\"\n    Min Stack\n    ----------\n    Input : operations -> list like [\"push:5\",\"push:3\",\"min\",\"pop\",\"min\"]\n    Output: list of results for \"min\" and \"top\" operations\n    \n    Example: [\"push:5\",\"push:3\",\"min\"] → [3]\n    \"\"\"\n    # Think: Two stacks — one for values, one for minimums\n    # Push to min_stack only if val <= current min\n    \n    # Write your solution below\n    # -----------------------------------\n    stack = []\n    min_stack = []\n    results = []\n    \n    # Process each operation:\n    for op in operations:\n        pass  # replace this with your code\n    \n    return results",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def minStack(self, operations: List[str]) -> List[int]:\n        stack = []\n        min_stack = []\n        results = []\n        # Process each operation\n        for op in operations:\n            pass  # Write your solution here\n        return results\n\ndef solve(operations):\n    return Solution().minStack(operations)",
     "visible_test_cases": [
       {
         "input": {
@@ -3157,7 +3157,7 @@
         "output": 3
       }
     ],
-    "starter_code": "def solve(grid):\n    \"\"\"\n    Number of Islands\n    ------------------\n    Input : grid -> 2D list of \"1\" (land) and \"0\" (water)\n    Output: integer (count of islands)\n    \n    Example: grid with one connected land mass → 1\n    \"\"\"\n    # Think: DFS/BFS — when you find a \"1\", explore all connected land\n    # Mark visited cells to avoid counting twice\n    \n    # Write your solution below\n    # -----------------------------------\n    if not grid:\n        return 0\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def numIslands(self, grid: List[List[str]]) -> int:\n        # Write your solution here\n        pass\n\ndef solve(grid):\n    return Solution().numIslands(grid)",
     "visible_test_cases": [
       {
         "input": {
@@ -3312,7 +3312,7 @@
         "output": []
       }
     ],
-    "starter_code": "def solve(root):\n    \"\"\"\n    Invert Binary Tree\n    -------------------\n    Input : root -> level-order list  e.g. [4,2,7,1,3,6,9]\n    Output: level-order list of inverted tree\n    \n    Example: [4,2,7,1,3,6,9] → [4,7,2,9,6,3,1]\n    \"\"\"\n    # Think: At each node, swap left and right children\n    # Do this recursively for every node\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List, Optional\n\nclass Solution:\n    def invertTree(self, root: List) -> List:\n        # Input/Output is level-order list\n        # Write your solution here\n        pass\n\ndef solve(root):\n    return Solution().invertTree(root)",
     "visible_test_cases": [
       {
         "input": {
@@ -3419,7 +3419,7 @@
         "output": 0
       }
     ],
-    "starter_code": "def solve(root):\n    \"\"\"\n    Maximum Depth of Binary Tree\n    ------------------------------\n    Input : root -> level-order list\n    Output: integer (max depth)\n    \n    Example: [3,9,20,null,null,15,7] → 3\n    \"\"\"\n    # Think recursively:\n    # max_depth(node) = 1 + max(left_depth, right_depth)\n    # Base case: empty node → depth 0\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List, Optional\n\nclass Solution:\n    def maxDepth(self, root: List) -> int:\n        # Input is level-order list\n        # Write your solution here\n        pass\n\ndef solve(root):\n    return Solution().maxDepth(root)",
     "visible_test_cases": [
       {
         "input": {
@@ -3642,7 +3642,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(list1, list2):\n    \"\"\"\n    Merge Two Sorted Lists\n    -----------------------\n    Input : list1 -> sorted list of integers\n            list2 -> sorted list of integers\n    Output: merged sorted list\n    \n    Example: [1,2,4] + [1,3,4] → [1,1,2,3,4,4]\n    \"\"\"\n    # Think: Two pointers — compare heads, take smaller\n    # Don't forget remaining elements!\n    \n    # Write your solution below\n    # -----------------------------------\n    result = []\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def mergeTwoLists(self, list1: List[int], list2: List[int]) -> List[int]:\n        # Write your solution here\n        pass\n\ndef solve(list1, list2):\n    return Solution().mergeTwoLists(list1, list2)",
     "visible_test_cases": [
       {
         "input": {
@@ -3882,7 +3882,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    3Sum\n    -----\n    Input : nums -> list of integers\n    Output: list of unique triplets that sum to 0\n    \n    Example: [-1,0,1,2,-1,-4] → [[-1,-1,2],[-1,0,1]]\n    \"\"\"\n    # Think: Sort first, then fix one element + two pointers\n    # Skip duplicates carefully!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def threeSum(self, nums: List[int]) -> List[List[int]]:\n        # Write your solution here\n        pass\n\ndef solve(nums):\n    return Solution().threeSum(nums)",
     "visible_test_cases": [
       {
         "input": {
@@ -4013,7 +4013,7 @@
         "output": 0.0
       }
     ],
-    "starter_code": "def solve(nums1, nums2):\n    \"\"\"\n    Median of Two Sorted Arrays\n    ----------------------------\n    Input : nums1 -> sorted list\n            nums2 -> sorted list\n    Output: float (median of combined arrays)\n    \n    Example: nums1=[1,3], nums2=[2] → 2.0\n    \n    Constraint: Must be O(log(m+n))!\n    \"\"\"\n    # Think: Binary search on the smaller array\n    # Find the correct partition point\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:\n        # Write your solution here\n        pass\n\ndef solve(nums1, nums2):\n    return Solution().findMedianSortedArrays(nums1, nums2)",
     "visible_test_cases": [
       {
         "input": {
@@ -4164,7 +4164,7 @@
         "output": false
       }
     ],
-    "starter_code": "def solve(board, word):\n    \"\"\"\n    Word Search\n    ------------\n    Input : board -> 2D list of characters\n            word  -> string to search\n    Output: True if word exists in grid, False otherwise\n    \n    Example: board=[[\"A\",\"B\",\"C\"],[\"S\",\"F\",\"C\"]], word=\"ABC\" → True\n    \"\"\"\n    # Think: DFS + Backtracking\n    # Start from every cell matching word[0]\n    # Mark visited, explore 4 directions, unmark on backtrack\n    \n    # Write your solution below\n    # -----------------------------------\n    rows, cols = len(board), len(board[0])\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def exist(self, board: List[List[str]], word: str) -> bool:\n        # Write your solution here\n        pass\n\ndef solve(board, word):\n    return Solution().exist(board, word)",
     "visible_test_cases": [
       {
         "input": {
@@ -4390,7 +4390,7 @@
         "output": 30
       }
     ],
-    "starter_code": "def solve(nums):\n    \"\"\"\n    House Robber\n    -------------\n    Input : nums -> list of integers (money in each house)\n    Output: integer (maximum money without robbing adjacent)\n    \n    Example: nums=[2,7,9,3,1] → 12\n    \"\"\"\n    # Think: dp[i] = max(dp[i-1], dp[i-2] + nums[i])\n    # You only need last two values — O(1) space!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def rob(self, nums: List[int]) -> int:\n        # Write your solution here\n        pass\n\ndef solve(nums):\n    return Solution().rob(nums)",
     "visible_test_cases": [
       {
         "input": {
@@ -4574,7 +4574,7 @@
         ]
       }
     ],
-    "starter_code": "def solve(nums, k):\n    \"\"\"\n    Top K Frequent Elements\n    ------------------------\n    Input : nums -> list of integers\n            k    -> integer\n    Output: list of k most frequent elements\n    \n    Example: nums=[1,1,1,2,2,3], k=2 → [1,2]\n    \"\"\"\n    # Think: Count frequencies with hashmap\n    # Then find top-k by frequency\n    # Bucket sort gives O(n)!\n    \n    # Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "starter_code": "from typing import List\n\nclass Solution:\n    def topKFrequent(self, nums: List[int], k: int) -> List[int]:\n        # Write your solution here\n        pass\n\ndef solve(nums, k):\n    return Solution().topKFrequent(nums, k)",
     "visible_test_cases": [
       {
         "input": {

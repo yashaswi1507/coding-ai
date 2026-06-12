@@ -20,6 +20,10 @@ app = FastAPI(title="ThinkCode AI", version="4.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 create_tables()
 
+# Auto-train on startup if model missing
+from model.auto_trainer import startup_train_if_needed, get_training_status
+startup_train_if_needed()
+
 class SubmitRequest(BaseModel):
     problem_id: str
     user_code: str
@@ -187,7 +191,8 @@ def admin_train(body: TrainRequest):
 
 # ── XP & Evolution ────────────────────────────────────────────────────────────
 from services.analytics import (
-    get_user_xp, get_weakness_evolution, get_thinking_replay
+    get_user_xp, get_weakness_evolution, get_thinking_replay,
+    add_xp_tables
 )
 from database import add_xp_tables as _add_xp
 
@@ -293,3 +298,8 @@ def cognitive_report(user_id: str = "guest"):
         "total_submissions": total_subs,
         "achievements":     achievements,
     }
+
+
+@app.get("/training-status/")
+def training_status():
+    return get_training_status()
