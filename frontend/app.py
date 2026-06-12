@@ -88,7 +88,6 @@ if tab == "🧩 Solve":
     if diff_filter != "All":    params += f"difficulty={diff_filter}&"
 
     problems = api(f"/problems/{params}") or []
-    st.write("DEBUG:", problems)
     if not problems: st.warning("No problems for this filter."); st.stop()
 
     problem_map = {f"[{p['difficulty'].upper()}] {p['title']}": p["id"] for p in problems}
