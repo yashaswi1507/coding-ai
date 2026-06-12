@@ -216,35 +216,84 @@ def _detect_weaknesses(code, thinking, approach, score):
 
 def _estimate_complexity(code):
     c = code.lower()
+    lines = [l.strip() for l in code.split("\n") if l.strip() and not l.strip().startswith("#")]
 
-    # One-liner with set — O(n)
-    if "len(" in c and "set(" in c:
+    # One-liner optimal — e.g. return len(nums) != len(set(nums))
+    if len(lines) <= 3 and "return" in c and "set(" in c and "len(" in c:
         return {"time": "O(n)", "space": "O(n)",
-                "explanation": "Set conversion — O(n) time and space"}
+                "explanation": "One-liner set conversion — elegant O(n) solution"}
 
-    # Set with loop
+    # DP patterns — check before nested loops
+    if "dp" in c and ("for" in c or "while" in c):
+        if c.count("for") >= 2:
+            return {"time": "O(n²)", "space": "O(n)",
+                    "explanation": "2D DP — nested loops with DP array"}
+        return {"time": "O(n)", "space": "O(n)",
+                "explanation": "1D DP — single pass with memoization"}
+
+    # Divide and Conquer / Merge Sort pattern
+    if "def " in c and c.count("def ") >= 2 and ("merge" in c or "divide" in c):
+        return {"time": "O(n log n)", "space": "O(n)",
+                "explanation": "Divide and conquer pattern detected"}
+
+    # Binary search pattern
+    if (("lo" in c and "hi" in c) or
+            ("left" in c and "right" in c and "mid" in c) or
+            ("low" in c and "high" in c)):
+        return {"time": "O(log n)", "space": "O(1)",
+                "explanation": "Binary search — halving search space each step"}
+
+    # Two pointer pattern
+    if ("left" in c and "right" in c and "while" in c and
+            ("left" not in ["left_pad"] and "sort" in c)):
+        return {"time": "O(n)", "space": "O(1)",
+                "explanation": "Two pointers — linear scan after sorting"}
+
+    # Sliding window pattern
+    if (("window" in c or "sliding" in c) or
+            ("left" in c and "right" in c and "for" in c and "max" in c)):
+        return {"time": "O(n)", "space": "O(1)",
+                "explanation": "Sliding window — single pass with two pointers"}
+
+    # BFS/DFS pattern
+    if "deque" in c or "queue" in c or ("from collections" in c and "deque" in c):
+        return {"time": "O(V+E)", "space": "O(V)",
+                "explanation": "BFS — visits each node and edge once"}
+    if "stack" in c and ("dfs" in c or "def dfs" in c):
+        return {"time": "O(V+E)", "space": "O(V)",
+                "explanation": "DFS — depth-first traversal"}
+
+    # Recursion without memoization
+    if c.count("def ") >= 2 and "return" in c:
+        func_lines = [l for l in lines if l.startswith("def ")]
+        if len(func_lines) >= 2:
+            return {"time": "O(2ⁿ) worst case", "space": "O(n) stack",
+                    "explanation": "Recursive — check if memoization is needed"}
+
+    # Set usage
     if "set(" in c or ".add(" in c:
         return {"time": "O(n)", "space": "O(n)",
-                "explanation": "Single pass with set — O(1) lookup"}
+                "explanation": "Set-based — O(1) average lookup"}
 
-    if "dp" in c and "for" in c:
-        return {"time": "O(n) or O(n²)", "space": "O(n)",
-                "explanation": "DP-based approach"}
-
-    if c.count("for") >= 2:
-        return {"time": "O(n²)", "space": "O(1)",
-                "explanation": "Nested loops detected"}
-
-    if "dict" in c or "{}" in c:
+    # Hashmap/dict usage
+    if "dict" in c or "{}" in c or "defaultdict" in c or "counter" in c:
         return {"time": "O(n)", "space": "O(n)",
-                "explanation": "Single pass with hashmap"}
+                "explanation": "Hashmap — single pass with O(1) lookup"}
 
-    if ("lo" in c and "hi" in c) or ("left" in c and "right" in c and "mid" in c):
-        return {"time": "O(log n)", "space": "O(1)",
-                "explanation": "Binary search pattern"}
-
+    # Sort
     if "sort" in c:
         return {"time": "O(n log n)", "space": "O(1)",
-                "explanation": "Sort-based approach"}
+                "explanation": "Sorting dominates — O(n log n) time"}
 
-    return {"time": "O(n)", "space": "O(1)", "explanation": "Single pass estimated"}
+    # Nested loops
+    if c.count("for") >= 2 or (c.count("for") >= 1 and c.count("while") >= 1):
+        return {"time": "O(n²)", "space": "O(1)",
+                "explanation": "Nested loops — consider optimization"}
+
+    # Single loop
+    if "for" in c or "while" in c:
+        return {"time": "O(n)", "space": "O(1)",
+                "explanation": "Single pass — linear time"}
+
+    return {"time": "O(n)", "space": "O(1)",
+            "explanation": "Linear estimate — analyze manually for precision"}

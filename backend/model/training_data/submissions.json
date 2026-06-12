@@ -418,5 +418,19 @@
     "total_tests": 10,
     "labeled": false,
     "timestamp": "2026-06-12T16:56:47.044715"
+  },
+  {
+    "id": "49af1dec-f19b-49d3-a1dc-3a613aba2d90",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    pass  # replace this with your code",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 63,
+    "approach": "optimal",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T17:20:19.025808"
   }
 ]

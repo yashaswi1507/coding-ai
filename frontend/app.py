@@ -207,6 +207,11 @@ if tab == "🧩 Solve":
         r = st.session_state.result
         st.divider()
 
+        # No code written
+        if r.get("error") == "no_code":
+            st.error("❌ Code nahi likha! solve() function ke andar apna solution likho.")
+            st.stop()
+
         # New Achievements popup
         if r.get("new_achievements"):
             for badge in r["new_achievements"]:
@@ -482,17 +487,45 @@ elif tab == "🗺️ Learning Path":
         solved   = path_data.get("solved_count", 0)
         total    = path_data.get("total", 0)
 
-        st.progress(progress/100, text=f"Progress: {solved}/{total} problems ({progress}%)")
+        # Progress summary
+        cm1, cm2, cm3 = st.columns(3)
+        cm1.metric("✅ Solved",    solved)
+        cm2.metric("🔒 Remaining", total - solved)
+        cm3.metric("📊 Progress",  f"{progress}%")
+        st.progress(progress/100,
+                    text=f"Progress: {solved}/{total} problems ({progress}%)")
         st.divider()
 
         for step in path_data.get("steps", []):
             diff_icon = "🟢" if step["difficulty"]=="easy" else "🟡" if step["difficulty"]=="medium" else "🔴"
+            topic = step.get("topic", "")
+
             if step["solved"]:
-                st.success(f"✅ {step['order']}. {step['title']} {diff_icon}")
+                st.markdown(
+                    f"<div style='padding:8px 12px;border-radius:8px;"
+                    f"background:#1a2e1a;border:1px solid #2d5a2d;margin:4px 0'>"
+                    f"✅ **{step['order']}. {step['title']}** {diff_icon} "
+                    f"<span style='color:#4AFF91;font-size:11px'>Completed!</span>"
+                    f"</div>",
+                    unsafe_allow_html=True
+                )
             elif step["current"]:
-                st.warning(f"👉 {step['order']}. **{step['title']}** {diff_icon} ← Next!")
+                st.markdown(
+                    f"<div style='padding:8px 12px;border-radius:8px;"
+                    f"background:#2e2a1a;border:2px solid #FFB547;margin:4px 0'>"
+                    f"👉 **{step['order']}. {step['title']}** {diff_icon} "
+                    f"<span style='color:#FFB547;font-size:11px'>← Solve This Next!</span>"
+                    f"</div>",
+                    unsafe_allow_html=True
+                )
             else:
-                st.write(f"🔒 {step['order']}. {step['title']} {diff_icon}")
+                st.markdown(
+                    f"<div style='padding:8px 12px;border-radius:8px;"
+                    f"background:#1a1a1a;border:1px solid #333;margin:4px 0;opacity:0.6'>"
+                    f"🔒 {step['order']}. {step['title']} {diff_icon}"
+                    f"</div>",
+                    unsafe_allow_html=True
+                )
 
 # ═══════════════════════════════════════════════════════
 # TAB: HISTORY
@@ -547,25 +580,47 @@ elif tab == "📜 History":
         })
         st.line_chart(trend_df.set_index("Submission"))
 
-    # ── 3. Topic-wise Analytics Chart ────────────────────────────────────────
+    # ── 3. Topic Mastery Score ──────────────────────────────────────────────
     topics = dashboard.get("topics", [])
     if topics:
         st.divider()
-        st.subheader("📊 Topic-wise Analytics")
+        st.subheader("📊 Topic Mastery Score")
+
+        # Mastery classification
+        def mastery_level(score):
+            if score >= 75: return ("🏆 Mastered",  "#4AFF91")
+            if score >= 50: return ("📘 Learning",  "#FFB547")
+            if score > 0:   return ("⚠️ Weak",      "#FF5B6B")
+            return ("❓ Not Started", "#888")
+
+        # Summary counts
+        mastered = sum(1 for t in topics if (t.get("avg_score") or 0) >= 75)
+        learning = sum(1 for t in topics if 50 <= (t.get("avg_score") or 0) < 75)
+        weak     = sum(1 for t in topics if 0 < (t.get("avg_score") or 0) < 50)
+
+        cm1, cm2, cm3 = st.columns(3)
+        cm1.metric("🏆 Mastered", mastered)
+        cm2.metric("📘 Learning", learning)
+        cm3.metric("⚠️ Weak",     weak)
+
         topic_df = pd.DataFrame({
             "Topic":          [t["topic"] for t in topics],
             "Thinking Score": [round(t.get("avg_score") or 0, 1) for t in topics],
-            "Attempts":       [t["count"] for t in topics]
         })
         st.bar_chart(topic_df.set_index("Topic")["Thinking Score"])
-        # Detailed table
+
         for t in topics:
             score = round(t.get("avg_score") or 0, 1)
-            color = "🟢" if score >= 70 else "🟡" if score >= 40 else "🔴"
-            col1, col2 = st.columns([4, 1])
+            label, color = mastery_level(score)
+            col1, col2, col3 = st.columns([3, 1, 1])
             col1.progress(score/100,
-                          text=f"{color} {t['topic']} ({t['count']} attempts)")
+                text=f"{t['topic']} ({t['count']} attempts)")
             col2.markdown(f"**{score}/100**")
+            col3.markdown(
+                f"<span style='color:{color};font-size:12px;font-weight:600'>"
+                f"{label}</span>",
+                unsafe_allow_html=True
+            )
 
     # ── 4. Weakness Evolution Visualization ──────────────────────────────────
     st.divider()
@@ -817,23 +872,62 @@ elif tab == "🎖️ Achievements":
 
     earned   = [a for a in achievements if a["earned"]]
     unearned = [a for a in achievements if not a["earned"]]
+    total_ach = len(achievements)
 
-    st.markdown(f"**{len(earned)}/{len(achievements)} Unlocked**")
-    st.progress(len(earned)/max(len(achievements),1))
+    # Visual progress
+    col1, col2, col3 = st.columns(3)
+    col1.metric("🎖️ Unlocked",  f"{len(earned)}/{total_ach}")
+    col2.metric("🔒 Locked",    f"{len(unearned)}/{total_ach}")
+    col3.metric("📊 Completion", f"{int(len(earned)/max(total_ach,1)*100)}%")
+    st.progress(len(earned)/max(total_ach,1),
+                text=f"{len(earned)} of {total_ach} achievements unlocked")
 
     if earned:
+        st.divider()
         st.subheader("✅ Earned")
         cols = st.columns(3)
         for i, a in enumerate(earned):
             with cols[i % 3]:
-                st.success(f"{a['icon']} **{a['title']}**\n\n{a['desc']}")
+                st.success(
+                    f"{a['icon']} **{a['title']}**  
+"
+                    f"{a['desc']}  
+"
+                    f"*Earned: {a.get('earned_at','')[:10]}*"
+                )
 
     if unearned:
-        st.subheader("🔒 Locked")
+        st.divider()
+        st.subheader("🔒 Next to Unlock")
+        # Show what's needed to unlock each badge
+        hints = {
+            "first_blood":       "Submit your first solution",
+            "streak_3":          "Maintain a 3-day streak",
+            "streak_7":          "Maintain a 7-day streak",
+            "streak_30":         "Maintain a 30-day streak",
+            "perfect_thinker":   "Get thinking score 90+ on any problem",
+            "optimizer":         "Use optimized approach 3 times",
+            "complexity_master": "Mention O(n) complexity 5 times",
+            "edge_case_hero":    "Handle edge cases in code 5 times",
+            "problem_crusher":   "Solve 10 problems successfully",
+            "speed_solver":      "Solve a problem under 10 minutes",
+            "all_pass":          "Pass all test cases on any problem",
+            "daily_done":        "Complete a daily challenge",
+        }
         cols = st.columns(3)
         for i, a in enumerate(unearned):
             with cols[i % 3]:
-                st.write(f"🔒 **{a['title']}**\n\n{a['desc']}")
+                hint = hints.get(a["id"], "Keep solving problems!")
+                st.markdown(
+                    f"<div style='padding:10px;border:1px solid #333;border-radius:8px;"
+                    f"background:#1a1a2e;'>"
+                    f"<div style='font-size:20px'>🔒</div>"
+                    f"<div style='font-weight:600;margin:4px 0'>{a['title']}</div>"
+                    f"<div style='font-size:11px;color:#888'>{a['desc']}</div>"
+                    f"<div style='font-size:11px;color:#4AFF91;margin-top:6px'>→ {hint}</div>"
+                    f"</div>",
+                    unsafe_allow_html=True
+                )
 
 # ═══════════════════════════════════════════════════════
 # TAB: ADMIN
