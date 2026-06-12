@@ -21,7 +21,8 @@ def create_tables():
         passed INTEGER DEFAULT 0,
         total INTEGER DEFAULT 0,
         topic TEXT, difficulty TEXT,
-        thinking_text TEXT, user_code TEXT, ai_feedback TEXT,
+        thinking_text TEXT, user_code TEXT,
+        ai_feedback TEXT, code_approach TEXT,
         language TEXT DEFAULT 'python',
         submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )""")
@@ -36,7 +37,7 @@ def create_tables():
 
     c.execute("""CREATE TABLE IF NOT EXISTS mentor_memory (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT DEFAULT 'guest',
+        user_id TEXT UNIQUE DEFAULT 'guest',
         weak_topics TEXT DEFAULT '[]',
         strong_topics TEXT DEFAULT '[]',
         avg_thinking_score REAL DEFAULT 0,
@@ -54,5 +55,32 @@ def create_tables():
         last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )""")
 
+    c.execute("""CREATE TABLE IF NOT EXISTS user_achievements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        achievement_id TEXT NOT NULL,
+        earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id, achievement_id)
+    )""")
+
+    conn.commit()
+    conn.close()
+
+def add_xp_tables():
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("""CREATE TABLE IF NOT EXISTS user_xp (
+        user_id TEXT PRIMARY KEY,
+        total_xp INTEGER DEFAULT 0,
+        level INTEGER DEFAULT 1,
+        last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
+    c.execute("""CREATE TABLE IF NOT EXISTS xp_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL,
+        xp_gained INTEGER DEFAULT 0,
+        reason TEXT,
+        earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
     conn.commit()
     conn.close()

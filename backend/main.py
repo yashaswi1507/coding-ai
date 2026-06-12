@@ -5,19 +5,18 @@ from typing import Optional
 
 from services.evaluator import evaluate_solution
 from services.analytics import (
-    get_streak_info, get_weakness_report,
-    get_next_recommended_problems, get_mentor_message,
-    get_leaderboard, update_leaderboard
+    get_streak_info, get_weakness_report, get_next_recommended_problems,
+    get_mentor_message, get_leaderboard, get_thinker_level,
+    get_thinking_patterns, get_user_achievements,
+    get_daily_challenge, is_daily_completed, get_learning_path,
+    score_reflection, LEARNING_PATHS
 )
-from utils.problem_loader import (
-    load_problems, get_problem_by_id,
-    get_problems_by_topic, get_problems_by_difficulty
-)
+from utils.problem_loader import load_problems, get_problem_by_id, get_problems_by_topic, get_problems_by_difficulty
 from database import create_tables, get_connection
 from model.data_collector import get_unlabeled_samples, manual_label, get_stats
 from model.inference import get_model_info
 
-app = FastAPI(title="ThinkCode AI", version="3.0.0")
+app = FastAPI(title="ThinkCode AI", version="4.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 create_tables()
 
@@ -27,6 +26,10 @@ class SubmitRequest(BaseModel):
     thinking_text: str = ""
     user_id: str = "guest"
     display_name: str = "Anonymous"
+
+class ReflectionRequest(BaseModel):
+    question: str
+    answer: str
 
 class LabelRequest(BaseModel):
     sample_id: str
@@ -41,7 +44,7 @@ class TrainRequest(BaseModel):
 # ── Core ──────────────────────────────────────────────────────────────────────
 @app.get("/")
 def home():
-    return {"message": "ThinkCode AI v3.0 — Train Your Thinking, Not Just Your Coding"}
+    return {"message": "ThinkCode AI v4.0 — Train Your Thinking"}
 
 @app.get("/problems/")
 def get_problems(topic: Optional[str]=None, difficulty: Optional[str]=None, company: Optional[str]=None):
@@ -54,17 +57,19 @@ def get_problems(topic: Optional[str]=None, difficulty: Optional[str]=None, comp
 
 @app.get("/problem/{problem_id}")
 def get_problem(problem_id: str):
-    problem = get_problem_by_id(problem_id)
-    if not problem:
-        raise HTTPException(status_code=404, detail="Problem not found")
-    return problem
+    p = get_problem_by_id(problem_id)
+    if not p: raise HTTPException(status_code=404, detail="Problem not found")
+    return p
 
 @app.post("/submit/")
 def submit_solution(body: SubmitRequest):
     problem = get_problem_by_id(body.problem_id)
-    if not problem:
-        raise HTTPException(status_code=404, detail="Problem not found")
+    if not problem: raise HTTPException(status_code=404, detail="Problem not found")
     return evaluate_solution(problem, body.user_code, body.thinking_text, body.user_id)
+
+@app.post("/score-reflection/")
+def score_reflection_endpoint(body: ReflectionRequest):
+    return score_reflection(body.question, body.answer)
 
 # ── Analytics ─────────────────────────────────────────────────────────────────
 @app.get("/streak/")
@@ -81,8 +86,7 @@ def mentor(user_id: str = "guest"):
 
 @app.get("/recommended/")
 def recommended(user_id: str = "guest"):
-    problems = load_problems()
-    return get_next_recommended_problems(user_id, problems)
+    return get_next_recommended_problems(user_id, load_problems())
 
 @app.get("/leaderboard/")
 def leaderboard(limit: int = 10):
@@ -92,15 +96,38 @@ def leaderboard(limit: int = 10):
 def history(user_id: str = "guest", limit: int = 20):
     conn = get_connection()
     c = conn.cursor()
-    c.execute("""
-        SELECT problem_id, thinking_score, code_score,
-               passed, total, topic, difficulty, submitted_at
-        FROM submissions WHERE user_id=?
-        ORDER BY submitted_at DESC LIMIT ?
-    """, (user_id, limit))
+    c.execute("""SELECT problem_id, thinking_score, code_score, passed, total,
+               topic, difficulty, code_approach, submitted_at
+               FROM submissions WHERE user_id=? ORDER BY submitted_at DESC LIMIT ?""", (user_id, limit))
     rows = [dict(r) for r in c.fetchall()]
     conn.close()
     return rows
+
+@app.get("/patterns/")
+def patterns(user_id: str = "guest"):
+    return get_thinking_patterns(user_id)
+
+@app.get("/achievements/")
+def achievements(user_id: str = "guest"):
+    return get_user_achievements(user_id)
+
+@app.get("/daily-challenge/")
+def daily_challenge(user_id: str = "guest"):
+    problems = load_problems()
+    challenge = get_daily_challenge(problems)
+    challenge["completed"] = is_daily_completed(user_id, challenge["id"])
+    return challenge
+
+@app.get("/learning-path/{path_id}")
+def learning_path(path_id: str, user_id: str = "guest"):
+    problems = load_problems()
+    path = get_learning_path(path_id, problems, user_id)
+    if not path: raise HTTPException(status_code=404, detail="Path not found")
+    return path
+
+@app.get("/learning-paths/")
+def all_learning_paths():
+    return [{"id": k, "title": v["title"], "desc": v["desc"]} for k, v in LEARNING_PATHS.items()]
 
 @app.get("/dashboard/")
 def dashboard(user_id: str = "guest"):
@@ -115,14 +142,15 @@ def dashboard(user_id: str = "guest"):
     c.execute("SELECT topic, COUNT(*) as count, AVG(thinking_score) as avg_score FROM submissions WHERE user_id=? GROUP BY topic", (user_id,))
     topics = [dict(r) for r in c.fetchall()]
     conn.close()
-    return {"total_submissions": total, "average_thinking_score": avg_t, "average_code_score": avg_c, "topics": topics}
+    level = get_thinker_level(avg_t)
+    return {"total_submissions": total, "average_thinking_score": avg_t,
+            "average_code_score": avg_c, "topics": topics, "thinker_level": level}
 
 @app.get("/companies/")
 def get_companies():
     problems = load_problems()
     companies = set()
-    for p in problems.values():
-        companies.update(p.get("companies", []))
+    for p in problems.values(): companies.update(p.get("companies", []))
     return sorted(list(companies))
 
 @app.get("/stats/")
@@ -157,6 +185,27 @@ def admin_train(body: TrainRequest):
     threading.Thread(target=run, daemon=True).start()
     return {"success": True, "message": f"Training started — {body.epochs} epochs"}
 
-@app.get("/admin/model-info/")
-def admin_model_info():
-    return get_model_info()
+# ── XP & Evolution ────────────────────────────────────────────────────────────
+from services.analytics import (
+    get_user_xp, get_weakness_evolution, get_thinking_replay,
+    add_xp_tables
+)
+from database import add_xp_tables as _add_xp
+
+# Create XP tables
+try:
+    _add_xp()
+except:
+    pass
+
+@app.get("/xp/")
+def xp(user_id: str = "guest"):
+    return get_user_xp(user_id)
+
+@app.get("/weakness-evolution/")
+def weakness_evolution(user_id: str = "guest"):
+    return get_weakness_evolution(user_id)
+
+@app.get("/thinking-replay/")
+def thinking_replay(user_id: str = "guest", problem_id: str = "two_sum"):
+    return get_thinking_replay(user_id, problem_id)

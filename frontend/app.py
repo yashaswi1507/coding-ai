@@ -1,9 +1,9 @@
 import streamlit as st
 import requests
 import time
-import os
+import os 
 
-BASE = os.environ.get("BACKEND_URL", "http://127.0.0.1:8000")  # ← yeh karo
+BASE = os.environ.get("BACKEND_URL", "http://127.0.0.1:8000")  # ← yeh
 USER_ID = "guest"
 
 st.set_page_config(page_title="ThinkCode AI", layout="wide", page_icon="🧠")
@@ -201,6 +201,12 @@ if tab == "🧩 Solve":
             for badge in r["new_achievements"]:
                 st.success(f"🎖️ New Achievement: {badge['icon']} **{badge['title']}** — {badge['desc']}")
 
+        # XP Gained
+        xp = r.get("xp", {})
+        if xp.get("xp_gained"):
+            xp_info = xp.get("level", {})
+            st.info(f"⚡ **+{xp['xp_gained']} XP** gained! · Total: {xp.get('total_xp', 0)} XP · {xp_info.get('icon','')} {xp_info.get('title','')}")
+
         # Scores
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Tests Passed", f"{r.get('passed',0)}/{r.get('total',0)}")
@@ -381,21 +387,13 @@ if tab == "🧩 Solve":
                 # Overall interview score
                 avg = total_score // len(st.session_state.interview_answers)
                 st.divider()
-                col1, col2, col3 = st.columns(3)
+                col1, col2 = st.columns(2)
                 col1.metric("🎤 Interview Score", f"{avg}/100")
-                col2.metric("🧠 Thinking Score",  f"{r.get('thinking_score', 0)}/100")
-                col3.metric("💻 Code Score",      f"{r.get('passed', 0)}/{r.get('total', 0)} tests")
+                col2.metric("🧠 Thinking Score", f"{r.get('thinking_score', 0)}/100")
 
-                # Combined overall score
-                combined = (avg + r.get('thinking_score', 0)) // 2
-                st.divider()
-                st.markdown(f"### 🏆 Overall Score: {combined}/100")
+                grade = "Excellent! 🏆" if avg >= 80 else "Good! ✅" if avg >= 55 else "Needs Practice ⚠️"
+                st.info(f"**Overall: {grade}** — Keep practicing to ace real interviews!")
 
-                grade = "Excellent! 🏆" if combined >= 80 else "Good! ✅" if combined >= 55 else "Needs Practice ⚠️"
-                all_pass = r.get('all_passed', False)
-                code_msg = "✅ All tests passed!" if all_pass else f"⚠️ {r.get('total',0) - r.get('passed',0)} test(s) failed"
-                st.info(f"**{grade}** · {code_msg} · Keep practicing!")
-                
                 # Restart interview button
                 if st.button("🔄 Retry Interview"):
                     st.session_state.interview_q_idx = 0
@@ -494,6 +492,38 @@ elif tab == "📜 History":
     c1.metric("Total Submissions",  dashboard.get("total_submissions",0))
     c2.metric("Avg Thinking Score", f"{dashboard.get('average_thinking_score',0)}/100")
     c3.metric("Avg Code Score",     f"{dashboard.get('average_code_score',0)}/100")
+
+    # XP & Level
+    xp_data = api(f"/xp/?user_id={USER_ID}")
+    if xp_data:
+        st.divider()
+        col1, col2, col3 = st.columns(3)
+        col1.metric(f"{xp_data.get('icon','')} Level", f"{xp_data.get('level',1)} — {xp_data.get('title','')}")
+        col2.metric("Total XP", xp_data.get("total_xp", 0))
+        col3.metric("Next Level", f"{xp_data.get('xp_to_next',0)} XP needed")
+        st.progress(xp_data.get("progress_to_next", 0) / 100,
+                    text=f"Progress to next level: {xp_data.get('progress_to_next',0)}%")
+        if xp_data.get("history"):
+            with st.expander("XP History", expanded=False):
+                for h in xp_data["history"][:5]:
+                    st.caption(f"+{h['xp_gained']} XP — {h['reason'][:60]}")
+
+    # Weakness Evolution
+    st.divider()
+    st.subheader("Weakness Evolution")
+    evolution = api(f"/weakness-evolution/?user_id={USER_ID}")
+    if evolution and evolution.get("evolution"):
+        if evolution.get("most_improved"):
+            st.success(f"Most improved: {evolution['most_improved']}")
+        if evolution.get("needs_attention"):
+            st.warning(f"Needs attention: {evolution['needs_attention']}")
+        for e in evolution["evolution"]:
+            col1, col2, col3 = st.columns([3, 1, 1])
+            col1.markdown(f"**{e['topic']}** — {e['trend']}")
+            col2.metric("This week", f"{e['recent']}/100")
+            col3.metric("Change", f"{'+' if e['change']>0 else ''}{e['change']}")
+    else:
+        st.info("Solve more problems to see your evolution!")
 
     # ── FEATURE 2: Thinking Patterns ───────────────────────────────────────
     st.subheader("🔍 Your Thinking Patterns")

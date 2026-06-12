@@ -379,7 +379,24 @@
       "Apple"
     ],
     "optimal_solution": "def solve(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        if target - num in seen:\n            return [seen[target-num], i]\n        seen[num] = i",
-    "optimal_explanation": "Single pass hashmap. Store each number's index. For each num, check if complement exists. O(n) time, O(n) space."
+    "optimal_explanation": "Single pass hashmap. Store each number's index. For each num, check if complement exists. O(n) time, O(n) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n\u00b2) time, O(1) space",
+        "desc": "Check every pair of numbers. Simple but slow for large inputs."
+      },
+      {
+        "name": "Hashmap",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Store each number's index. For each number check if complement exists. Single pass."
+      },
+      {
+        "name": "Two Pointers (sorted)",
+        "complexity": "O(n log n) time, O(1) space",
+        "desc": "Sort array, use two pointers. But loses original indices."
+      }
+    ]
   },
   "best_time_to_buy_stock": {
     "id": "best_time_to_buy_stock",
@@ -1919,7 +1936,24 @@
       "LinkedIn"
     ],
     "optimal_solution": "def solve(nums):\n    curr = best = nums[0]\n    for n in nums[1:]:\n        curr = max(n, curr+n)\n        best = max(best, curr)\n    return best",
-    "optimal_explanation": "Kadane's algorithm. At each step: extend or start fresh. O(n) time, O(1) space."
+    "optimal_explanation": "Kadane's algorithm. At each step: extend or start fresh. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n\u00b2) time, O(1) space",
+        "desc": "Check all subarrays and track maximum sum."
+      },
+      {
+        "name": "Kadane's Algorithm",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "At each step decide: extend current subarray or start fresh."
+      },
+      {
+        "name": "Divide & Conquer",
+        "complexity": "O(n log n) time, O(log n) space",
+        "desc": "Split array, find max in left, right, and crossing middle."
+      }
+    ]
   },
   "climbing_stairs": {
     "id": "climbing_stairs",
@@ -2089,7 +2123,24 @@
       "Adobe"
     ],
     "optimal_solution": "def solve(n):\n    a, b = 1, 1\n    for _ in range(n-1):\n        a, b = b, a+b\n    return b",
-    "optimal_explanation": "Fibonacci with O(1) space. Only keep last two values. O(n) time, O(1) space."
+    "optimal_explanation": "Fibonacci with O(1) space. Only keep last two values. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Recursion (naive)",
+        "complexity": "O(2\u207f) time, O(n) space",
+        "desc": "Pure recursion \u2014 exponential time due to repeated subproblems."
+      },
+      {
+        "name": "Memoization (top-down)",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Cache results of subproblems to avoid recomputation."
+      },
+      {
+        "name": "DP (bottom-up)",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Only keep last 2 values. Fibonacci pattern."
+      }
+    ]
   },
   "coin_change": {
     "id": "coin_change",
@@ -2302,7 +2353,24 @@
       "Uber"
     ],
     "optimal_solution": "def solve(coins, amount):\n    dp = [float('inf')] * (amount+1)\n    dp[0] = 0\n    for i in range(1, amount+1):\n        for c in coins:\n            if c <= i:\n                dp[i] = min(dp[i], dp[i-c]+1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
-    "optimal_explanation": "Bottom-up DP. dp[i] = min coins for amount i. Try every coin at each amount. O(amount\u00d7coins) time."
+    "optimal_explanation": "Bottom-up DP. dp[i] = min coins for amount i. Try every coin at each amount. O(amount\u00d7coins) time.",
+    "approaches": [
+      {
+        "name": "Brute Force (recursion)",
+        "complexity": "O(S^n) time",
+        "desc": "Try all combinations. Extremely slow for large amounts."
+      },
+      {
+        "name": "Top-down DP (memoization)",
+        "complexity": "O(S\u00d7n) time, O(S) space",
+        "desc": "Recursion + cache. Store results of subproblems."
+      },
+      {
+        "name": "Bottom-up DP",
+        "complexity": "O(S\u00d7n) time, O(S) space",
+        "desc": "Build solution from amount 0 to target. Most efficient."
+      }
+    ]
   },
   "binary_search": {
     "id": "binary_search",
@@ -2611,7 +2679,24 @@
       "Apple"
     ],
     "optimal_solution": "def solve(nums, target):\n    lo, hi = 0, len(nums)-1\n    while lo <= hi:\n        mid = lo + (hi-lo)//2\n        if nums[mid] == target: return mid\n        elif nums[mid] < target: lo = mid+1\n        else: hi = mid-1\n    return -1",
-    "optimal_explanation": "Classic binary search. lo+(hi-lo)//2 avoids overflow. O(log n) time, O(1) space."
+    "optimal_explanation": "Classic binary search. lo+(hi-lo)//2 avoids overflow. O(log n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Linear Search",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Check each element one by one. Works but slow."
+      },
+      {
+        "name": "Binary Search (iterative)",
+        "complexity": "O(log n) time, O(1) space",
+        "desc": "Divide search space in half each iteration. Best approach."
+      },
+      {
+        "name": "Binary Search (recursive)",
+        "complexity": "O(log n) time, O(log n) space",
+        "desc": "Same logic but uses call stack for recursion."
+      }
+    ]
   },
   "valid_parentheses": {
     "id": "valid_parentheses",
@@ -2782,7 +2867,19 @@
       "Bloomberg"
     ],
     "optimal_solution": "def solve(s):\n    stack, pairs = [], {')':'(',']':'[','}':'{'}\n    for c in s:\n        if c in '([{':\n            stack.append(c)\n        elif not stack or stack[-1] != pairs[c]:\n            return False\n        else:\n            stack.pop()\n    return not stack",
-    "optimal_explanation": "Stack-based matching. Push opening brackets. On closing bracket, check top matches. O(n) time, O(n) space."
+    "optimal_explanation": "Stack-based matching. Push opening brackets. On closing bracket, check top matches. O(n) time, O(n) space.",
+    "approaches": [
+      {
+        "name": "Counter approach",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Count opens and closes. But fails for mixed brackets like '([)]'."
+      },
+      {
+        "name": "Stack approach",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Push opening brackets, pop and match on closing. Handles all cases."
+      }
+    ]
   },
   "min_stack": {
     "id": "min_stack",
@@ -4209,7 +4306,24 @@
       "Airbnb"
     ],
     "optimal_solution": "def solve(nums):\n    prev2, prev1 = 0, 0\n    for n in nums:\n        prev2, prev1 = prev1, max(prev1, prev2+n)\n    return prev1",
-    "optimal_explanation": "DP with O(1) space. prev1=best including current, prev2=best excluding. O(n) time, O(1) space."
+    "optimal_explanation": "DP with O(1) space. prev1=best including current, prev2=best excluding. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(2\u207f) time",
+        "desc": "Try all possible combinations of houses."
+      },
+      {
+        "name": "DP with array",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "dp[i] = max(dp[i-1], dp[i-2] + nums[i])."
+      },
+      {
+        "name": "DP optimized",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Only keep two variables \u2014 prev2 and prev1."
+      }
+    ]
   },
   "top_k_frequent_elements": {
     "id": "top_k_frequent_elements",
