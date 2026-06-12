@@ -15,8 +15,25 @@ def evaluate_solution(problem, user_code, thinking_text,
                       user_id="guest", is_daily=False):
 
     # No code written — return early, no XP, no score
-    actual_code = user_code.replace("pass", "").replace("#", "").strip()
-    if not actual_code or len(actual_code.splitlines()) <= 2:
+    def _is_empty_solution(code: str) -> bool:
+        """Check if user actually wrote any solution logic."""
+        lines = code.splitlines()
+        solution_lines = []
+        for line in lines:
+            stripped = line.strip()
+            # Skip boilerplate lines
+            if not stripped: continue
+            if stripped.startswith("from typing"): continue
+            if stripped.startswith("class Solution"): continue
+            if stripped.startswith("def solve("): continue
+            if stripped.startswith("return Solution()"): continue
+            if stripped.startswith("def ") and "self" in stripped: continue
+            if stripped.startswith("#"): continue
+            if stripped == "pass": continue
+            solution_lines.append(stripped)
+        return len(solution_lines) == 0
+
+    if _is_empty_solution(user_code):
         return {
             "passed": 0, "visible_passed": 0, "hidden_passed": 0,
             "total": len(problem.get("test_cases", [])),
