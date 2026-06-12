@@ -212,7 +212,8 @@ if tab == "🧩 Solve":
         c1.metric("Tests Passed", f"{r.get('passed',0)}/{r.get('total',0)}")
         c2.metric("Visible",      f"{r.get('visible_passed',0)}/{r.get('visible_total',0)}")
         c3.metric("Hidden 🔒",    f"{r.get('hidden_passed',0)}/{r.get('hidden_total',0)}")
-        c4.metric("🧠 Thinking",  f"{r.get('thinking_score',0)}/100")
+        code_pct = int((r.get('passed',0) / r.get('total',1)) * 100)
+        c4.metric("💻 Code Score", f"{code_pct}%")
 
         # ── FEATURE 1: Score Breakdown ──────────────────────────────────────
         breakdown = r.get("score_breakdown", {}).get("breakdown", {})
