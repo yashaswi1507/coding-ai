@@ -124,5 +124,61 @@
     "total_tests": 12,
     "labeled": false,
     "timestamp": "2026-06-11T23:28:27.375191"
+  },
+  {
+    "id": "8e0ae868-211e-4d01-b876-ab736aefed76",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n    \n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 55,
+    "approach": "brute_force",
+    "passed_tests": 11,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T00:00:36.489165"
+  },
+  {
+    "id": "65ebe2a9-2cc5-48ce-9ba6-4655245ffc75",
+    "code": "seen = {}\nfor i, num in enumerate(nums):\n    complement = target - num\n    if complement in seen:\n        return [seen[complement], i]\n    seen[num] = i",
+    "thinking_text": "I'm going with the HashMap approach instead of brute force.\n\nBrute force would be O(n²) — check every pair. That's too slow for interviews.\n\nHashMap approach: as I iterate, I store each number's index. For every element, I check if (target - current number) already exists in the map. If yes, I've found my pair.\n\nTime complexity: O(n) — single pass\nSpace complexity: O(n) — for the hashmap\nEdge cases: problem guarantees exactly one solution, so no need to handle zero/multiple results.\nThis can't be optimized further in time complexity.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 94,
+    "approach": "optimized",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T00:29:32.993838"
+  },
+  {
+    "id": "978e7d2d-f7cc-430e-9a95-865210a2f3e7",
+    "code": "def solve(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i",
+    "thinking_text": "I'm going with the HashMap approach instead of brute force.\n\nBrute force would be O(n²) — check every pair. That's too slow for interviews.\n\nHashMap approach: as I iterate, I store each number's index. For every element, I check if (target - current number) already exists in the map. If yes, I've found my pair.\n\nTime complexity: O(n) — single pass\nSpace complexity: O(n) — for the hashmap\nEdge cases: problem guarantees exactly one solution, so no need to handle zero/multiple results.\nThis can't be optimized further in time complexity.",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 94,
+    "approach": "optimized",
+    "passed_tests": 11,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T00:34:43.554141"
+  },
+  {
+    "id": "d2c962e2-76b5-49ef-a53d-e315ae870b6d",
+    "code": "def containsDuplicate(nums):\n    seen = set()\n\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n\n    return False\n    ",
+    "thinking_text": "",
+    "problem_id": "contains_duplicate",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 51,
+    "approach": "brute_force",
+    "passed_tests": 0,
+    "total_tests": 10,
+    "labeled": false,
+    "timestamp": "2026-06-12T09:52:44.423670"
   }
 ]

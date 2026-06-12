@@ -1,9 +1,8 @@
 import streamlit as st
 import requests
 import time
-import os 
 
-BASE = os.environ.get("BACKEND_URL", "http://127.0.0.1:8000")
+BASE = "http://127.0.0.1:8000"
 USER_ID = "guest"
 
 st.set_page_config(page_title="ThinkCode AI", layout="wide", page_icon="🧠")
@@ -16,11 +15,10 @@ def api(endpoint, method="GET", data=None):
     except:
         return None
 
-# ── Session State ─────────────────────────────────────────────────────────────
 for key, val in {
-    "result": None, "hint_level": 0, "timer_running": False,
-    "timer_start": None, "timer_seconds": 0, "timer_done": False,
-    "active_tab": "Solve"
+    "result": None, "hint_level": 0,
+    "timer_running": False, "timer_start": None,
+    "timer_seconds": 1200, "active_tab": "🧩 Solve"
 }.items():
     if key not in st.session_state:
         st.session_state[key] = val
@@ -31,32 +29,30 @@ with st.sidebar:
     st.caption("Train Your Thinking, Not Just Your Coding")
     st.divider()
 
-    # Mentor Message
     mentor = api(f"/mentor/?user_id={USER_ID}")
-    if mentor and mentor.get("message"):
-        st.info(f"💬 {mentor['message']}")
+    if mentor:
+        level = mentor.get("level", {})
+        if level:
+            st.markdown(f"### {level.get('icon','')} {level.get('level','')}")
+            st.caption(level.get("desc",""))
+        if mentor.get("message"):
+            st.info(mentor["message"])
         for tip in mentor.get("tips", [])[:2]:
             st.caption(f"→ {tip}")
         st.divider()
 
-    # Streak
     streak = api(f"/streak/?user_id={USER_ID}")
     if streak:
-        col1, col2 = st.columns(2)
-        col1.metric("🔥 Streak", f"{streak['current_streak']} days")
-        col2.metric("🏆 Best", f"{streak['longest_streak']} days")
-
-        # Heatmap (last 14 days)
+        c1, c2 = st.columns(2)
+        c1.metric("🔥 Streak", f"{streak['current_streak']} days")
+        c2.metric("🏆 Best",   f"{streak['longest_streak']} days")
         heatmap = streak.get("heatmap", [])[-14:]
         if heatmap:
-            st.caption("Last 14 days:")
             cols = st.columns(14)
             for i, day in enumerate(heatmap):
-                emoji = "🟩" if day["active"] else "⬜"
-                cols[i].markdown(f"<div style='text-align:center;font-size:12px'>{emoji}</div>", unsafe_allow_html=True)
+                cols[i].markdown(f"<div style='text-align:center'>{'🟩' if day['active'] else '⬜'}</div>", unsafe_allow_html=True)
         st.divider()
 
-    # Weakness report
     weak = api(f"/weakness/?user_id={USER_ID}")
     if weak and weak.get("weak_topics"):
         st.markdown("**⚠️ Weak Areas:**")
@@ -64,22 +60,17 @@ with st.sidebar:
             st.markdown(f"- {t}")
         st.divider()
 
-    # Navigation
-    st.session_state.active_tab = st.radio(
-        "Navigate",
-        ["Solve", "My History", "Leaderboard", "Recommended", "Admin"],
-        label_visibility="collapsed"
-    )
+    st.session_state.active_tab = st.radio("", [
+        "🧩 Solve", "🌟 Daily Challenge", "🗺️ Learning Path",
+        "📜 History", "🏆 Leaderboard", "🎖️ Achievements", "🛠 Admin"
+    ], label_visibility="collapsed")
 
-# ── Main Content ──────────────────────────────────────────────────────────────
 tab = st.session_state.active_tab
 
 # ═══════════════════════════════════════════════════════
 # TAB: SOLVE
 # ═══════════════════════════════════════════════════════
-if tab == "Solve":
-
-    # Filters
+if tab == "🧩 Solve":
     col1, col2, col3 = st.columns(3)
     with col1:
         companies = api("/companies/") or []
@@ -90,65 +81,61 @@ if tab == "Solve":
     with col3:
         diff_filter = st.selectbox("⚡ Difficulty", ["All","easy","medium","hard"])
 
-    # Fetch problems with filters
     params = "?"
     if company_filter != "All": params += f"company={company_filter}&"
     if topic_filter != "All":   params += f"topic={topic_filter}&"
     if diff_filter != "All":    params += f"difficulty={diff_filter}&"
 
     problems = api(f"/problems/{params}") or []
-    if not problems:
-        st.warning("No problems for this filter.")
-        st.stop()
+    if not problems: st.warning("No problems for this filter."); st.stop()
 
     problem_map = {f"[{p['difficulty'].upper()}] {p['title']}": p["id"] for p in problems}
     selected_label = st.selectbox("🧩 Select Problem", list(problem_map.keys()))
-    selected_id    = problem_map[selected_label]
-    problem        = api(f"/problem/{selected_id}")
+    selected_id = problem_map[selected_label]
+    problem = api(f"/problem/{selected_id}")
     if not problem: st.stop()
 
-    # Company tags
-    if problem.get("companies"):
-        tags = " ".join([f"`{c}`" for c in problem["companies"][:5]])
-        st.caption(f"🏢 Asked at: {tags}")
-
+    # Header
     st.subheader(problem["title"])
     diff = problem["difficulty"]
     icon = "🟢" if diff=="easy" else "🟡" if diff=="medium" else "🔴"
-    st.caption(f"{icon} {diff.title()} · 📂 {problem['topic']}")
+    if problem.get("companies"):
+        tags = " ".join([f"`{c}`" for c in problem["companies"][:5]])
+        st.caption(f"{icon} {diff.title()} · 📂 {problem['topic']} · 🏢 {tags}")
     st.info(problem["question"])
 
-    # ── Interview Timer ───────────────────────────────────────────────────────
-    with st.expander("⏱️ Interview Timer (optional)", expanded=False):
-        timer_mins = st.slider("Set timer (minutes)", 10, 60, 20, step=5)
-        col_t1, col_t2, col_t3 = st.columns(3)
+    # Alternative approaches
+    if problem.get("approaches"):
+        with st.expander("🔄 Different Approaches", expanded=False):
+            for approach in problem["approaches"]:
+                st.markdown(f"**{approach['name']}** — `{approach['complexity']}`")
+                st.caption(approach["desc"])
 
-        if col_t1.button("▶ Start Timer"):
+    # Timer
+    with st.expander("⏱️ Interview Timer", expanded=False):
+        timer_mins = st.slider("Minutes", 10, 60, 20, step=5)
+        c1, c2 = st.columns(2)
+        if c1.button("▶ Start"):
             st.session_state.timer_running = True
             st.session_state.timer_start   = time.time()
             st.session_state.timer_seconds = timer_mins * 60
-            st.session_state.timer_done    = False
-
-        if col_t2.button("⏹ Stop Timer"):
+        if c2.button("⏹ Stop"):
             st.session_state.timer_running = False
 
         if st.session_state.timer_running:
-            elapsed  = time.time() - (st.session_state.timer_start or time.time())
+            elapsed   = time.time() - (st.session_state.timer_start or time.time())
             remaining = max(0, st.session_state.timer_seconds - int(elapsed))
             mins, secs = divmod(remaining, 60)
             progress = 1 - (remaining / st.session_state.timer_seconds)
-
             if remaining == 0:
-                st.error("⏰ Time's up! Submit your solution now!")
+                st.error("⏰ Time's up!")
                 st.session_state.timer_running = False
             else:
-                color = "normal" if progress < 0.7 else "inverse"
                 st.progress(progress)
-                st.metric("Time Remaining", f"{mins:02d}:{secs:02d}")
-                time.sleep(1)
-                st.rerun()
+                st.metric("Remaining", f"{mins:02d}:{secs:02d}")
+                time.sleep(1); st.rerun()
 
-    # ── Visible Test Cases ────────────────────────────────────────────────────
+    # Visible test cases
     st.subheader("🧪 Examples")
     visible_cases = problem.get("visible_test_cases", problem.get("test_cases", []))
     hidden_count  = len(problem.get("hidden_test_cases", []))
@@ -160,45 +147,46 @@ if tab == "Solve":
                 for k, v in tc["input"].items():
                     st.code(f"{k} = {v}", language="python")
             with c2:
-                st.markdown("**Expected Output:**")
+                st.markdown("**Output:**")
                 st.code(str(tc["output"]), language="python")
     st.caption(f"🔒 +{hidden_count} hidden test cases will also run")
 
-    # ── Hints ─────────────────────────────────────────────────────────────────
-    with st.expander("💡 Hints (click to reveal)", expanded=False):
+    # Hints
+    with st.expander("💡 Hints", expanded=False):
         for i, hint in enumerate(problem.get("hints", [])):
-            if st.button(f"Reveal Hint {i+1}", key=f"hint_{selected_id}_{i}"):
+            if st.button(f"Reveal Hint {i+1}", key=f"h_{selected_id}_{i}"):
                 st.session_state.hint_level = i + 1
             if st.session_state.hint_level > i:
                 st.warning(f"💡 {hint}")
 
-    # ── Thinking ──────────────────────────────────────────────────────────────
+    # Thinking
     st.subheader("🧠 Your Thinking")
-    st.caption("⭐ This is what ThinkCode AI evaluates — explain BEFORE you code!")
+    st.caption("⭐ This is the CORE of ThinkCode AI — explain before you code!")
     thinking = st.text_area(
         "Explain your approach:",
-        placeholder="• Why did you choose this approach?\n• What is the time complexity?\n• How are you handling edge cases?\n• Can it be optimized?",
-        height=120, key=f"think_{selected_id}"
+        placeholder="• Why this approach?\n• Time & space complexity?\n• Edge cases?\n• Can it be optimized?",
+        height=130, key=f"think_{selected_id}"
     )
     wc = len(thinking.split()) if thinking.strip() else 0
     if wc > 0:
-        q = "🏆 Excellent!" if wc>=60 else "✅ Good!" if wc>=25 else "⚠️ Thoda aur likho..."
+        q = "🏆 Excellent!" if wc>=60 else "✅ Good!" if wc>=25 else "⚠️ Elaborate more..."
         st.caption(f"{wc} words — {q}")
 
-    # ── Code Editor ───────────────────────────────────────────────────────────
+    # Code
     st.subheader("💻 Your Code")
     default_code = problem.get("starter_code", "def solve():\n    pass")
     code = st.text_area("Write inside solve():", height=320,
                         value=default_code, key=f"code_{selected_id}")
 
-    # ── Submit ────────────────────────────────────────────────────────────────
     if st.button("🚀 Submit & Get AI Feedback", type="primary", use_container_width=True):
-        with st.spinner("🧠 Analyzing your thinking..."):
+        # Reset interview state for new submission
+        st.session_state.interview_q_idx = 0
+        st.session_state.interview_answers = []
+        st.session_state.interview_done = False
+        with st.spinner("🧠 Analyzing thinking..."):
             result = api("/submit/", "POST", {
-                "problem_id": selected_id,
-                "user_code": code,
-                "thinking_text": thinking,
-                "user_id": USER_ID
+                "problem_id": selected_id, "user_code": code,
+                "thinking_text": thinking, "user_id": USER_ID
             })
             st.session_state.result = result
 
@@ -206,59 +194,60 @@ if tab == "Solve":
     if st.session_state.result:
         r = st.session_state.result
         st.divider()
-        st.subheader("📊 Results")
 
+        # New Achievements popup
+        if r.get("new_achievements"):
+            for badge in r["new_achievements"]:
+                st.success(f"🎖️ New Achievement: {badge['icon']} **{badge['title']}** — {badge['desc']}")
+
+        # Scores
         c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Total Passed",   f"{r.get('passed',0)} / {r.get('total',0)}")
-        c2.metric("Visible",        f"{r.get('visible_passed',0)} / {r.get('visible_total',0)}")
-        c3.metric("Hidden 🔒",      f"{r.get('hidden_passed',0)} / {r.get('hidden_total',0)}")
-        c4.metric("Thinking Score", f"{r.get('thinking_score',0)} / 100")
+        c1.metric("Tests Passed", f"{r.get('passed',0)}/{r.get('total',0)}")
+        c2.metric("Visible",      f"{r.get('visible_passed',0)}/{r.get('visible_total',0)}")
+        c3.metric("Hidden 🔒",    f"{r.get('hidden_passed',0)}/{r.get('hidden_total',0)}")
+        c4.metric("🧠 Thinking",  f"{r.get('thinking_score',0)}/100")
+
+        # ── FEATURE 1: Score Breakdown ──────────────────────────────────────
+        breakdown = r.get("score_breakdown", {}).get("breakdown", {})
+        if breakdown:
+            st.subheader("📊 Thinking Score Breakdown")
+            for key, val in breakdown.items():
+                score, max_score = val["score"], val["max"]
+                pct = score / max_score if max_score else 0
+                c1, c2 = st.columns([3,1])
+                c1.progress(pct, text=f"{val['label']} — {val['detail']}")
+                c2.markdown(f"**{score}/{max_score}**")
 
         for i, res in enumerate(r.get("results", [])):
-            if res["passed"]:
-                st.success(f"✅ Example {i+1}: Passed")
-            else:
-                st.error(f"❌ Example {i+1}: Wrong Answer")
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.markdown("**Expected:**")
-                    st.code(str(res.get('expected')), language="python")
-                with col2:
-                    st.markdown("**Your Output:**")
-                    st.code(str(res.get('got')), language="python")
-                
-                # Hint kya galat hua
-                exp = res.get('expected')
-                got = res.get('got')
-                if got is None:
-                    st.warning("⚠️ Your function returned nothing — make sure solve() returns a value!")
-                elif type(exp) != type(got):
-                    st.warning(f"⚠️ Wrong data type — expected `{type(exp).__name__}` but got `{type(got).__name__}`")
-                elif isinstance(exp, list) and sorted(exp) == sorted(got):
-                    st.info("💡 Values sahi hain but order galat hai — check karo!")
-                else:
-                    st.warning("⚠️ Output galat hai — apna logic check karo")
-                
-                if res.get('message') and res.get('message') != 'Wrong Answer':
-                    st.caption(f"🔍 {res.get('message')}")
-        ht = r.get("hidden_total", 0)
+            if res["passed"]: st.success(f"✅ Example {i+1}: Passed")
+            else: st.error(f"❌ Example {i+1}: Expected `{res.get('expected')}` → Got `{res.get('got')}`")
+
+        ht = r.get("hidden_total",0)
         if ht > 0:
-            hp = r.get("hidden_passed", 0)
-            if hp == ht: st.success(f"✅ All {ht} hidden test cases passed!")
-            else: st.warning(f"⚠️ {ht-hp} hidden test case(s) failed — check edge cases")
+            hp = r.get("hidden_passed",0)
+            if hp==ht: st.success(f"✅ All {ht} hidden test cases passed!")
+            else: st.warning(f"⚠️ {ht-hp} hidden test case(s) failed")
+
+        # ── FEATURE 6: Edge Case Detector ──────────────────────────────────
+        missing = r.get("missing_edge_cases", [])
+        if missing:
+            st.subheader("🛡️ Missing Edge Cases")
+            for ec in missing:
+                st.warning(f"⚠️ **{ec['case']}** — {ec['question']}")
 
         # Complexity
         cx = r.get("complexity_analysis", {})
         if cx:
             c1, c2 = st.columns(2)
-            c1.metric("⏱ Time Complexity",  cx.get("time","?"))
-            c2.metric("💾 Space Complexity", cx.get("space","?"))
+            c1.metric("⏱ Time",  cx.get("time","?"))
+            c2.metric("💾 Space", cx.get("space","?"))
             st.caption(cx.get("explanation",""))
 
-        # Thinking feedback
+        # ── FEATURE 2: Thinking Pattern from feedback ───────────────────────
         st.subheader("🧠 AI Thinking Analysis")
         src = r.get("model_source","rule_based")
-        st.caption(f"Evaluated by: {'🤖 Neural Network' if src=='neural_network' else '📏 Rule-Based Engine'} · Approach: **{r.get('code_approach','?').replace('_',' ').title()}**")
+        approach = r.get("code_approach","?")
+        st.caption(f"{'🤖 Neural Network' if src=='neural_network' else '📏 Rule-Based'} · Approach: **{approach.replace('_',' ').title()}**")
         for fb in r.get("feedback",[]): st.info(fb)
 
         col1, col2 = st.columns(2)
@@ -278,152 +267,347 @@ if tab == "Solve":
         # Code vs Optimal
         optimal = problem.get("optimal_solution")
         if optimal:
-            st.subheader("🔍 Your Code vs Optimal Solution")
-            col1, col2 = st.columns(2)
-            with col1:
+            st.subheader("🔍 Your Code vs Optimal")
+            c1, c2 = st.columns(2)
+            with c1:
                 st.markdown("**Your Code**")
                 st.code(code, language="python")
-            with col2:
+            with c2:
                 st.markdown("**Optimal Solution**")
                 st.code(optimal, language="python")
                 if problem.get("optimal_explanation"):
                     st.info(f"💡 {problem['optimal_explanation']}")
 
-        # Reflection
+        # ── FEATURE 5: Reflection Scoring ──────────────────────────────────
         st.subheader("🪞 Reflection Questions")
-        for q in r.get("reflection_questions",[]): st.warning(q)
+        st.caption("Answer these — your answers will be scored!")
+        with st.form(key=f"ref_{selected_id}"):
+            reflection_answers = []
+            for idx, q in enumerate(r.get("reflection_questions",[])):
+                ans = st.text_area(q, key=f"ans_{selected_id}_{idx}", height=80)
+                reflection_answers.append((q, ans))
+            submitted = st.form_submit_button("✅ Score My Reflections")
 
-        # Interviewer
-        st.subheader("🎤 AI Interviewer")
-        for q in r.get("followup_questions",[]): st.error(f"❓ {q}")
+        if submitted:
+            st.subheader("📊 Reflection Scores")
+            total_ref_score = 0
+            for q, ans in reflection_answers:
+                if ans.strip():
+                    result_ref = api("/score-reflection/", "POST", {"question": q, "answer": ans})
+                    if result_ref:
+                        score = result_ref.get("score", 0)
+                        level = result_ref.get("level","")
+                        total_ref_score += score
+                        icon = "🏆" if score>=80 else "✅" if score>=55 else "⚠️"
+                        st.write(f"{icon} **{level}** ({score}/100) — {result_ref.get('feedback','')}")
+
+            if reflection_answers:
+                avg_ref = total_ref_score // len(reflection_answers)
+                st.metric("Overall Reflection Score", f"{avg_ref}/100")
+
+        # ── AI Interviewer — Step by Step ──────────────────────────────
+        st.divider()
+        st.subheader("🎤 AI Mock Interview")
+        st.caption("Answer each question one by one — just like a real interview!")
+
+        questions = r.get("followup_questions", [])
+
+        if questions:
+            # Track current question index
+            if "interview_q_idx" not in st.session_state:
+                st.session_state.interview_q_idx = 0
+            if "interview_answers" not in st.session_state:
+                st.session_state.interview_answers = []
+            if "interview_done" not in st.session_state:
+                st.session_state.interview_done = False
+
+            idx = st.session_state.interview_q_idx
+            total_qs = len(questions)
+
+            # Progress bar
+            st.progress(idx / total_qs, text=f"Question {min(idx+1, total_qs)} of {total_qs}")
+
+            # Interview not done yet
+            if not st.session_state.interview_done:
+                if idx < total_qs:
+                    # Current question
+                    st.markdown(f"### ❓ {questions[idx]}")
+                    answer = st.text_area(
+                        "Your Answer:",
+                        height=100,
+                        placeholder="Explain clearly — just like you would in a real interview...",
+                        key=f"interview_ans_{idx}"
+                    )
+
+                    if st.button("Next →" if idx < total_qs - 1 else "Submit Interview ✅",
+                                 type="primary", key=f"interview_btn_{idx}"):
+                        if answer.strip():
+                            st.session_state.interview_answers.append({
+                                "question": questions[idx],
+                                "answer": answer
+                            })
+                            if idx < total_qs - 1:
+                                st.session_state.interview_q_idx += 1
+                            else:
+                                st.session_state.interview_done = True
+                            st.rerun()
+                        else:
+                            st.warning("⚠️ Answer likho pehle!")
+
+            # Interview complete — show analysis
+            else:
+                st.success("✅ Interview complete! Yeh rahi teri performance:")
+                st.divider()
+
+                total_score = 0
+                for i, qa in enumerate(st.session_state.interview_answers):
+                    result_ref = api("/score-reflection/", "POST", {
+                        "question": qa["question"],
+                        "answer": qa["answer"]
+                    })
+
+                    score = result_ref.get("score", 0) if result_ref else 0
+                    level = result_ref.get("level", "") if result_ref else ""
+                    feedback = result_ref.get("feedback", "") if result_ref else ""
+                    total_score += score
+
+                    icon = "🏆" if score >= 80 else "✅" if score >= 55 else "⚠️"
+                    with st.expander(f"{icon} Q{i+1}: {qa['question'][:60]}...", expanded=True):
+                        st.markdown(f"**Your Answer:** {qa['answer']}")
+                        st.markdown(f"**Score:** {score}/100 — {level}")
+                        st.caption(feedback)
+
+                # Overall interview score
+                avg = total_score // len(st.session_state.interview_answers)
+                st.divider()
+                col1, col2, col3 = st.columns(3)
+                col1.metric("🎤 Interview Score", f"{avg}/100")
+                col2.metric("🧠 Thinking Score",  f"{r.get('thinking_score', 0)}/100")
+                col3.metric("💻 Code Score",      f"{r.get('passed', 0)}/{r.get('total', 0)} tests")
+
+                # Combined overall score
+                combined = (avg + r.get('thinking_score', 0)) // 2
+                st.divider()
+                st.markdown(f"### 🏆 Overall Score: {combined}/100")
+
+                grade = "Excellent! 🏆" if combined >= 80 else "Good! ✅" if combined >= 55 else "Needs Practice ⚠️"
+                all_pass = r.get('all_passed', False)
+                code_msg = "✅ All tests passed!" if all_pass else f"⚠️ {r.get('total',0) - r.get('passed',0)} test(s) failed"
+                st.info(f"**{grade}** · {code_msg} · Keep practicing!")
+                
+                # Restart interview button
+                if st.button("🔄 Retry Interview"):
+                    st.session_state.interview_q_idx = 0
+                    st.session_state.interview_answers = []
+                    st.session_state.interview_done = False
+                    st.rerun()
 
 # ═══════════════════════════════════════════════════════
-# TAB: MY HISTORY
+# TAB: DAILY CHALLENGE
 # ═══════════════════════════════════════════════════════
-elif tab == "My History":
-    st.subheader("📜 My Submission History")
+elif tab == "🌟 Daily Challenge":
+    st.subheader("🌟 Today's Thinking Challenge")
+    daily = api(f"/daily-challenge/?user_id={USER_ID}")
 
-    history = api(f"/history/?user_id={USER_ID}&limit=30") or []
+    if daily:
+        if daily.get("completed"):
+            st.success("✅ You already completed today's challenge! Come back tomorrow.")
+        else:
+            st.info(f"🎯 {daily.get('bonus_note','')}")
+
+        diff = daily.get("difficulty","easy")
+        icon = "🟢" if diff=="easy" else "🟡" if diff=="medium" else "🔴"
+        st.subheader(f"{icon} {daily.get('title','')}")
+        st.caption(f"Topic: {daily.get('topic','')} · Difficulty: {diff}")
+        st.write(daily.get("question",""))
+
+        if daily.get("companies"):
+            st.caption(f"🏢 Asked at: {', '.join(daily['companies'][:3])}")
+
+        st.divider()
+        thinking = st.text_area("🧠 Your Thinking:", height=120, key="daily_think")
+        code = st.text_area("💻 Your Code:", height=280,
+                            value=daily.get("starter_code","def solve():\n    pass"), key="daily_code")
+
+        if st.button("🚀 Submit Daily Challenge", type="primary", use_container_width=True):
+            with st.spinner("Analyzing..."):
+                result = api("/submit/", "POST", {
+                    "problem_id": daily["id"], "user_code": code,
+                    "thinking_text": thinking, "user_id": USER_ID
+                })
+                if result:
+                    score = result.get("thinking_score", 0)
+                    passed = result.get("passed", 0)
+                    total  = result.get("total", 0)
+                    st.balloons()
+                    st.success(f"🌟 Daily Challenge Complete! Thinking Score: {score}/100 · Tests: {passed}/{total}")
+                    if result.get("new_achievements"):
+                        for b in result["new_achievements"]:
+                            st.success(f"🎖️ {b['icon']} {b['title']} unlocked!")
+
+# ═══════════════════════════════════════════════════════
+# TAB: LEARNING PATH
+# ═══════════════════════════════════════════════════════
+elif tab == "🗺️ Learning Path":
+    st.subheader("🗺️ Your Learning Path")
+    paths = api("/learning-paths/") or []
+
+    path_options = {p["title"]: p["id"] for p in paths}
+    selected_path = st.selectbox("Choose Your Path", list(path_options.keys()))
+    path_id = path_options[selected_path]
+
+    path_data = api(f"/learning-path/{path_id}?user_id={USER_ID}")
+
+    if path_data:
+        st.caption(path_data.get("desc",""))
+        progress = path_data.get("progress", 0)
+        solved   = path_data.get("solved_count", 0)
+        total    = path_data.get("total", 0)
+
+        st.progress(progress/100, text=f"Progress: {solved}/{total} problems ({progress}%)")
+        st.divider()
+
+        for step in path_data.get("steps", []):
+            diff_icon = "🟢" if step["difficulty"]=="easy" else "🟡" if step["difficulty"]=="medium" else "🔴"
+            if step["solved"]:
+                st.success(f"✅ {step['order']}. {step['title']} {diff_icon}")
+            elif step["current"]:
+                st.warning(f"👉 {step['order']}. **{step['title']}** {diff_icon} ← Next!")
+            else:
+                st.write(f"🔒 {step['order']}. {step['title']} {diff_icon}")
+
+# ═══════════════════════════════════════════════════════
+# TAB: HISTORY
+# ═══════════════════════════════════════════════════════
+elif tab == "📜 History":
+    st.subheader("📜 My Progress")
+
     dashboard = api(f"/dashboard/?user_id={USER_ID}") or {}
+    level = dashboard.get("thinker_level", {})
+
+    if level:
+        st.markdown(f"### {level.get('icon','')} {level.get('level','')}")
+        st.caption(level.get("desc",""))
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("Total Submissions",    dashboard.get("total_submissions", 0))
-    c2.metric("Avg Thinking Score",   f"{dashboard.get('average_thinking_score',0)}/100")
-    c3.metric("Avg Code Score",       f"{dashboard.get('average_code_score',0)}/100")
+    c1.metric("Total Submissions",  dashboard.get("total_submissions",0))
+    c2.metric("Avg Thinking Score", f"{dashboard.get('average_thinking_score',0)}/100")
+    c3.metric("Avg Code Score",     f"{dashboard.get('average_code_score',0)}/100")
 
-    # Topic performance bars
-    st.subheader("📊 Performance by Topic")
+    # ── FEATURE 2: Thinking Patterns ───────────────────────────────────────
+    st.subheader("🔍 Your Thinking Patterns")
+    patterns = api(f"/patterns/?user_id={USER_ID}")
+    if patterns:
+        st.info(f"**Style:** {patterns.get('style','')} · **Trend:** {patterns.get('trend','')}")
+        for p in patterns.get("patterns", []):
+            if p["type"] == "strength": st.success(p["msg"])
+            else: st.warning(p["msg"])
+
+    # Topic performance
+    st.subheader("📊 Topic Performance")
     for t in dashboard.get("topics", []):
         score = round(t.get("avg_score") or 0, 1)
-        col1, col2 = st.columns([3, 1])
-        col1.progress(score/100, text=f"{t['topic']} ({t['count']} attempts)")
-        col2.markdown(f"**{score}/100**")
+        c1, c2 = st.columns([4, 1])
+        c1.progress(score/100, text=f"{t['topic']} ({t['count']} attempts)")
+        c2.markdown(f"**{score}/100**")
 
-    # History table
+    # History list
     st.subheader("Recent Submissions")
+    history = api(f"/history/?user_id={USER_ID}&limit=20") or []
     if history:
         for h in history:
-            passed_icon = "✅" if h["passed"] == h["total"] and h["total"] > 0 else "⚠️"
-            diff_icon = "🟢" if h["difficulty"]=="easy" else "🟡" if h["difficulty"]=="medium" else "🔴"
-            with st.expander(f"{passed_icon} {diff_icon} {h['problem_id'].replace('_',' ').title()} — Thinking: {h['thinking_score']}/100 · {h['submitted_at'][:10]}"):
+            pi = "✅" if h["passed"]==h["total"] and h["total"]>0 else "⚠️"
+            di = "🟢" if h["difficulty"]=="easy" else "🟡" if h["difficulty"]=="medium" else "🔴"
+            approach = h.get("code_approach","?")
+            with st.expander(f"{pi} {di} {h['problem_id'].replace('_',' ').title()} — 🧠{h['thinking_score']}/100 · {h.get('submitted_at','')[:10]}"):
                 c1, c2, c3 = st.columns(3)
-                c1.metric("Tests", f"{h['passed']}/{h['total']}")
+                c1.metric("Tests",    f"{h['passed']}/{h['total']}")
                 c2.metric("Thinking", f"{h['thinking_score']}/100")
-                c3.metric("Code", f"{h['code_score']}/100")
+                c3.metric("Approach", approach.replace("_"," ").title())
     else:
-        st.info("No submissions yet. Start solving problems!")
+        st.info("No submissions yet!")
 
 # ═══════════════════════════════════════════════════════
 # TAB: LEADERBOARD
 # ═══════════════════════════════════════════════════════
-elif tab == "Leaderboard":
+elif tab == "🏆 Leaderboard":
     st.subheader("🏆 Thinking Leaderboard")
-    st.caption("Ranked by average thinking score — not just code correctness!")
+    st.caption("Ranked by thinking score — not just code correctness!")
 
     leaders = api("/leaderboard/?limit=10") or []
+    medals = ["🥇","🥈","🥉"] + ["🔸"]*7
+
     if leaders:
-        medals = ["🥇","🥈","🥉"] + ["🔸"]*7
         for i, l in enumerate(leaders):
-            with st.container():
-                c1, c2, c3, c4 = st.columns([1,3,2,2])
-                c1.markdown(f"### {medals[i]}")
-                c2.markdown(f"**{l['display_name']}**")
-                c3.metric("Avg Thinking", f"{round(l['avg_thinking_score'],1)}/100")
-                c4.metric("🔥 Streak", f"{l['current_streak']} days")
+            c1, c2, c3, c4 = st.columns([1,3,2,2])
+            c1.markdown(f"### {medals[i]}")
+            c2.markdown(f"**{l['display_name']}**")
+            c3.metric("Avg Thinking", f"{round(l['avg_thinking_score'],1)}/100")
+            c4.metric("🔥 Streak",   f"{l['current_streak']} days")
     else:
-        st.info("Leaderboard is empty. Be the first to submit!")
+        st.info("Be the first on the leaderboard!")
 
 # ═══════════════════════════════════════════════════════
-# TAB: RECOMMENDED
+# TAB: ACHIEVEMENTS
 # ═══════════════════════════════════════════════════════
-elif tab == "Recommended":
-    st.subheader("🎯 Recommended For You")
-    st.caption("Based on your performance, weak areas, and progression")
+elif tab == "🎖️ Achievements":
+    st.subheader("🎖️ Achievements")
+    achievements = api(f"/achievements/?user_id={USER_ID}") or []
 
-    weak = api(f"/weakness/?user_id={USER_ID}") or {}
-    recommended = api(f"/recommended/?user_id={USER_ID}") or []
+    earned   = [a for a in achievements if a["earned"]]
+    unearned = [a for a in achievements if not a["earned"]]
 
-    if weak.get("weak_topics"):
-        st.warning(f"⚠️ Focus areas: **{', '.join(weak['weak_topics'][:3])}**")
-    if weak.get("strong_topics"):
-        st.success(f"💪 You're great at: **{', '.join(weak['strong_topics'][:3])}**")
+    st.markdown(f"**{len(earned)}/{len(achievements)} Unlocked**")
+    st.progress(len(earned)/max(len(achievements),1))
 
-    if recommended:
-        st.subheader("Next Problems to Solve:")
-        for p in recommended:
-            diff_icon = "🟢" if p["difficulty"]=="easy" else "🟡" if p["difficulty"]=="medium" else "🔴"
-            companies = ", ".join(p.get("companies", [])[:3])
-            with st.expander(f"{diff_icon} {p['title']} · {p['topic']}"):
-                st.write(p["question"])
-                if companies: st.caption(f"🏢 {companies}")
-                if st.button("Solve This", key=f"rec_{p['id']}"):
-                    st.session_state.active_tab = "Solve"
-                    st.rerun()
-    else:
-        st.info("Solve some problems first to get personalized recommendations!")
+    if earned:
+        st.subheader("✅ Earned")
+        cols = st.columns(3)
+        for i, a in enumerate(earned):
+            with cols[i % 3]:
+                st.success(f"{a['icon']} **{a['title']}**\n\n{a['desc']}")
+
+    if unearned:
+        st.subheader("🔒 Locked")
+        cols = st.columns(3)
+        for i, a in enumerate(unearned):
+            with cols[i % 3]:
+                st.write(f"🔒 **{a['title']}**\n\n{a['desc']}")
 
 # ═══════════════════════════════════════════════════════
 # TAB: ADMIN
 # ═══════════════════════════════════════════════════════
-elif tab == "Admin":
+elif tab == "🛠 Admin":
     st.subheader("🛠 Admin Panel")
-    st.caption("Label training data and retrain the thinking model")
-
     admin_stats = api("/admin/stats/") or {}
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Total Submissions", admin_stats.get("total_submissions", 0))
-    c2.metric("Labeled",           admin_stats.get("labeled", 0))
-    c3.metric("Unlabeled",         admin_stats.get("unlabeled", 0))
-    engine = "🤖 Neural Net" if admin_stats.get("model_available") else "📏 Rule-Based"
-    c4.metric("Engine", engine)
+    c1.metric("Submissions", admin_stats.get("total_submissions",0))
+    c2.metric("Labeled",     admin_stats.get("labeled",0))
+    c3.metric("Unlabeled",   admin_stats.get("unlabeled",0))
+    c4.metric("Engine", "🤖 Neural Net" if admin_stats.get("model_available") else "📏 Rule-Based")
 
     st.subheader("🧠 Train Model")
-    col1, col2 = st.columns(2)
-    epochs    = col1.number_input("Epochs", 10, 1000, 150, step=10)
-    seed_only = col2.checkbox("Labeled data only")
+    c1, c2 = st.columns(2)
+    epochs    = c1.number_input("Epochs", 10, 1000, 150, step=10)
+    seed_only = c2.checkbox("Labeled only")
     if st.button("🚀 Train Now", type="primary"):
         res = api("/admin/train/", "POST", {"epochs": int(epochs), "seed_only": seed_only})
-        if res: st.success(f"✅ {res.get('message', 'Training started!')}")
+        if res: st.success(f"✅ {res.get('message','')}")
 
     st.subheader("📋 Label Submissions")
-    samples = api(f"/admin/unlabeled/?limit=10") or []
+    samples = api("/admin/unlabeled/?limit=10") or []
     if not samples:
-        st.success("🎉 All caught up — no unlabeled submissions!")
+        st.success("🎉 All submissions labeled!")
     for s in samples:
-        with st.expander(f"#{s['id'][:8]} — {s['problem_id']} · {s.get('topic','')}"):
+        with st.expander(f"#{s['id'][:8]} — {s['problem_id']}"):
             if s.get("thinking_text"):
                 st.markdown("**🧠 Thinking:**")
                 st.text(s["thinking_text"])
             st.markdown("**💻 Code:**")
             st.code(s.get("code",""), language="python")
-
             c1, c2 = st.columns(2)
-            score    = c1.number_input("Score (0-100)", 0, 100, int(s.get("thinking_score",50)), key=f"sc_{s['id']}")
+            score    = c1.number_input("Score", 0, 100, int(s.get("thinking_score",50)), key=f"sc_{s['id']}")
             approach = c2.selectbox("Approach", ["brute_force","basic","optimized","optimal"], key=f"ap_{s['id']}")
-            if st.button("✅ Save Label", key=f"save_{s['id']}"):
-                res = api("/admin/label/", "POST", {
-                    "sample_id": s["id"], "thinking_score": int(score),
-                    "approach": approach, "notes": ""
-                })
-                if res: st.success("Saved!")
-                st.rerun()
+            if st.button("✅ Save", key=f"sv_{s['id']}"):
+                res = api("/admin/label/", "POST", {"sample_id": s["id"], "thinking_score": int(score), "approach": approach, "notes": ""})
+                if res: st.success("Saved!"); st.rerun()
