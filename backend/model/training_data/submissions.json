@@ -180,5 +180,33 @@
     "total_tests": 10,
     "labeled": false,
     "timestamp": "2026-06-12T09:52:44.423670"
+  },
+  {
+    "id": "6b2a5a07-8e66-4fb9-a056-c3f77fee6dfd",
+    "code": "def solve(nums, target):\n    \"\"\"\n    Two Sum\n    -------\n    Input : nums  -> list of integers\n            target -> integer\n    Output: list of two indices [i, j]\n    \n    Example: nums=[2,7,11,15], target=9 → [0,1]\n    \"\"\"\n    # Step 1: Think about your approach here\n    # Brute force? Hashmap? Two pointers?\n    \n    # Step 2: Write your solution below\n    # -----------------------------------\n    \n     n = len(nums)\n\n    for i in range(n):\n      \n        # For each element [i], check every\n        # other element [j] that comes after it\n        for j in range(i + 1, n):\n          \n            # Check if the sum of the current pair\n            # equals the target\n            if nums[i] + nums[j] == target:\n                return True\n              \n    # If no pair is found after checking\n    # all possibilities\n    return False",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 26,
+    "approach": "brute_force",
+    "passed_tests": 0,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T10:47:09.777476"
+  },
+  {
+    "id": "017098d7-c45c-4078-b0fe-92a52f0da9eb",
+    "code": "def solve(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        if target - num in seen:\n            return [seen[target-num], i]\n        seen[num] = i",
+    "thinking_text": "",
+    "problem_id": "two_sum",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "thinking_score": 70,
+    "approach": "optimized",
+    "passed_tests": 11,
+    "total_tests": 12,
+    "labeled": false,
+    "timestamp": "2026-06-12T10:48:06.003889"
   }
 ]
