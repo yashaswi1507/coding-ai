@@ -7221,5 +7221,250 @@
         ]
       }
     ]
+  },
+  "palindrome_number": {
+    "id": "palindrome_number",
+    "title": "Palindrome Number",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given an integer x, return true if x is a palindrome (reads same forwards and backwards). Negative numbers are not palindromes.",
+    "hints": [
+      "Convert to string and compare.",
+      "Or reverse the number mathematically.",
+      "Negative numbers always return False."
+    ],
+    "companies": [
+      "Amazon",
+      "Google"
+    ],
+    "starter_code": "class Solution:\n    def isPalindrome(self, x: int) -> bool:\n        pass\n\ndef solve(x):\n    return Solution().isPalindrome(x)",
+    "optimal_solution": "def solve(x):\n    if x < 0: return False\n    return str(x) == str(x)[::-1]",
+    "optimal_explanation": "Convert to string, compare with reverse. O(log n) time.",
+    "test_cases": [
+      {
+        "input": {
+          "x": 121
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": -121
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "x": 10
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "x": 121
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": -121
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "x": 10
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "x": 0
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": 1221
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": 12321
+        },
+        "output": true
+      }
+    ],
+    "released_at": "2026-06-14T01:50:34.758467"
+  },
+  "roman_to_integer": {
+    "id": "roman_to_integer",
+    "title": "Roman to Integer",
+    "topic": "strings",
+    "difficulty": "easy",
+    "question": "Given a roman numeral string, convert it to integer. Roman numerals: I=1, V=5, X=10, L=50, C=100, D=500, M=1000.",
+    "hints": [
+      "Process right to left.",
+      "If current < previous, subtract it.",
+      "Otherwise add it."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "class Solution:\n    def romanToInt(self, s: str) -> int:\n        pass\n\ndef solve(s):\n    return Solution().romanToInt(s)",
+    "optimal_solution": "def solve(s):\n    vals = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}\n    result = 0\n    for i in range(len(s)):\n        if i+1 < len(s) and vals[s[i]] < vals[s[i+1]]:\n            result -= vals[s[i]]\n        else:\n            result += vals[s[i]]\n    return result",
+    "optimal_explanation": "Process left to right. If current < next, subtract. Else add. O(n) time.",
+    "test_cases": [
+      {
+        "input": {
+          "s": "III"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "LVIII"
+        },
+        "output": 58
+      },
+      {
+        "input": {
+          "s": "MCMXCIV"
+        },
+        "output": 1994
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "III"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "LVIII"
+        },
+        "output": 58
+      },
+      {
+        "input": {
+          "s": "MCMXCIV"
+        },
+        "output": 1994
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s": "IV"
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "s": "IX"
+        },
+        "output": 9
+      },
+      {
+        "input": {
+          "s": "XL"
+        },
+        "output": 40
+      }
+    ],
+    "released_at": "2026-06-14T01:50:34.845393"
+  },
+  "longest_common_prefix": {
+    "id": "longest_common_prefix",
+    "title": "Longest Common Prefix",
+    "topic": "strings",
+    "difficulty": "easy",
+    "question": "Write a function to find the longest common prefix string amongst an array of strings. Return '' if there is no common prefix.",
+    "hints": [
+      "Take first string as reference.",
+      "Compare character by character with all others.",
+      "Stop when mismatch found."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def longestCommonPrefix(self, strs: List[str]) -> str:\n        pass\n\ndef solve(strs):\n    return Solution().longestCommonPrefix(strs)",
+    "optimal_solution": "def solve(strs):\n    if not strs: return ''\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix: return ''\n    return prefix",
+    "optimal_explanation": "Use first string as prefix, shrink until all strings start with it. O(S) time where S = total chars.",
+    "test_cases": [
+      {
+        "input": {
+          "strs": [
+            "flower",
+            "flow",
+            "flight"
+          ]
+        },
+        "output": "fl"
+      },
+      {
+        "input": {
+          "strs": [
+            "dog",
+            "racecar",
+            "car"
+          ]
+        },
+        "output": ""
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "strs": [
+            "flower",
+            "flow",
+            "flight"
+          ]
+        },
+        "output": "fl"
+      },
+      {
+        "input": {
+          "strs": [
+            "dog",
+            "racecar",
+            "car"
+          ]
+        },
+        "output": ""
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "strs": [
+            "a"
+          ]
+        },
+        "output": "a"
+      },
+      {
+        "input": {
+          "strs": [
+            "ab",
+            "a"
+          ]
+        },
+        "output": "a"
+      }
+    ],
+    "released_at": "2026-06-14T01:50:34.859898"
   }
 }
