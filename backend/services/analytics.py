@@ -501,31 +501,110 @@ def get_mentor_message(user_id=USER_ID) -> dict:
     c = conn.cursor()
     c.execute("SELECT * FROM mentor_memory WHERE user_id=?", (user_id,))
     row = c.fetchone()
+
+    # Get recent submissions for deep analysis
+    c.execute("""
+        SELECT thinking_score, code_score, topic, difficulty, code_approach,
+               thinking_text, submitted_at
+        FROM submissions WHERE user_id=?
+        ORDER BY submitted_at DESC LIMIT 10
+    """, (user_id,))
+    recent = [dict(r) for r in c.fetchall()]
     conn.close()
 
-    if not row:
-        return {"message": "Welcome! Start solving to get personalized coaching.", "tips": ["Begin with easy Array problems"]}
+    if not row or not recent:
+        return {
+            "message": "Welcome to ThinkCode AI! Start solving to get personalized coaching.",
+            "tips": [
+                "Begin with Easy Array problems",
+                "Always explain your thinking before writing code",
+                "Mention time complexity in every explanation"
+            ]
+        }
 
     weak   = json.loads(row["weak_topics"] or "[]")
     strong = json.loads(row["strong_topics"] or "[]")
     avg    = row["avg_thinking_score"] or 0
+    total  = row["total_submissions"] or 0
     streak = get_streak_info(user_id)
     level  = get_thinker_level(avg)
 
+    # ── Deep Personalized Analysis ────────────────────────────────────────
+    # Score trend
+    scores = [r["thinking_score"] for r in recent if r["thinking_score"]]
+    recent_avg = sum(scores[:3])/3 if len(scores) >= 3 else (scores[0] if scores else 0)
+    older_avg  = sum(scores[-3:])/3 if len(scores) >= 6 else recent_avg
+    trend = "improving" if recent_avg > older_avg + 3 else "declining" if recent_avg < older_avg - 3 else "stable"
+
+    # Approach pattern
+    approaches = [r.get("code_approach","") for r in recent]
+    bf_count  = approaches.count("brute_force")
+    opt_count = approaches.count("optimized") + approaches.count("optimal")
+    always_bf = bf_count >= len(approaches) * 0.7 and len(approaches) >= 3
+
+    # Thinking text quality
+    texts = [r.get("thinking_text","") for r in recent if r.get("thinking_text","").strip()]
+    avg_words = sum(len(t.split()) for t in texts) // max(len(texts), 1) if texts else 0
+    never_explains = avg_words < 10 and len(recent) >= 3
+    explains_well  = avg_words >= 40
+
+    # Difficulty pattern
+    difficulties = [r.get("difficulty","") for r in recent]
+    stuck_on_easy = difficulties.count("easy") >= len(difficulties) * 0.8 and len(difficulties) >= 5
+
+    # ── Build personalized message ────────────────────────────────────────
     parts = [f"{level['icon']} {level['level']}"]
-    if streak["current_streak"] >= 3:
-        parts.append(f"🔥 {streak['current_streak']}-day streak!")
-    if avg >= 70: parts.append(f"Thinking score avg: {avg}/100 — excellent!")
-    elif avg >= 40: parts.append(f"Avg {avg}/100 — improving!")
-    else: parts.append("Focus on explaining your approach before coding.")
 
+    if streak["current_streak"] >= 7:
+        parts.append(f"🔥 Incredible {streak['current_streak']}-day streak!")
+    elif streak["current_streak"] >= 3:
+        parts.append(f"🔥 {streak['current_streak']}-day streak — keep it going!")
+
+    if trend == "improving":
+        parts.append(f"📈 Your thinking score improved by +{round(recent_avg - older_avg, 1)} recently — great progress!")
+    elif trend == "declining":
+        parts.append(f"📉 Slight dip lately — try slowing down and thinking more before coding.")
+    else:
+        parts.append(f"Avg thinking score: {round(avg, 1)}/100")
+
+    # ── Personalized tips ─────────────────────────────────────────────────
     tips = []
-    if weak: tips.append(f"Work on {', '.join(weak[:2])}")
-    if strong: tips.append(f"Try harder {', '.join(strong[:1])} problems")
 
-    return {"message": " · ".join(parts), "tips": tips, "avg_score": avg,
-            "total_solved": row["total_submissions"] or 0, "streak": streak["current_streak"],
-            "level": level}
+    if never_explains:
+        tips.append("⚠️ You rarely explain your thinking — this is your #1 growth area. Write 2-3 sentences before coding!")
+    elif not explains_well:
+        tips.append(f"Your explanations average {avg_words} words — aim for 40+ with complexity and edge cases")
+    elif explains_well:
+        tips.append("✅ Great explanation habit! Now focus on mentioning trade-offs and alternatives")
+
+    if always_bf:
+        tips.append("⚠️ You tend to go brute force — try asking 'can I use a hashmap or set?' before coding")
+    elif opt_count >= len(approaches) * 0.6:
+        tips.append("✅ You naturally think of optimized approaches — try harder problems!")
+
+    if weak:
+        topic = weak[0]
+        tips.append(f"🎯 Focus on {topic} — your thinking score is lowest here. Practice 2-3 more problems!")
+
+    if strong:
+        tips.append(f"💪 You're strong in {strong[0]} — try Hard difficulty there")
+
+    if stuck_on_easy:
+        tips.append("🚀 You've been on Easy problems — time to level up to Medium!")
+
+    if total < 5:
+        tips.append("Solve at least 10 problems to unlock full personalized insights")
+
+    return {
+        "message": " · ".join(parts),
+        "tips": tips[:3],
+        "avg_score": round(avg, 1),
+        "total_solved": total,
+        "streak": streak["current_streak"],
+        "level": level,
+        "trend": trend,
+        "avg_explanation_words": avg_words,
+    }
 
 
 # ── Leaderboard ───────────────────────────────────────────────────────────────

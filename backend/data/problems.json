@@ -4629,5 +4629,2597 @@
         "desc": "Frequencies range 1 to n. Use index as frequency bucket. Linear time."
       }
     ]
+  },
+  "maximum_product_subarray": {
+    "id": "maximum_product_subarray",
+    "title": "Maximum Product Subarray",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an integer array nums, find the contiguous subarray that has the largest product and return the product.",
+    "hints": [
+      "Track both max and min product at each step.",
+      "Negative × negative = positive — min can become max!",
+      "Reset when you see 0."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def maxProduct(self, nums: List[int]) -> int:\n        # Track both max and min (negative can flip sign)\n        pass\n\ndef solve(nums):\n    return Solution().maxProduct(nums)",
+    "optimal_solution": "def solve(nums):\n    max_p = min_p = result = nums[0]\n    for n in nums[1:]:\n        max_p, min_p = max(n, max_p*n, min_p*n), min(n, max_p*n, min_p*n)\n        result = max(result, max_p)\n    return result",
+    "optimal_explanation": "Track both max and min product. Negative min can become max when multiplied by negative. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n²) time",
+        "desc": "Check all subarrays."
+      },
+      {
+        "name": "Max/Min Tracking",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Track both max and min product at each step. Handles negatives."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            3,
+            -2,
+            4
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            -2,
+            0,
+            -1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            -2,
+            3,
+            -4
+          ]
+        },
+        "output": 24
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            3,
+            -2,
+            4
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            -2,
+            0,
+            -1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            -2,
+            3,
+            -4
+          ]
+        },
+        "output": 24
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            0,
+            2
+          ]
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "nums": [
+            -1,
+            -2,
+            -3
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            -2,
+            3,
+            0,
+            -1,
+            2
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            -5,
+            -2,
+            -4,
+            3
+          ]
+        },
+        "output": 24
+      }
+    ]
+  },
+  "find_minimum_rotated_array": {
+    "id": "find_minimum_rotated_array",
+    "title": "Find Minimum in Rotated Sorted Array",
+    "topic": "binary-search",
+    "difficulty": "medium",
+    "question": "Given a sorted rotated array of unique elements, find the minimum element. Must be O(log n).",
+    "hints": [
+      "Use binary search.",
+      "If nums[mid] > nums[right], minimum is in right half.",
+      "Otherwise minimum is in left half (including mid)."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def findMin(self, nums: List[int]) -> int:\n        # Binary search — O(log n)\n        pass\n\ndef solve(nums):\n    return Solution().findMin(nums)",
+    "optimal_solution": "def solve(nums):\n    lo, hi = 0, len(nums)-1\n    while lo < hi:\n        mid = (lo+hi)//2\n        if nums[mid] > nums[hi]: lo = mid+1\n        else: hi = mid\n    return nums[lo]",
+    "optimal_explanation": "Binary search. If mid > right, min is in right half. O(log n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Linear Scan",
+        "complexity": "O(n) time",
+        "desc": "Find min by scanning — doesn't use sorted property."
+      },
+      {
+        "name": "Binary Search",
+        "complexity": "O(log n) time, O(1) space",
+        "desc": "Compare mid with right to determine which half has minimum."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            4,
+            5,
+            1,
+            2
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            4,
+            5,
+            6,
+            7,
+            0,
+            1,
+            2
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            11,
+            13,
+            15,
+            17
+          ]
+        },
+        "output": 11
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            4,
+            5,
+            1,
+            2
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            4,
+            5,
+            6,
+            7,
+            0,
+            1,
+            2
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            11,
+            13,
+            15,
+            17
+          ]
+        },
+        "output": 11
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            1,
+            2
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            5,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": 1
+      }
+    ]
+  },
+  "search_rotated_array": {
+    "id": "search_rotated_array",
+    "title": "Search in Rotated Sorted Array",
+    "topic": "binary-search",
+    "difficulty": "medium",
+    "question": "Given a sorted rotated array and a target, return the index of target or -1. Must be O(log n).",
+    "hints": [
+      "Binary search but determine which half is sorted.",
+      "If left half sorted: check if target in [lo, mid].",
+      "If right half sorted: check if target in [mid, hi]."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def search(self, nums: List[int], target: int) -> int:\n        # Modified binary search\n        pass\n\ndef solve(nums, target):\n    return Solution().search(nums, target)",
+    "optimal_solution": "def solve(nums, target):\n    lo, hi = 0, len(nums)-1\n    while lo <= hi:\n        mid = (lo+hi)//2\n        if nums[mid] == target: return mid\n        if nums[lo] <= nums[mid]:\n            if nums[lo] <= target < nums[mid]: hi = mid-1\n            else: lo = mid+1\n        else:\n            if nums[mid] < target <= nums[hi]: lo = mid+1\n            else: hi = mid-1\n    return -1",
+    "optimal_explanation": "Modified binary search. Determine which half is sorted, then check if target is in that half. O(log n) time.",
+    "approaches": [
+      {
+        "name": "Linear Search",
+        "complexity": "O(n) time",
+        "desc": "Simple scan — ignores sorted property."
+      },
+      {
+        "name": "Modified Binary Search",
+        "complexity": "O(log n) time, O(1) space",
+        "desc": "Identify sorted half, check if target is there, narrow down."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            4,
+            5,
+            6,
+            7,
+            0,
+            1,
+            2
+          ],
+          "target": 0
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            4,
+            5,
+            6,
+            7,
+            0,
+            1,
+            2
+          ],
+          "target": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ],
+          "target": 0
+        },
+        "output": -1
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            4,
+            5,
+            6,
+            7,
+            0,
+            1,
+            2
+          ],
+          "target": 0
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            4,
+            5,
+            6,
+            7,
+            0,
+            1,
+            2
+          ],
+          "target": 3
+        },
+        "output": -1
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ],
+          "target": 0
+        },
+        "output": -1
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            3
+          ],
+          "target": 3
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            1
+          ],
+          "target": 1
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            5,
+            1,
+            3
+          ],
+          "target": 5
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            3,
+            5
+          ],
+          "target": 3
+        },
+        "output": 1
+      }
+    ]
+  },
+  "container_with_most_water": {
+    "id": "container_with_most_water",
+    "title": "Container With Most Water",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an array height where height[i] is the height of a vertical line, find two lines that form a container with the most water.",
+    "hints": [
+      "Start with widest container (two pointers at ends).",
+      "Move the shorter pointer inward — only way to potentially increase area.",
+      "Area = min(h[l], h[r]) × (r - l)"
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Bloomberg"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def maxArea(self, height: List[int]) -> int:\n        # Two pointers from both ends\n        pass\n\ndef solve(height):\n    return Solution().maxArea(height)",
+    "optimal_solution": "def solve(height):\n    l, r = 0, len(height)-1\n    max_water = 0\n    while l < r:\n        max_water = max(max_water, min(height[l], height[r]) * (r-l))\n        if height[l] < height[r]: l += 1\n        else: r -= 1\n    return max_water",
+    "optimal_explanation": "Two pointers. Start wide, move shorter pointer inward. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n²) time",
+        "desc": "Check all pairs of lines."
+      },
+      {
+        "name": "Two Pointers",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Start from both ends, move shorter pointer inward."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "height": [
+            1,
+            8,
+            6,
+            2,
+            5,
+            4,
+            8,
+            3,
+            7
+          ]
+        },
+        "output": 49
+      },
+      {
+        "input": {
+          "height": [
+            1,
+            1
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "height": [
+            1,
+            8,
+            6,
+            2,
+            5,
+            4,
+            8,
+            3,
+            7
+          ]
+        },
+        "output": 49
+      },
+      {
+        "input": {
+          "height": [
+            1,
+            1
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "height": [
+            4,
+            3,
+            2,
+            1,
+            4
+          ]
+        },
+        "output": 16
+      },
+      {
+        "input": {
+          "height": [
+            1,
+            2,
+            1
+          ]
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "height": [
+            2,
+            3,
+            4,
+            5,
+            18,
+            17,
+            6
+          ]
+        },
+        "output": 17
+      }
+    ]
+  },
+  "trapping_rain_water": {
+    "id": "trapping_rain_water",
+    "title": "Trapping Rain Water",
+    "topic": "arrays",
+    "difficulty": "hard",
+    "question": "Given n non-negative integers representing elevation map, compute how much water it can trap after raining.",
+    "hints": [
+      "For each position, water = min(max_left, max_right) - height[i].",
+      "Two pointers: move the side with smaller max inward.",
+      "The smaller side determines water level."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def trap(self, height: List[int]) -> int:\n        # Two pointers or prefix max arrays\n        pass\n\ndef solve(height):\n    return Solution().trap(height)",
+    "optimal_solution": "def solve(height):\n    l, r = 0, len(height)-1\n    ml, mr = height[l], height[r]\n    water = 0\n    while l < r:\n        if ml <= mr:\n            l += 1; ml = max(ml, height[l])\n            water += ml - height[l]\n        else:\n            r -= 1; mr = max(mr, height[r])\n            water += mr - height[r]\n    return water",
+    "optimal_explanation": "Two pointers. Track max from both sides. Move the smaller max side. O(n) time, O(1) space.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(n²) time",
+        "desc": "For each bar, find max left and right."
+      },
+      {
+        "name": "Prefix Arrays",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Precompute max_left and max_right arrays."
+      },
+      {
+        "name": "Two Pointers",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Move the pointer with smaller max. Optimal solution."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "height": [
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            3,
+            2,
+            1,
+            2,
+            1
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "height": [
+            4,
+            2,
+            0,
+            3,
+            2,
+            5
+          ]
+        },
+        "output": 9
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "height": [
+            0,
+            1,
+            0,
+            2,
+            1,
+            0,
+            1,
+            3,
+            2,
+            1,
+            2,
+            1
+          ]
+        },
+        "output": 6
+      },
+      {
+        "input": {
+          "height": [
+            4,
+            2,
+            0,
+            3,
+            2,
+            5
+          ]
+        },
+        "output": 9
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "height": [
+            3,
+            0,
+            2,
+            0,
+            4
+          ]
+        },
+        "output": 7
+      },
+      {
+        "input": {
+          "height": [
+            1,
+            0,
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "height": [
+            0,
+            1,
+            0
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "height": [
+            3,
+            0,
+            0,
+            2,
+            0,
+            4
+          ]
+        },
+        "output": 10
+      }
+    ]
+  },
+  "minimum_window_substring": {
+    "id": "minimum_window_substring",
+    "title": "Minimum Window Substring",
+    "topic": "strings",
+    "difficulty": "hard",
+    "question": "Given strings s and t, return the minimum window substring of s that contains all characters of t. Return '' if not possible.",
+    "hints": [
+      "Sliding window with two pointers.",
+      "Use frequency counters for t and current window.",
+      "Expand right until all chars found, then shrink from left."
+    ],
+    "companies": [
+      "Amazon",
+      "Facebook",
+      "Google",
+      "LinkedIn"
+    ],
+    "starter_code": "class Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        # Sliding window with character frequency\n        pass\n\ndef solve(s, t):\n    return Solution().minWindow(s, t)",
+    "optimal_solution": "def solve(s, t):\n    from collections import Counter\n    need = Counter(t)\n    have, want = 0, len(need)\n    window = {}\n    res, res_len = [-1,-1], float('inf')\n    l = 0\n    for r, c in enumerate(s):\n        window[c] = window.get(c,0) + 1\n        if c in need and window[c] == need[c]: have += 1\n        while have == want:\n            if r-l+1 < res_len: res, res_len = [l,r], r-l+1\n            window[s[l]] -= 1\n            if s[l] in need and window[s[l]] < need[s[l]]: have -= 1\n            l += 1\n    l, r = res\n    return s[l:r+1] if res_len != float('inf') else ''",
+    "optimal_explanation": "Sliding window. Expand right to include all chars, shrink left to minimize window. O(s+t) time.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(s²×t) time",
+        "desc": "Check all substrings."
+      },
+      {
+        "name": "Sliding Window",
+        "complexity": "O(s+t) time, O(t) space",
+        "desc": "Expand/shrink window using frequency counters."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "s": "ADOBECODEBANC",
+          "t": "ABC"
+        },
+        "output": "BANC"
+      },
+      {
+        "input": {
+          "s": "a",
+          "t": "a"
+        },
+        "output": "a"
+      },
+      {
+        "input": {
+          "s": "a",
+          "t": "aa"
+        },
+        "output": ""
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "ADOBECODEBANC",
+          "t": "ABC"
+        },
+        "output": "BANC"
+      },
+      {
+        "input": {
+          "s": "a",
+          "t": "a"
+        },
+        "output": "a"
+      },
+      {
+        "input": {
+          "s": "a",
+          "t": "aa"
+        },
+        "output": ""
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s": "abc",
+          "t": "b"
+        },
+        "output": "b"
+      },
+      {
+        "input": {
+          "s": "ab",
+          "t": "b"
+        },
+        "output": "b"
+      },
+      {
+        "input": {
+          "s": "bba",
+          "t": "ab"
+        },
+        "output": "ba"
+      }
+    ]
+  },
+  "permutation_in_string": {
+    "id": "permutation_in_string",
+    "title": "Permutation in String",
+    "topic": "strings",
+    "difficulty": "medium",
+    "question": "Given strings s1 and s2, return true if s2 contains a permutation of s1 (s1's permutation is a substring of s2).",
+    "hints": [
+      "Sliding window of size len(s1).",
+      "Compare character frequencies in window vs s1.",
+      "Slide one character at a time."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "class Solution:\n    def checkInclusion(self, s1: str, s2: str) -> bool:\n        # Sliding window of size len(s1)\n        pass\n\ndef solve(s1, s2):\n    return Solution().checkInclusion(s1, s2)",
+    "optimal_solution": "def solve(s1, s2):\n    from collections import Counter\n    if len(s1) > len(s2): return False\n    need = Counter(s1)\n    window = Counter(s2[:len(s1)])\n    if window == need: return True\n    for i in range(len(s1), len(s2)):\n        window[s2[i]] += 1\n        left = s2[i-len(s1)]\n        window[left] -= 1\n        if window[left] == 0: del window[left]\n        if window == need: return True\n    return False",
+    "optimal_explanation": "Fixed-size sliding window. Compare Counter of window vs s1. O(s1 + s2) time.",
+    "approaches": [
+      {
+        "name": "Brute Force",
+        "complexity": "O(s1 × s2) time",
+        "desc": "Check every substring of length s1."
+      },
+      {
+        "name": "Sliding Window",
+        "complexity": "O(s1+s2) time",
+        "desc": "Fixed window of size s1, compare counters."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "s1": "ab",
+          "s2": "eidbaooo"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s1": "ab",
+          "s2": "eidboaoo"
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "s1": "ab",
+          "s2": "eidbaooo"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s1": "ab",
+          "s2": "eidboaoo"
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s1": "adc",
+          "s2": "dcda"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s1": "ab",
+          "s2": "ab"
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "s1": "abc",
+          "s2": "bbbca"
+        },
+        "output": false
+      }
+    ]
+  },
+  "validate_bst": {
+    "id": "validate_bst",
+    "title": "Validate Binary Search Tree",
+    "topic": "trees",
+    "difficulty": "medium",
+    "question": "Given a binary tree as level-order list, determine if it is a valid BST. Each node must be strictly between its min and max bounds.",
+    "hints": [
+      "Use recursive approach with min/max bounds.",
+      "Left subtree: max bound = current node value.",
+      "Right subtree: min bound = current node value."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List, Optional\n\nclass Solution:\n    def isValidBST(self, root: List) -> bool:\n        # Check BST property with bounds\n        pass\n\ndef solve(root):\n    return Solution().isValidBST(root)",
+    "optimal_solution": "def solve(root):\n    if not root: return True\n    def valid(node_val, lo, hi):\n        if node_val is None: return True\n        if not (lo < node_val < hi): return False\n        return True\n    # For list representation, do in-order check\n    vals = [x for x in root if x is not None]\n    return vals == sorted(set(vals)) and len(vals) == len(set(vals))",
+    "optimal_explanation": "In-order traversal of BST gives sorted sequence. Check if level-order has BST property. O(n) time.",
+    "approaches": [
+      {
+        "name": "In-order Check",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "In-order traversal should give sorted sequence."
+      },
+      {
+        "name": "Bounds Validation",
+        "complexity": "O(n) time, O(h) space",
+        "desc": "Recursively pass min/max bounds to each node."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "root": [
+            2,
+            1,
+            3
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "root": [
+            5,
+            1,
+            4,
+            null,
+            null,
+            3,
+            6
+          ]
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "root": [
+            2,
+            1,
+            3
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "root": [
+            5,
+            1,
+            4,
+            null,
+            null,
+            3,
+            6
+          ]
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "root": [
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            1
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "root": [
+            5,
+            4,
+            6,
+            null,
+            null,
+            3,
+            7
+          ]
+        },
+        "output": false
+      }
+    ]
+  },
+  "level_order_traversal": {
+    "id": "level_order_traversal",
+    "title": "Binary Tree Level Order Traversal",
+    "topic": "trees",
+    "difficulty": "medium",
+    "question": "Given a binary tree as level-order list, return the level-order traversal as list of lists (each list = one level).",
+    "hints": [
+      "Use BFS with a queue.",
+      "Process all nodes at current level before moving to next.",
+      "Queue size at start of each iteration = nodes at that level."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def levelOrder(self, root: List) -> List[List[int]]:\n        # BFS level by level\n        pass\n\ndef solve(root):\n    return Solution().levelOrder(root)",
+    "optimal_solution": "def solve(root):\n    if not root: return []\n    result, queue = [], [x for x in root if x is not None]\n    i = 0\n    level_size = 1\n    while i < len(root):\n        level = []\n        for _ in range(level_size):\n            if i < len(root) and root[i] is not None:\n                level.append(root[i])\n            i += 1\n        if level: result.append(level)\n        level_size *= 2\n    return result",
+    "optimal_explanation": "BFS using queue. Process each level completely before moving to next. O(n) time and space.",
+    "approaches": [
+      {
+        "name": "BFS with Queue",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Process level by level using queue. Most intuitive."
+      },
+      {
+        "name": "DFS with Level Tracking",
+        "complexity": "O(n) time, O(h) space",
+        "desc": "DFS while tracking depth to group nodes by level."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "root": [
+            3,
+            9,
+            20,
+            null,
+            null,
+            15,
+            7
+          ]
+        },
+        "output": [
+          [
+            3
+          ],
+          [
+            9,
+            20
+          ],
+          [
+            15,
+            7
+          ]
+        ]
+      },
+      {
+        "input": {
+          "root": [
+            1
+          ]
+        },
+        "output": [
+          [
+            1
+          ]
+        ]
+      },
+      {
+        "input": {
+          "root": []
+        },
+        "output": []
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "root": [
+            3,
+            9,
+            20,
+            null,
+            null,
+            15,
+            7
+          ]
+        },
+        "output": [
+          [
+            3
+          ],
+          [
+            9,
+            20
+          ],
+          [
+            15,
+            7
+          ]
+        ]
+      },
+      {
+        "input": {
+          "root": [
+            1
+          ]
+        },
+        "output": [
+          [
+            1
+          ]
+        ]
+      },
+      {
+        "input": {
+          "root": []
+        },
+        "output": []
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "root": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": [
+          [
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      },
+      {
+        "input": {
+          "root": [
+            0
+          ]
+        },
+        "output": [
+          [
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  "diameter_of_tree": {
+    "id": "diameter_of_tree",
+    "title": "Diameter of Binary Tree",
+    "topic": "trees",
+    "difficulty": "easy",
+    "question": "Given a binary tree as level-order list, return the length of the diameter (longest path between any two nodes).",
+    "hints": [
+      "Diameter at each node = left_depth + right_depth.",
+      "Use DFS, track max diameter seen.",
+      "Return depth to parent, update global max."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def diameterOfBinaryTree(self, root: List) -> int:\n        # DFS — diameter = left depth + right depth at each node\n        pass\n\ndef solve(root):\n    return Solution().diameterOfBinaryTree(root)",
+    "optimal_solution": "def solve(root):\n    if not root: return 0\n    n = len(root)\n    res = [0]\n    def depth(i):\n        if i >= n or root[i] is None: return 0\n        l, r = depth(2*i+1), depth(2*i+2)\n        res[0] = max(res[0], l+r)\n        return 1 + max(l, r)\n    depth(0)\n    return res[0]",
+    "optimal_explanation": "DFS. At each node, diameter = left_depth + right_depth. Track global max. O(n) time.",
+    "approaches": [
+      {
+        "name": "DFS",
+        "complexity": "O(n) time, O(h) space",
+        "desc": "Calculate depth at each node, diameter = left + right depth."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "root": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            2
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "root": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            2
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "root": [
+            1
+          ]
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            null,
+            null,
+            null,
+            null,
+            7
+          ]
+        },
+        "output": 4
+      }
+    ]
+  },
+  "unique_paths": {
+    "id": "unique_paths",
+    "title": "Unique Paths",
+    "topic": "dynamic-programming",
+    "difficulty": "medium",
+    "question": "A robot is on an m×n grid and can only move right or down. How many unique paths are there from top-left to bottom-right?",
+    "hints": [
+      "dp[i][j] = paths to reach cell (i,j).",
+      "dp[i][j] = dp[i-1][j] + dp[i][j-1].",
+      "Can optimize space to O(n) using 1D DP."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "class Solution:\n    def uniquePaths(self, m: int, n: int) -> int:\n        # DP: paths[i][j] = paths[i-1][j] + paths[i][j-1]\n        pass\n\ndef solve(m, n):\n    return Solution().uniquePaths(m, n)",
+    "optimal_solution": "def solve(m, n):\n    dp = [1] * n\n    for _ in range(1, m):\n        for j in range(1, n):\n            dp[j] += dp[j-1]\n    return dp[-1]",
+    "optimal_explanation": "1D DP. dp[j] accumulates paths. O(m×n) time, O(n) space.",
+    "approaches": [
+      {
+        "name": "Recursion",
+        "complexity": "O(2^(m+n)) time",
+        "desc": "Pure recursion — exponential."
+      },
+      {
+        "name": "2D DP",
+        "complexity": "O(m×n) time and space",
+        "desc": "Build path count grid."
+      },
+      {
+        "name": "1D DP",
+        "complexity": "O(m×n) time, O(n) space",
+        "desc": "Optimize space with rolling array."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "m": 3,
+          "n": 7
+        },
+        "output": 28
+      },
+      {
+        "input": {
+          "m": 3,
+          "n": 2
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "m": 1,
+          "n": 1
+        },
+        "output": 1
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "m": 3,
+          "n": 7
+        },
+        "output": 28
+      },
+      {
+        "input": {
+          "m": 3,
+          "n": 2
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "m": 1,
+          "n": 1
+        },
+        "output": 1
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "m": 2,
+          "n": 2
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "m": 1,
+          "n": 10
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "m": 7,
+          "n": 3
+        },
+        "output": 28
+      }
+    ]
+  },
+  "longest_common_subsequence": {
+    "id": "longest_common_subsequence",
+    "title": "Longest Common Subsequence",
+    "topic": "dynamic-programming",
+    "difficulty": "medium",
+    "question": "Given two strings text1 and text2, return the length of their longest common subsequence.",
+    "hints": [
+      "dp[i][j] = LCS of text1[:i] and text2[:j].",
+      "If chars match: dp[i][j] = dp[i-1][j-1] + 1.",
+      "Else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])."
+    ],
+    "companies": [
+      "Google",
+      "Amazon",
+      "Microsoft"
+    ],
+    "starter_code": "class Solution:\n    def longestCommonSubsequence(self, text1: str, text2: str) -> int:\n        # Classic 2D DP problem\n        pass\n\ndef solve(text1, text2):\n    return Solution().longestCommonSubsequence(text1, text2)",
+    "optimal_solution": "def solve(text1, text2):\n    m, n = len(text1), len(text2)\n    dp = [[0]*(n+1) for _ in range(m+1)]\n    for i in range(1,m+1):\n        for j in range(1,n+1):\n            if text1[i-1]==text2[j-1]: dp[i][j]=dp[i-1][j-1]+1\n            else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])\n    return dp[m][n]",
+    "optimal_explanation": "2D DP. Build table of LCS lengths. O(m×n) time and space.",
+    "approaches": [
+      {
+        "name": "Recursion",
+        "complexity": "O(2^(m+n)) time",
+        "desc": "Pure recursion without memoization."
+      },
+      {
+        "name": "Memoization",
+        "complexity": "O(m×n) time and space",
+        "desc": "Top-down DP with cache."
+      },
+      {
+        "name": "Bottom-up DP",
+        "complexity": "O(m×n) time and space",
+        "desc": "Build table iteratively. Most efficient."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "text1": "abcde",
+          "text2": "ace"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "text1": "abc",
+          "text2": "abc"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "text1": "abc",
+          "text2": "def"
+        },
+        "output": 0
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "text1": "abcde",
+          "text2": "ace"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "text1": "abc",
+          "text2": "abc"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "text1": "abc",
+          "text2": "def"
+        },
+        "output": 0
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "text1": "bl",
+          "text2": "yby"
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "text1": "ezupkr",
+          "text2": "ubmrapg"
+        },
+        "output": 2
+      }
+    ]
+  },
+  "decode_ways": {
+    "id": "decode_ways",
+    "title": "Decode Ways",
+    "topic": "dynamic-programming",
+    "difficulty": "medium",
+    "question": "A string of digits can be decoded where '1'→'A', '2'→'B', ..., '26'→'Z'. Return number of ways to decode the string s.",
+    "hints": [
+      "dp[i] = ways to decode s[:i].",
+      "Single digit valid if s[i] != '0'.",
+      "Two digits valid if 10 <= int(s[i-1:i+1]) <= 26."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "class Solution:\n    def numDecodings(self, s: str) -> int:\n        # DP: ways to decode each prefix\n        pass\n\ndef solve(s):\n    return Solution().numDecodings(s)",
+    "optimal_solution": "def solve(s):\n    if not s or s[0]=='0': return 0\n    n = len(s)\n    dp = [0]*(n+1)\n    dp[0], dp[1] = 1, 1\n    for i in range(2, n+1):\n        if s[i-1] != '0': dp[i] += dp[i-1]\n        if 10 <= int(s[i-2:i]) <= 26: dp[i] += dp[i-2]\n    return dp[n]",
+    "optimal_explanation": "DP. Check if single/two digit decode is valid. O(n) time, O(n) space.",
+    "approaches": [
+      {
+        "name": "Recursion",
+        "complexity": "O(2^n) time",
+        "desc": "Try single and double digit at each step."
+      },
+      {
+        "name": "DP with Array",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Build dp array of decode counts."
+      },
+      {
+        "name": "DP Optimized",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Only keep last 2 values."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "s": "12"
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "s": "226"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "06"
+        },
+        "output": 0
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "12"
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "s": "226"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "06"
+        },
+        "output": 0
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s": "0"
+        },
+        "output": 0
+      },
+      {
+        "input": {
+          "s": "11106"
+        },
+        "output": 2
+      },
+      {
+        "input": {
+          "s": "10"
+        },
+        "output": 1
+      }
+    ]
+  },
+  "clone_graph": {
+    "id": "clone_graph",
+    "title": "Clone Graph",
+    "topic": "graphs",
+    "difficulty": "medium",
+    "question": "Given an adjacency list of a graph, return a deep copy. Input: list of adjacency lists where index=node, value=neighbors.",
+    "hints": [
+      "Use DFS/BFS with a hashmap to track cloned nodes.",
+      "hashmap[original] = clone prevents cycles.",
+      "Visit each node once."
+    ],
+    "companies": [
+      "Facebook",
+      "Amazon",
+      "Google"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def cloneGraph(self, adj: List[List[int]]) -> List[List[int]]:\n        # DFS with hashmap to avoid cycles\n        pass\n\ndef solve(adj):\n    return Solution().cloneGraph(adj)",
+    "optimal_solution": "def solve(adj):\n    if not adj: return []\n    # Return deep copy of adjacency list\n    return [list(neighbors) for neighbors in adj]",
+    "optimal_explanation": "Deep copy adjacency list. For actual graph nodes, use DFS with visited hashmap. O(V+E) time.",
+    "approaches": [
+      {
+        "name": "DFS + HashMap",
+        "complexity": "O(V+E) time, O(V) space",
+        "desc": "Clone each node once, track with hashmap to handle cycles."
+      },
+      {
+        "name": "BFS + HashMap",
+        "complexity": "O(V+E) time, O(V) space",
+        "desc": "Same idea but BFS traversal."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "adj": [
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              3
+            ]
+          ]
+        },
+        "output": [
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      {
+        "input": {
+          "adj": [
+            []
+          ]
+        },
+        "output": [
+          []
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "adj": [
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              1,
+              3
+            ]
+          ]
+        },
+        "output": [
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      {
+        "input": {
+          "adj": [
+            []
+          ]
+        },
+        "output": [
+          []
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "adj": []
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "adj": [
+            [
+              2
+            ],
+            [
+              1
+            ]
+          ]
+        },
+        "output": [
+          [
+            2
+          ],
+          [
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  "course_schedule": {
+    "id": "course_schedule",
+    "title": "Course Schedule",
+    "topic": "graphs",
+    "difficulty": "medium",
+    "question": "There are numCourses courses (0 to n-1). Given prerequisites pairs [a,b] meaning b before a, determine if you can finish all courses.",
+    "hints": [
+      "This is cycle detection in a directed graph.",
+      "Use DFS with 3 states: unvisited, visiting, visited.",
+      "If you revisit a 'visiting' node — cycle detected."
+    ],
+    "companies": [
+      "Amazon",
+      "Facebook",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:\n        # Cycle detection in directed graph\n        pass\n\ndef solve(numCourses, prerequisites):\n    return Solution().canFinish(numCourses, prerequisites)",
+    "optimal_solution": "def solve(numCourses, prerequisites):\n    graph = [[] for _ in range(numCourses)]\n    for a, b in prerequisites: graph[a].append(b)\n    state = [0] * numCourses\n    def dfs(node):\n        if state[node] == 1: return False\n        if state[node] == 2: return True\n        state[node] = 1\n        for nei in graph[node]:\n            if not dfs(nei): return False\n        state[node] = 2\n        return True\n    return all(dfs(i) for i in range(numCourses))",
+    "optimal_explanation": "DFS cycle detection. 3 states: 0=unvisited, 1=visiting, 2=done. Cycle if we revisit a visiting node. O(V+E).",
+    "approaches": [
+      {
+        "name": "DFS Cycle Detection",
+        "complexity": "O(V+E) time, O(V) space",
+        "desc": "3-color DFS. White=unvisited, Gray=visiting, Black=done."
+      },
+      {
+        "name": "Topological Sort (BFS)",
+        "complexity": "O(V+E) time, O(V) space",
+        "desc": "Kahn's algorithm. If all nodes processed, no cycle."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "numCourses": 2,
+          "prerequisites": [
+            [
+              1,
+              0
+            ]
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "numCourses": 2,
+          "prerequisites": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "numCourses": 2,
+          "prerequisites": [
+            [
+              1,
+              0
+            ]
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "numCourses": 2,
+          "prerequisites": [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "numCourses": 1,
+          "prerequisites": []
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "numCourses": 3,
+          "prerequisites": [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "numCourses": 3,
+          "prerequisites": [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        },
+        "output": true
+      }
+    ]
+  },
+  "linked_list_cycle": {
+    "id": "linked_list_cycle",
+    "title": "Linked List Cycle",
+    "topic": "linked-lists",
+    "difficulty": "easy",
+    "question": "Given a linked list as array, determine if it has a cycle. For simplicity, return True if any value repeats in adjacent positions.",
+    "hints": [
+      "Floyd's cycle detection: slow and fast pointers.",
+      "Slow moves 1 step, fast moves 2 steps.",
+      "If they meet, there's a cycle."
+    ],
+    "companies": [
+      "Amazon",
+      "Microsoft",
+      "Google"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def hasCycle(self, head: List[int]) -> bool:\n        # Floyd's tortoise and hare\n        pass\n\ndef solve(head):\n    return Solution().hasCycle(head)",
+    "optimal_solution": "def solve(head):\n    seen = set()\n    for val in head:\n        if val in seen: return True\n        seen.add(val)\n    return False",
+    "optimal_explanation": "HashSet tracks seen values. O(n) time, O(n) space. For real linked list, use Floyd's O(1) space algorithm.",
+    "approaches": [
+      {
+        "name": "HashSet",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Track visited nodes in a set."
+      },
+      {
+        "name": "Floyd's Algorithm",
+        "complexity": "O(n) time, O(1) space",
+        "desc": "Slow/fast pointers. If they meet, cycle exists."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "head": [
+            3,
+            2,
+            0,
+            4,
+            2
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "head": [
+            3,
+            2,
+            0,
+            4,
+            2
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3
+          ]
+        },
+        "output": false
+      }
+    ]
+  },
+  "reorder_list": {
+    "id": "reorder_list",
+    "title": "Reorder List",
+    "topic": "linked-lists",
+    "difficulty": "medium",
+    "question": "Given linked list L0→L1→...→Ln, reorder to L0→Ln→L1→Ln-1→... Input/output as list.",
+    "hints": [
+      "Find middle, reverse second half, merge two halves.",
+      "Three steps: find mid, reverse, merge.",
+      "Two pointer for middle."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def reorderList(self, head: List[int]) -> List[int]:\n        # Find mid, reverse second half, merge\n        pass\n\ndef solve(head):\n    return Solution().reorderList(head)",
+    "optimal_solution": "def solve(head):\n    if len(head) <= 2: return head\n    mid = len(head)//2\n    first = head[:mid]\n    second = head[mid:][::-1]\n    result = []\n    for i in range(len(second)):\n        result.append(first[i])\n        result.append(second[i])\n    if len(first) > len(second):\n        result.append(first[-1])\n    return result",
+    "optimal_explanation": "Split at middle, reverse second half, interleave. O(n) time, O(n) space.",
+    "approaches": [
+      {
+        "name": "Split + Reverse + Merge",
+        "complexity": "O(n) time, O(n) space",
+        "desc": "Three-step approach: find mid, reverse, merge alternating."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": [
+          1,
+          4,
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": [
+          1,
+          5,
+          2,
+          4,
+          3
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "output": [
+          1,
+          4,
+          2,
+          3
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "output": [
+          1,
+          5,
+          2,
+          4,
+          3
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": [
+          1,
+          2
+        ]
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": [
+          1
+        ]
+      }
+    ]
+  },
+  "kth_largest_element": {
+    "id": "kth_largest_element",
+    "title": "Kth Largest Element in Array",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an integer array nums and integer k, return the kth largest element (not kth distinct).",
+    "hints": [
+      "Use a min-heap of size k.",
+      "Or use QuickSelect for O(n) average.",
+      "Sorting gives O(n log n) — not optimal."
+    ],
+    "companies": [
+      "Amazon",
+      "Facebook",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def findKthLargest(self, nums: List[int], k: int) -> int:\n        # Min-heap of size k or QuickSelect\n        pass\n\ndef solve(nums, k):\n    return Solution().findKthLargest(nums, k)",
+    "optimal_solution": "def solve(nums, k):\n    import heapq\n    return heapq.nlargest(k, nums)[-1]",
+    "optimal_explanation": "Min-heap of size k. Pop when size > k. Top = kth largest. O(n log k) time.",
+    "approaches": [
+      {
+        "name": "Sorting",
+        "complexity": "O(n log n) time",
+        "desc": "Sort and return nums[-k]."
+      },
+      {
+        "name": "Min-Heap",
+        "complexity": "O(n log k) time, O(k) space",
+        "desc": "Maintain heap of size k. Top = kth largest."
+      },
+      {
+        "name": "QuickSelect",
+        "complexity": "O(n) average, O(n²) worst",
+        "desc": "Partition like quicksort. Average O(n)."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            1,
+            5,
+            6,
+            4
+          ],
+          "k": 2
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            3,
+            1,
+            2,
+            4,
+            5,
+            5,
+            6
+          ],
+          "k": 4
+        },
+        "output": 4
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            1,
+            5,
+            6,
+            4
+          ],
+          "k": 2
+        },
+        "output": 5
+      },
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            3,
+            1,
+            2,
+            4,
+            5,
+            5,
+            6
+          ],
+          "k": 4
+        },
+        "output": 4
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1
+          ],
+          "k": 1
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            1
+          ],
+          "k": 2
+        },
+        "output": 1
+      }
+    ]
+  },
+  "subsets": {
+    "id": "subsets",
+    "title": "Subsets",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an integer array nums of unique elements, return all possible subsets (power set). Order doesn't matter.",
+    "hints": [
+      "Backtracking: include or exclude each element.",
+      "Or iterate: for each num, add to all existing subsets.",
+      "Result has 2^n subsets."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def subsets(self, nums: List[int]) -> List[List[int]]:\n        # Backtracking or iterative\n        pass\n\ndef solve(nums):\n    return sorted([sorted(s) for s in Solution().subsets(nums)])",
+    "optimal_solution": "def solve(nums):\n    result = [[]]\n    for num in nums:\n        result += [sub + [num] for sub in result]\n    return sorted([sorted(s) for s in result])",
+    "optimal_explanation": "Iterative. For each num, double result by adding num to each existing subset. O(n × 2^n) time.",
+    "approaches": [
+      {
+        "name": "Backtracking",
+        "complexity": "O(n × 2^n) time",
+        "desc": "Include/exclude each element recursively."
+      },
+      {
+        "name": "Iterative",
+        "complexity": "O(n × 2^n) time",
+        "desc": "For each num, add to all existing subsets."
+      },
+      {
+        "name": "Bit Manipulation",
+        "complexity": "O(n × 2^n) time",
+        "desc": "Each number 0 to 2^n represents a subset."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3
+          ]
+        },
+        "output": [
+          [],
+          [
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0
+          ]
+        },
+        "output": [
+          [],
+          [
+            0
+          ]
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2,
+            3
+          ]
+        },
+        "output": [
+          [],
+          [
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0
+          ]
+        },
+        "output": [
+          [],
+          [
+            0
+          ]
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1,
+            2
+          ]
+        },
+        "output": [
+          [],
+          [
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2
+          ]
+        ]
+      }
+    ]
+  },
+  "combination_sum": {
+    "id": "combination_sum",
+    "title": "Combination Sum",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given distinct integers candidates and a target, return all unique combinations that sum to target. Same number can be used multiple times.",
+    "hints": [
+      "Backtracking with start index.",
+      "At each step: include current (stay at same index) or skip (move to next).",
+      "Stop when sum exceeds target."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:\n        # Backtracking\n        pass\n\ndef solve(candidates, target):\n    return sorted([sorted(c) for c in Solution().combinationSum(candidates, target)])",
+    "optimal_solution": "def solve(candidates, target):\n    result = []\n    def bt(start, curr, remaining):\n        if remaining == 0: result.append(list(curr)); return\n        for i in range(start, len(candidates)):\n            if candidates[i] <= remaining:\n                curr.append(candidates[i])\n                bt(i, curr, remaining - candidates[i])\n                curr.pop()\n    candidates.sort()\n    bt(0, [], target)\n    return sorted([sorted(c) for c in result])",
+    "optimal_explanation": "Backtracking with start index. Reuse current element. Prune when exceeds target. O(n^(T/M)) time.",
+    "approaches": [
+      {
+        "name": "Backtracking",
+        "complexity": "O(n^(T/M)) time",
+        "desc": "Try each candidate, recurse, backtrack. Prune when sum > target."
+      }
+    ],
+    "test_cases": [
+      {
+        "input": {
+          "candidates": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "target": 7
+        },
+        "output": [
+          [
+            2,
+            2,
+            3
+          ],
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "input": {
+          "candidates": [
+            2,
+            3,
+            5
+          ],
+          "target": 8
+        },
+        "output": [
+          [
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            3,
+            3
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "candidates": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "target": 7
+        },
+        "output": [
+          [
+            2,
+            2,
+            3
+          ],
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "input": {
+          "candidates": [
+            2,
+            3,
+            5
+          ],
+          "target": 8
+        },
+        "output": [
+          [
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            3,
+            3
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "candidates": [
+            2
+          ],
+          "target": 1
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "candidates": [
+            1
+          ],
+          "target": 2
+        },
+        "output": [
+          [
+            1,
+            1
+          ]
+        ]
+      }
+    ]
   }
 }
