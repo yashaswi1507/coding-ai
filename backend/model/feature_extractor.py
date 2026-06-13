@@ -91,64 +91,149 @@ def _extract_solution_code(code: str) -> str:
 # ── Code Feature Extraction (15 features) ────────────────────────────────────
 
 def _extract_code_features(code: str) -> list:
+    """
+    Language-agnostic feature extraction.
+    Works for Python, Java, C++, JavaScript, C.
+    """
     c = code.lower()
     lines = [l for l in code.split("\n") if l.strip()]
 
-    # 0: nested loops (bool)
-    nested = 1.0 if c.count("for ") >= 2 or c.count("while ") >= 2 else 0.0
+    # ── 0: Nested loops ───────────────────────────────────────────────────
+    # All languages use for/while
+    loop_keywords = c.count("for ") + c.count("for(") + c.count("while ")
+    nested = 1.0 if loop_keywords >= 2 else 0.0
 
-    # 1: loop count (normalized 0-1, cap at 4)
-    loop_count = min((c.count("for ") + c.count("while ")), 4) / 4.0
+    # ── 1: Loop count ─────────────────────────────────────────────────────
+    loop_count = min(loop_keywords, 4) / 4.0
 
-    # 2: uses hashmap / dict (bool)
-    has_dict = 1.0 if ("dict" in c or "{}" in c or "= {}" in c or
-                        "defaultdict" in c or "counter" in c) else 0.0
+    # ── 2: Has hashmap/dict ───────────────────────────────────────────────
+    # Python: dict, {}, defaultdict, Counter
+    # Java: HashMap, LinkedHashMap, TreeMap, Hashtable
+    # C++: unordered_map, map, std::map
+    # JS: Map, new Map, {}
+    # C: struct with key-value
+    hashmap_patterns = [
+        "dict", "{}", "defaultdict", "counter",           # Python
+        "hashmap", "linkedhashmap", "treemap",             # Java
+        "unordered_map", "std::map",                       # C++
+        "new map(", "map()",                               # JS
+        "= {}", "seen =",                                  # Generic
+    ]
+    has_dict = 1.0 if any(p in c for p in hashmap_patterns) else 0.0
 
-    # 3: uses set (bool)
-    has_set = 1.0 if ("set()" in c or "= set(" in c or "seen = {" in c) else 0.0
+    # ── 3: Has set ────────────────────────────────────────────────────────
+    # Python: set(), .add()
+    # Java: HashSet, TreeSet, LinkedHashSet
+    # C++: unordered_set, set
+    # JS: new Set(), Set
+    set_patterns = [
+        "set()", "= set(", ".add(",                        # Python
+        "hashset", "treeset", "linkedhashset",             # Java
+        "unordered_set", "std::set",                       # C++
+        "new set(", "new set(",                            # JS
+    ]
+    has_set = 1.0 if any(p in c for p in set_patterns) else 0.0
 
-    # 4: uses sorting (bool)
-    has_sort = 1.0 if "sort" in c else 0.0
+    # ── 4: Has sorting ────────────────────────────────────────────────────
+    # All languages: sort keyword present
+    sort_patterns = ["sort", "arrays.sort", "collections.sort",
+                     "std::sort", "qsort"]
+    has_sort = 1.0 if any(p in c for p in sort_patterns) else 0.0
 
-    # 5: uses recursion (bool) — function calls itself
-    has_recursion = _detect_recursion(code)
+    # ── 5: Has recursion ──────────────────────────────────────────────────
+    has_recursion = _detect_recursion_universal(code)
 
-    # 6: edge case handling (bool)
-    has_edge = 1.0 if ("if not " in c or "if len(" in c or
-                        "is none" in c or "== []" in c or
-                        "== 0" in c or "return []" in c) else 0.0
+    # ── 6: Edge case handling ─────────────────────────────────────────────
+    # Python: if not, is None, len(
+    # Java: == null, .isEmpty(), .length == 0
+    # C++: == nullptr, .empty(), .size() == 0
+    # JS: === null, === undefined, .length === 0
+    edge_patterns = [
+        "if not ", "is none", "== []", "return []",        # Python
+        "== null", ".isempty()", ".length == 0",            # Java
+        "== nullptr", ".empty()", ".size() == 0",           # C++
+        "=== null", "=== undefined", ".length === 0",       # JS
+        "if (!",                                            # C/C++/Java
+    ]
+    has_edge = 1.0 if any(p in c for p in edge_patterns) or "if len(" in c else 0.0
 
-    # 7: line count (normalized 0-1, cap at 40 lines)
+    # ── 7: Line count ─────────────────────────────────────────────────────
     line_count = min(len(lines), 40) / 40.0
 
-    # 8: has comments (bool)
-    has_comments = 1.0 if "#" in code else 0.0
+    # ── 8: Has comments ───────────────────────────────────────────────────
+    # Python: #, Java/C++/JS/C: //, /* */
+    has_comments = 1.0 if ("#" in code or "//" in code or "/*" in code) else 0.0
 
-    # 9: list comprehension usage (bool)
-    has_listcomp = 1.0 if re.search(r'\[.+for.+in.+\]', c) else 0.0
+    # ── 9: Functional/elegant pattern ────────────────────────────────────
+    # Python list comp, Java streams, JS array methods
+    elegant_patterns = [
+        r'\[.+for.+in.+\]',     # Python list comp
+        r'\.stream()\.',         # Java streams
+        r'\.filter\(',           # JS/Java filter
+        r'\.map\(',              # JS/Java map
+        r'\.reduce\(',           # JS reduce
+    ]
+    has_elegant = 1.0 if any(re.search(p, c) for p in elegant_patterns) else 0.0
 
-    # 10: uses defaultdict (bool)
-    has_defaultdict = 1.0 if "defaultdict" in c else 0.0
+    # ── 10: Stack/Queue usage ─────────────────────────────────────────────
+    stack_patterns = ["stack", "queue", "deque", "arraydeque",
+                      "linkedlist", "priorityqueue", "collections.deque"]
+    has_stack = 1.0 if any(p in c for p in stack_patterns) else 0.0
 
-    # 11: binary search pattern (lo/hi/mid) (bool)
-    has_binsearch = 1.0 if (("lo" in c and "hi" in c) or
-                             ("left" in c and "right" in c and "mid" in c)) else 0.0
+    # ── 11: Binary search pattern ─────────────────────────────────────────
+    has_binsearch = 1.0 if (
+        ("lo" in c and "hi" in c) or
+        ("left" in c and "right" in c and "mid" in c) or
+        ("low" in c and "high" in c) or
+        "binarysearch" in c or "collections.binarysearch" in c
+    ) else 0.0
 
-    # 12: DP array pattern (bool)
-    has_dp = 1.0 if re.search(r'\bdp\b', c) else 0.0
+    # ── 12: DP pattern ────────────────────────────────────────────────────
+    has_dp = 1.0 if re.search(r'\bdp\b', c) or "memo" in c or "cache" in c else 0.0
 
-    # 13: two-pointer pattern (bool)
-    has_two_ptr = 1.0 if (("left" in c and "right" in c) and
-                           "sort" in c) else 0.0
+    # ── 13: Two pointers ──────────────────────────────────────────────────
+    has_two_ptr = 1.0 if (
+        ("left" in c and "right" in c) or
+        ("start" in c and "end" in c) or
+        ("i" in c and "j" in c and loop_keywords >= 1)
+    ) else 0.0
 
-    # 14: function count (normalized 0-1, cap at 5)
-    func_count = min(len(re.findall(r'\bdef\s+\w+', code)), 5) / 5.0
+    # ── 14: Function/method count ─────────────────────────────────────────
+    # Python: def, Java/C++: return type + name, JS: function
+    func_patterns = len(re.findall(r'\bdef\s+\w+', code))        # Python
+    func_patterns += len(re.findall(r'\bfunction\s+\w+', code))  # JS
+    func_patterns += len(re.findall(r'\bpublic\s+\w+\s+\w+\s*\(', code))  # Java
+    func_count = min(func_patterns, 5) / 5.0
 
     return [
         nested, loop_count, has_dict, has_set, has_sort,
-        has_recursion, has_edge, line_count, has_comments, has_listcomp,
-        has_defaultdict, has_binsearch, has_dp, has_two_ptr, func_count
+        has_recursion, has_edge, line_count, has_comments, has_elegant,
+        has_stack, has_binsearch, has_dp, has_two_ptr, func_count
     ]
+
+
+def _detect_recursion_universal(code: str) -> float:
+    """Detect recursion in any language."""
+    lines = code.split("\n")
+    func_names = []
+
+    # Python
+    for line in lines:
+        if line.strip().startswith("def "):
+            try:
+                name = line.strip().split("(")[0].replace("def ", "").strip()
+                func_names.append(name)
+            except: pass
+
+    # Java/C++/JS — find method names
+    for match in re.finditer(r'(?:public|private|protected|static|void|int|bool|\w+)\s+(\w+)\s*\(', code):
+        func_names.append(match.group(1))
+
+    for name in func_names:
+        if name in ["main", "solve", "constructor"]: continue
+        if code.lower().count(name.lower()) >= 2:
+            return 1.0
+    return 0.0
 
 
 def _detect_recursion(code: str) -> float:

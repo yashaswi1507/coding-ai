@@ -105,6 +105,28 @@ if tab == "🧩 Solve":
         st.caption(f"{icon} {diff.title()} · 📂 {problem['topic']} · 🏢 {tags}")
     st.info(problem["question"])
 
+    # ── Language Selector ────────────────────────────────────────────────────
+    languages_data = api("/languages/") or []
+    lang_options = {}
+    for l in languages_data:
+        status = "✅" if l["available"] else "⚠️"
+        lang_options[f"{l['icon']} {l['name']} {status}"] = l["name"]
+
+    if not lang_options:
+        lang_options = {"🐍 Python ✅": "Python"}
+
+    selected_lang_label = st.selectbox(
+        "💻 Language",
+        list(lang_options.keys()),
+        key=f"lang_{selected_id}"
+    )
+    selected_language = lang_options[selected_lang_label]
+
+    # Show install hint if language not available
+    for l in languages_data:
+        if l["name"] == selected_language and not l["available"]:
+            st.warning(f"⚠️ {l.get('install_hint', f'Install {selected_language} to use this option')}")
+
     # Alternative approaches
     if problem.get("approaches"):
         with st.expander("🔄 Different Approaches", expanded=False):
@@ -186,15 +208,18 @@ if tab == "🧩 Solve":
 
     # Code
     st.subheader("💻 Your Code")
-    default_code = problem.get("starter_code", "def solve():\n    pass")
+    lang_code_key = f"code_{selected_id}_{selected_language}"
+    if lang_code_key not in st.session_state:
+        lang_starter = api(f"/starter-code/{selected_id}?language={selected_language}")
+        if lang_starter and lang_starter.get("code"):
+            st.session_state[lang_code_key] = lang_starter["code"]
+        else:
+            st.session_state[lang_code_key] = problem.get("starter_code", "def solve():\n    pass")
+    code = st.text_area(
+        f"Write your {selected_language} solution:",
+        height=340, key=lang_code_key
+    )
 
-    # Reset code when problem changes
-    if f"code_{selected_id}" not in st.session_state:
-        st.session_state[f"code_{selected_id}"] = default_code
-
-    code = st.text_area("Write inside solve():", height=320,
-                        key=f"code_{selected_id}")
-    
     if st.button("🚀 Submit & Get AI Feedback", type="primary", use_container_width=True):
         # Reset interview state for new submission
         st.session_state.interview_q_idx = 0
@@ -203,7 +228,8 @@ if tab == "🧩 Solve":
         with st.spinner("🧠 Analyzing thinking..."):
             result = api("/submit/", "POST", {
                 "problem_id": selected_id, "user_code": code,
-                "thinking_text": thinking, "user_id": USER_ID
+                "thinking_text": thinking, "user_id": USER_ID,
+                "language": selected_language
             })
             st.session_state.result = result
 
@@ -941,6 +967,37 @@ elif tab == "🛠 Admin":
     c3.metric("Unlabeled",   admin_stats.get("unlabeled",0))
     c4.metric("Engine", "🤖 Neural Net" if admin_stats.get("model_available") else "📏 Rule-Based")
 
+    # AI Status
+    ai_status = api("/ai-status/") or {}
+    if ai_status:
+        active = ai_status.get("active", "pytorch")
+        status_map = {
+            "groq":    ("☁️ Groq AI", "green",  "All languages — 24/7 cloud"),
+            "ollama":  ("🖥️ Ollama",  "blue",   "All languages — local"),
+            "pytorch": ("🧠 PyTorch", "orange", "Python only — always works"),
+        }
+        label, color, desc = status_map.get(active, ("Unknown", "grey", ""))
+        st.info(f"**Active AI Engine: {label}** — {desc}")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("☁️ Groq",    "✅ Ready" if ai_status.get("groq",{}).get("available") else "❌ No Key")
+        col2.metric("🖥️ Ollama",  "✅ Running" if ai_status.get("ollama",{}).get("available") else "❌ Offline")
+        col3.metric("🧠 PyTorch", "✅ Always")
+
+    # ── Problem Scheduler Status ─────────────────────────────────────────────
+    sched = api("/scheduler/status/") or {}
+    if sched:
+        st.subheader("📅 Problem Scheduler")
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Total Problems", sched.get("active_problems", 0))
+        c2.metric("Bank Remaining", sched.get("bank_unreleased", 0))
+        c3.metric("Next Release", f"{sched.get('next_release_in_hours', 0)}h")
+        c4.metric("Mode", "🤖 Ollama" if sched.get("ollama_available") else "📚 Bank")
+
+        if sched.get("last_added"):
+            st.caption(f"Last released: {', '.join(sched['last_added'])}")
+        st.caption("✅ Fully automatic — releases every 2 days without any manual action!")
+        st.divider()
+
     # Auto training status
     train_status = api("/training-status/") or {}
     if train_status:
@@ -960,6 +1017,48 @@ elif tab == "🛠 Admin":
     if st.button("🚀 Train Now", type="primary"):
         res = api("/admin/train/", "POST", {"epochs": int(epochs), "seed_only": seed_only})
         if res: st.success(f"✅ {res.get('message','')}")
+
+    # ── LLM Training Data Generator ───────────────────────────────────────
+    st.divider()
+    st.subheader("🤖 AI Training Data Generator")
+    st.caption("Use LLaMA3 to auto-generate Java/C++/JS training data — Knowledge Distillation!")
+
+    gen_status = api("/admin/generation-status/") or {}
+    if gen_status:
+        c1, c2 = st.columns(2)
+        c1.metric("Total Samples", gen_status.get("total_samples", 0))
+        groq_ok = gen_status.get("groq_available", False)
+        ollama_ok = gen_status.get("ollama_available", False)
+        engine = "☁️ Groq" if groq_ok else "🖥️ Ollama" if ollama_ok else "❌ No AI"
+        c2.metric("AI Engine", engine)
+
+        by_lang = gen_status.get("by_language", {})
+        if by_lang:
+            for lang, count in by_lang.items():
+                st.caption(f"{lang}: {count} samples")
+
+    col1, col2, col3 = st.columns(3)
+    langs = []
+    if col1.checkbox("☕ Java",       value=True): langs.append("Java")
+    if col2.checkbox("⚙️ C++",        value=True): langs.append("C++")
+    if col3.checkbox("🟨 JavaScript", value=True): langs.append("JavaScript")
+
+    count_per = st.slider("Samples per problem", 3, 20, 5)
+
+    if st.button("🚀 Generate + Train", type="primary", use_container_width=True):
+        if not langs:
+            st.warning("Select at least one language!")
+        else:
+            res = api("/admin/generate-training-data/", "POST", {
+                "languages": langs,
+                "problem_ids": [],
+                "count_per": count_per
+            })
+            if res:
+                st.success(f"✅ {res.get('message','')}")
+                st.info(f"Expected: ~{res.get('total_expected',0)} samples → auto-retraining after!")
+            else:
+                st.error("Generation failed — check if Groq key or Ollama is set!")
 
     st.subheader("📋 Label Submissions")
     samples = api("/admin/unlabeled/?limit=10") or []

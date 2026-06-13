@@ -5,6 +5,8 @@ Uses OUR OWN PyTorch model. Zero external API dependency.
 
 from model.inference import predict, is_model_available
 from model.data_collector import collect_submission
+from services.ollama_analyzer import analyze_code, get_ai_status
+from services.ollama_analyzer import analyze_code, get_ai_status
 
 APPROACH_LABELS_FEEDBACK = {
     "brute_force": "⚠️ Brute-force approach detected — O(n²) or worse",
@@ -73,15 +75,64 @@ REFLECTION_QUESTIONS = {
 
 
 def analyze_thinking(user_code, thinking_text, problem,
-                     passed_tests=0, total_tests=0):
-    """Full thinking analysis using our own model. Zero external API."""
+                     passed_tests=0, total_tests=0, language="Python"):
+    """
+    Full thinking analysis.
+    - Ollama available → analyze any language with LLM
+    - Python → PyTorch model + rule-based
+    - Other  → thinking text analysis only
+    """
 
+    # ── Try AI (Groq → Ollama → fallback) ────────────────────────────────
+    ai_result = analyze_code(user_code, thinking_text, problem, language)
+    if ai_result:
+        score    = ai_result.get("thinking_score", 50)
+        approach = ai_result.get("code_approach", "basic")
+        source   = ai_result.get("model_source", "ai")
+
+        # Source label
+        source_labels = {
+            "groq":   "☁️ Groq AI (LLaMA3) — all languages supported!",
+            "ollama": "🖥️ Local Ollama — all languages supported!",
+        }
+        ai_result["feedback"] = ai_result.get("feedback", [])
+        ai_result["feedback"].append(source_labels.get(source, "🤖 AI Analysis"))
+
+        # Collect training data for Python only
+        if language == "Python" and user_code.strip():
+            try:
+                collect_submission(
+                    code=user_code, thinking_text=thinking_text,
+                    problem_id=problem.get("id","unknown"),
+                    topic=problem.get("topic","unknown"),
+                    difficulty=problem.get("difficulty","easy"),
+                    rule_based_score=score, rule_based_approach=approach,
+                    passed_tests=passed_tests, total_tests=total_tests,
+                )
+            except Exception:
+                pass
+
+        return {
+            "thinking_score":       score,
+            "code_approach":        approach,
+            "feedback":             ai_result.get("feedback", []),
+            "suggestions":          ai_result.get("suggestions", []),
+            "strengths":            ai_result.get("strengths", []),
+            "areas_to_improve":     ai_result.get("areas_to_improve", []),
+            "reflection_questions": ai_result.get("reflection_questions", [])[:4],
+            "complexity_analysis":  ai_result.get("complexity_analysis", {}),
+            "model_source":         source,
+            "confidence":           ai_result.get("confidence", 0.85),
+            "features":             [0]*25,
+        }
+
+    # ── Fallback: PyTorch model (Python only) ─────────────────────────────
     prediction = predict(user_code, thinking_text)
     score    = prediction["thinking_score"]
     approach = prediction["approach"]
     source   = prediction["source"]
 
-    # Override approach if set/dict detected (fix for set-based solutions)
+    # Override approach if set/dict detected
     approach = _detect_approach_override(user_code, approach)
 
     # Build feedback
@@ -105,16 +156,17 @@ def analyze_thinking(user_code, thinking_text, problem,
     else:
         feedback.append("📏 Rule-based engine — train model for better accuracy")
 
-    # Auto-collect for training
+    # Auto-collect for training — Python only
     try:
-        collect_submission(
-            code=user_code, thinking_text=thinking_text,
-            problem_id=problem.get("id", "unknown"),
-            topic=problem.get("topic", "unknown"),
-            difficulty=problem.get("difficulty", "easy"),
-            rule_based_score=score, rule_based_approach=approach,
-            passed_tests=passed_tests, total_tests=total_tests,
-        )
+        if user_code.strip() and language == "Python":
+            collect_submission(
+                code=user_code, thinking_text=thinking_text,
+                problem_id=problem.get("id", "unknown"),
+                topic=problem.get("topic", "unknown"),
+                difficulty=problem.get("difficulty", "easy"),
+                rule_based_score=score, rule_based_approach=approach,
+                passed_tests=passed_tests, total_tests=total_tests,
+            )
     except Exception:
         pass
 

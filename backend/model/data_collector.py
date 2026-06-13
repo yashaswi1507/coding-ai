@@ -220,6 +220,52 @@ def create_seed_data():
             "problem_id": "binary_search", "topic": "binary-search", "difficulty": "easy",
             "thinking_score": 88, "approach": "optimal", "labeled": True
         },
+
+        # ── JAVA SAMPLES ──────────────────────────────────────────────────────
+        {
+            "code": "import java.util.*;\npublic class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        HashMap<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int comp = target - nums[i];\n            if (seen.containsKey(comp)) return new int[]{seen.get(comp), i};\n            seen.put(nums[i], i);\n        }\n        return new int[]{};\n    }\n}",
+            "thinking_text": "Using HashMap for O(1) lookup. For each number check if complement exists. O(n) time O(n) space.",
+            "problem_id": "two_sum", "topic": "arrays", "difficulty": "easy",
+            "thinking_score": 88, "approach": "optimized", "labeled": True
+        },
+        {
+            "code": "import java.util.*;\npublic class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        for (int i = 0; i < nums.length; i++)\n            for (int j = i+1; j < nums.length; j++)\n                if (nums[i] + nums[j] == target) return new int[]{i, j};\n        return new int[]{};\n    }\n}",
+            "thinking_text": "Checking all pairs of numbers.",
+            "problem_id": "two_sum", "topic": "arrays", "difficulty": "easy",
+            "thinking_score": 20, "approach": "brute_force", "labeled": True
+        },
+        {
+            "code": "import java.util.*;\npublic class Solution {\n    public boolean containsDuplicate(int[] nums) {\n        HashSet<Integer> seen = new HashSet<>();\n        for (int num : nums) { if (!seen.add(num)) return true; }\n        return false;\n    }\n}",
+            "thinking_text": "HashSet add returns false if element exists. O(n) time O(n) space elegant solution.",
+            "problem_id": "contains_duplicate", "topic": "arrays", "difficulty": "easy",
+            "thinking_score": 85, "approach": "optimized", "labeled": True
+        },
+        # ── C++ SAMPLES ───────────────────────────────────────────────────────
+        {
+            "code": "#include<vector>\n#include<unordered_map>\nusing namespace std;\nclass Solution{public:\n    vector<int> twoSum(vector<int>& nums,int target){\n        unordered_map<int,int> seen;\n        for(int i=0;i<nums.size();i++){\n            int c=target-nums[i];\n            if(seen.count(c)) return {seen[c],i};\n            seen[nums[i]]=i;\n        }\n        return {};\n    }\n};",
+            "thinking_text": "unordered_map gives O(1) average lookup. Single pass O(n) time O(n) space. Much better than nested loops.",
+            "problem_id": "two_sum", "topic": "arrays", "difficulty": "easy",
+            "thinking_score": 90, "approach": "optimized", "labeled": True
+        },
+        {
+            "code": "#include<vector>\nusing namespace std;\nclass Solution{public:\n    int search(vector<int>&nums,int target){\n        int lo=0,hi=nums.size()-1;\n        while(lo<=hi){int mid=lo+(hi-lo)/2;\n            if(nums[mid]==target)return mid;\n            else if(nums[mid]<target)lo=mid+1;\n            else hi=mid-1;}\n        return -1;\n    }\n};",
+            "thinking_text": "Binary search. lo+(hi-lo)/2 avoids overflow. O(log n) time O(1) space.",
+            "problem_id": "binary_search", "topic": "binary-search", "difficulty": "easy",
+            "thinking_score": 88, "approach": "optimal", "labeled": True
+        },
+        # ── JAVASCRIPT SAMPLES ────────────────────────────────────────────────
+        {
+            "code": "var twoSum=function(nums,target){\n    const seen=new Map();\n    for(let i=0;i<nums.length;i++){\n        const c=target-nums[i];\n        if(seen.has(c))return[seen.get(c),i];\n        seen.set(nums[i],i);\n    }\n    return[];\n};",
+            "thinking_text": "Map for O(1) lookup. Check complement each iteration. O(n) time O(n) space.",
+            "problem_id": "two_sum", "topic": "arrays", "difficulty": "easy",
+            "thinking_score": 82, "approach": "optimized", "labeled": True
+        },
+        {
+            "code": "var containsDuplicate=function(nums){\n    return new Set(nums).size!==nums.length;\n};",
+            "thinking_text": "Set removes duplicates. Compare sizes. O(n) time O(n) space. Clean one-liner optimal solution.",
+            "problem_id": "contains_duplicate", "topic": "arrays", "difficulty": "easy",
+            "thinking_score": 90, "approach": "optimal", "labeled": True
+        },
     ]
 
     labeled = _load_json(LABELED_FILE)

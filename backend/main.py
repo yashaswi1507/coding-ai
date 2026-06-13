@@ -24,12 +24,17 @@ create_tables()
 from model.auto_trainer import startup_train_if_needed, get_training_status
 startup_train_if_needed()
 
+# Start problem scheduler
+from utils.problem_scheduler import start_scheduler, get_schedule_status, manual_release
+start_scheduler()
+
 class SubmitRequest(BaseModel):
     problem_id: str
     user_code: str
     thinking_text: str = ""
     user_id: str = "guest"
     display_name: str = "Anonymous"
+    language: str = "Python"
 
 class ReflectionRequest(BaseModel):
     question: str
@@ -69,7 +74,7 @@ def get_problem(problem_id: str):
 def submit_solution(body: SubmitRequest):
     problem = get_problem_by_id(body.problem_id)
     if not problem: raise HTTPException(status_code=404, detail="Problem not found")
-    return evaluate_solution(problem, body.user_code, body.thinking_text, body.user_id)
+    return evaluate_solution(problem, body.user_code, body.thinking_text, body.user_id, language=body.language)
 
 @app.post("/score-reflection/")
 def score_reflection_endpoint(body: ReflectionRequest):
@@ -191,7 +196,8 @@ def admin_train(body: TrainRequest):
 
 # ── XP & Evolution ────────────────────────────────────────────────────────────
 from services.analytics import (
-    get_user_xp, get_weakness_evolution, get_thinking_replay
+    get_user_xp, get_weakness_evolution, get_thinking_replay,
+    add_xp_tables
 )
 from database import add_xp_tables as _add_xp
 
@@ -302,3 +308,85 @@ def cognitive_report(user_id: str = "guest"):
 @app.get("/training-status/")
 def training_status():
     return get_training_status()
+
+
+# ── Problem Scheduler ─────────────────────────────────────────────────────────
+@app.get("/scheduler/status/")
+def scheduler_status():
+    return get_schedule_status()
+
+@app.post("/scheduler/release/")
+def scheduler_release(count: int = 3):
+    added = manual_release(count)
+    return {"success": True, "added": added, "count": len(added)}
+
+
+@app.get("/languages/")
+def get_languages():
+    from services.code_executor import check_language_available
+    from utils.language_templates import SUPPORTED_LANGUAGES, LANGUAGE_INFO
+    result = []
+    for lang in SUPPORTED_LANGUAGES:
+        status = check_language_available(lang)
+        result.append({
+            "name": lang,
+            "icon": LANGUAGE_INFO[lang]["icon"],
+            "available": status["available"],
+            "install_hint": status.get("install_hint", "")
+        })
+    return result
+
+@app.get("/starter-code/{problem_id}")
+def get_starter_code(problem_id: str, language: str = "Python"):
+    from utils.language_templates import get_starter_code
+    problem = get_problem_by_id(problem_id)
+    if not problem:
+        raise HTTPException(status_code=404, detail="Problem not found")
+    code = get_starter_code(problem_id, problem["title"], language)
+    return {"language": language, "code": code}
+
+
+@app.get("/ai-status/")
+def ai_status():
+    from services.ollama_analyzer import get_ai_status
+    return get_ai_status()
+
+
+# ── LLM Training Data Generation ─────────────────────────────────────────────
+class GenerateDataRequest(BaseModel):
+    languages: list = ["Java", "C++", "JavaScript"]
+    problem_ids: list = []  # Empty = use first 5 problems
+    count_per: int = 5      # Samples per problem per language
+
+@app.post("/admin/generate-training-data/")
+def generate_training_data(body: GenerateDataRequest):
+    import threading
+    from model.llm_data_generator import bulk_generate
+
+    problems = load_problems()
+    if body.problem_ids:
+        selected = [problems[pid] for pid in body.problem_ids if pid in problems]
+    else:
+        # Use first 5 easy problems by default
+        selected = [p for p in problems.values() if p["difficulty"] == "easy"][:5]
+
+    def run():
+        total = bulk_generate(selected, body.languages, body.count_per)
+        print(f"Generation complete: {total} samples added")
+        # Auto retrain after generation
+        from model.trainer import train
+        train(epochs=150, batch_size=8)
+        print("Retraining complete!")
+
+    threading.Thread(target=run, daemon=True).start()
+
+    return {
+        "success": True,
+        "message": f"Generating {len(selected)} problems × {len(body.languages)} languages × {body.count_per} samples each",
+        "total_expected": len(selected) * len(body.languages) * body.count_per
+    }
+
+@app.get("/admin/generation-status/")
+def generation_status():
+    from model.llm_data_generator import get_generation_status
+    return get_generation_status()

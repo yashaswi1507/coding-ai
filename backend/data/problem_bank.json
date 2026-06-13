@@ -1,0 +1,1116 @@
+[
+  {
+    "id": "palindrome_number",
+    "title": "Palindrome Number",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given an integer x, return true if x is a palindrome (reads same forwards and backwards). Negative numbers are not palindromes.",
+    "hints": [
+      "Convert to string and compare.",
+      "Or reverse the number mathematically.",
+      "Negative numbers always return False."
+    ],
+    "companies": [
+      "Amazon",
+      "Google"
+    ],
+    "starter_code": "class Solution:\n    def isPalindrome(self, x: int) -> bool:\n        pass\n\ndef solve(x):\n    return Solution().isPalindrome(x)",
+    "optimal_solution": "def solve(x):\n    if x < 0: return False\n    return str(x) == str(x)[::-1]",
+    "optimal_explanation": "Convert to string, compare with reverse. O(log n) time.",
+    "test_cases": [
+      {
+        "input": {
+          "x": 121
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": -121
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "x": 10
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "x": 121
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": -121
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "x": 10
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "x": 0
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": 1221
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "x": 12321
+        },
+        "output": true
+      }
+    ]
+  },
+  {
+    "id": "roman_to_integer",
+    "title": "Roman to Integer",
+    "topic": "strings",
+    "difficulty": "easy",
+    "question": "Given a roman numeral string, convert it to integer. Roman numerals: I=1, V=5, X=10, L=50, C=100, D=500, M=1000.",
+    "hints": [
+      "Process right to left.",
+      "If current < previous, subtract it.",
+      "Otherwise add it."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "class Solution:\n    def romanToInt(self, s: str) -> int:\n        pass\n\ndef solve(s):\n    return Solution().romanToInt(s)",
+    "optimal_solution": "def solve(s):\n    vals = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}\n    result = 0\n    for i in range(len(s)):\n        if i+1 < len(s) and vals[s[i]] < vals[s[i+1]]:\n            result -= vals[s[i]]\n        else:\n            result += vals[s[i]]\n    return result",
+    "optimal_explanation": "Process left to right. If current < next, subtract. Else add. O(n) time.",
+    "test_cases": [
+      {
+        "input": {
+          "s": "III"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "LVIII"
+        },
+        "output": 58
+      },
+      {
+        "input": {
+          "s": "MCMXCIV"
+        },
+        "output": 1994
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "s": "III"
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "s": "LVIII"
+        },
+        "output": 58
+      },
+      {
+        "input": {
+          "s": "MCMXCIV"
+        },
+        "output": 1994
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "s": "IV"
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "s": "IX"
+        },
+        "output": 9
+      },
+      {
+        "input": {
+          "s": "XL"
+        },
+        "output": 40
+      }
+    ]
+  },
+  {
+    "id": "longest_common_prefix",
+    "title": "Longest Common Prefix",
+    "topic": "strings",
+    "difficulty": "easy",
+    "question": "Write a function to find the longest common prefix string amongst an array of strings. Return '' if there is no common prefix.",
+    "hints": [
+      "Take first string as reference.",
+      "Compare character by character with all others.",
+      "Stop when mismatch found."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def longestCommonPrefix(self, strs: List[str]) -> str:\n        pass\n\ndef solve(strs):\n    return Solution().longestCommonPrefix(strs)",
+    "optimal_solution": "def solve(strs):\n    if not strs: return ''\n    prefix = strs[0]\n    for s in strs[1:]:\n        while not s.startswith(prefix):\n            prefix = prefix[:-1]\n            if not prefix: return ''\n    return prefix",
+    "optimal_explanation": "Use first string as prefix, shrink until all strings start with it. O(S) time where S = total chars.",
+    "test_cases": [
+      {
+        "input": {
+          "strs": [
+            "flower",
+            "flow",
+            "flight"
+          ]
+        },
+        "output": "fl"
+      },
+      {
+        "input": {
+          "strs": [
+            "dog",
+            "racecar",
+            "car"
+          ]
+        },
+        "output": ""
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "strs": [
+            "flower",
+            "flow",
+            "flight"
+          ]
+        },
+        "output": "fl"
+      },
+      {
+        "input": {
+          "strs": [
+            "dog",
+            "racecar",
+            "car"
+          ]
+        },
+        "output": ""
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "strs": [
+            "a"
+          ]
+        },
+        "output": "a"
+      },
+      {
+        "input": {
+          "strs": [
+            "ab",
+            "a"
+          ]
+        },
+        "output": "a"
+      }
+    ]
+  },
+  {
+    "id": "move_zeroes",
+    "title": "Move Zeroes",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given an array nums, move all 0s to the end while maintaining the relative order of non-zero elements. Do it in-place.",
+    "hints": [
+      "Two pointers: one for position to insert non-zero.",
+      "Scan and place non-zeros at front.",
+      "Fill rest with zeros."
+    ],
+    "companies": [
+      "Facebook",
+      "Amazon",
+      "Bloomberg"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def moveZeroes(self, nums: List[int]) -> List[int]:\n        pass\n\ndef solve(nums):\n    return Solution().moveZeroes(nums)",
+    "optimal_solution": "def solve(nums):\n    pos = 0\n    for n in nums:\n        if n != 0:\n            nums[pos] = n\n            pos += 1\n    while pos < len(nums):\n        nums[pos] = 0\n        pos += 1\n    return nums",
+    "optimal_explanation": "Two-pointer. Place non-zeros at front, fill rest with zeros. O(n) time, O(1) space.",
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            0,
+            3,
+            12
+          ]
+        },
+        "output": [
+          1,
+          3,
+          12,
+          0,
+          0
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0
+          ]
+        },
+        "output": [
+          0
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            0,
+            1
+          ]
+        },
+        "output": [
+          1,
+          1,
+          0
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            0,
+            3,
+            12
+          ]
+        },
+        "output": [
+          1,
+          3,
+          12,
+          0,
+          0
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0
+          ]
+        },
+        "output": [
+          0
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            0,
+            1
+          ]
+        },
+        "output": [
+          1,
+          1,
+          0
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": [
+          1
+        ]
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            0,
+            1
+          ]
+        },
+        "output": [
+          1,
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "id": "single_number",
+    "title": "Single Number",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given a non-empty array where every element appears twice except one, find that single element. Must be O(n) time O(1) space.",
+    "hints": [
+      "XOR of a number with itself = 0.",
+      "XOR of a number with 0 = the number.",
+      "XOR all numbers — pairs cancel out."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def singleNumber(self, nums: List[int]) -> int:\n        # Hint: XOR!\n        pass\n\ndef solve(nums):\n    return Solution().singleNumber(nums)",
+    "optimal_solution": "def solve(nums):\n    result = 0\n    for n in nums: result ^= n\n    return result",
+    "optimal_explanation": "XOR all numbers. Pairs cancel (a^a=0). Single number remains. O(n) time, O(1) space.",
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            2,
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            4,
+            1,
+            2,
+            1,
+            2
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            2,
+            2,
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            4,
+            1,
+            2,
+            1,
+            2
+          ]
+        },
+        "output": 4
+      },
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            1,
+            3,
+            2,
+            2
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            0,
+            1,
+            0
+          ]
+        },
+        "output": 1
+      }
+    ]
+  },
+  {
+    "id": "palindrome_linked_list",
+    "title": "Palindrome Linked List",
+    "topic": "linked-lists",
+    "difficulty": "easy",
+    "question": "Given a linked list as array, determine if it is a palindrome.",
+    "hints": [
+      "Simple: convert to array and check.",
+      "Optimal: find middle, reverse second half, compare.",
+      "Two pointers for O(1) space."
+    ],
+    "companies": [
+      "Amazon",
+      "Facebook",
+      "Google"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def isPalindrome(self, head: List[int]) -> bool:\n        pass\n\ndef solve(head):\n    return Solution().isPalindrome(head)",
+    "optimal_solution": "def solve(head):\n    return head == head[::-1]",
+    "optimal_explanation": "Compare list with its reverse. For real linked list, reverse second half. O(n) time.",
+    "test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            2,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": true
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            2,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2
+          ]
+        },
+        "output": false
+      },
+      {
+        "input": {
+          "head": [
+            1
+          ]
+        },
+        "output": true
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3,
+            2,
+            1
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "head": [
+            1,
+            2,
+            3
+          ]
+        },
+        "output": false
+      }
+    ]
+  },
+  {
+    "id": "balanced_binary_tree",
+    "title": "Balanced Binary Tree",
+    "topic": "trees",
+    "difficulty": "easy",
+    "question": "Given a binary tree as level-order list, determine if it is height-balanced (depth of subtrees never differs by more than 1).",
+    "hints": [
+      "DFS to get height of each subtree.",
+      "At each node, check |left_height - right_height| <= 1.",
+      "Return -1 to signal unbalanced."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def isBalanced(self, root: List) -> bool:\n        pass\n\ndef solve(root):\n    return Solution().isBalanced(root)",
+    "optimal_solution": "def solve(root):\n    if not root: return True\n    def height(i):\n        if i >= len(root) or root[i] is None: return 0\n        l, r = height(2*i+1), height(2*i+2)\n        if l == -1 or r == -1 or abs(l-r) > 1: return -1\n        return 1 + max(l, r)\n    return height(0) != -1",
+    "optimal_explanation": "DFS. Return -1 if unbalanced subtree found. O(n) time, O(h) space.",
+    "test_cases": [
+      {
+        "input": {
+          "root": [
+            3,
+            9,
+            20,
+            null,
+            null,
+            15,
+            7
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            2,
+            2,
+            3,
+            3,
+            null,
+            null,
+            4,
+            4
+          ]
+        },
+        "output": false
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "root": [
+            3,
+            9,
+            20,
+            null,
+            null,
+            15,
+            7
+          ]
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "root": [
+            1,
+            2,
+            2,
+            3,
+            3,
+            null,
+            null,
+            4,
+            4
+          ]
+        },
+        "output": false
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "root": []
+        },
+        "output": true
+      },
+      {
+        "input": {
+          "root": [
+            1
+          ]
+        },
+        "output": true
+      }
+    ]
+  },
+  {
+    "id": "letter_combinations",
+    "title": "Letter Combinations of Phone Number",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given a string of digits 2-9, return all possible letter combinations. Phone mapping: 2=abc, 3=def, 4=ghi, 5=jkl, 6=mno, 7=pqrs, 8=tuv, 9=wxyz.",
+    "hints": [
+      "Backtracking.",
+      "For each digit, try all mapped letters.",
+      "Recurse with remaining digits."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def letterCombinations(self, digits: str) -> List[str]:\n        pass\n\ndef solve(digits):\n    return sorted(Solution().letterCombinations(digits))",
+    "optimal_solution": "def solve(digits):\n    if not digits: return []\n    phone = {'2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz'}\n    result = []\n    def bt(i, curr):\n        if i == len(digits): result.append(curr); return\n        for c in phone[digits[i]]: bt(i+1, curr+c)\n    bt(0, '')\n    return sorted(result)",
+    "optimal_explanation": "Backtracking. For each digit, iterate mapped letters and recurse. O(4^n × n) time.",
+    "test_cases": [
+      {
+        "input": {
+          "digits": "23"
+        },
+        "output": [
+          "ad",
+          "ae",
+          "af",
+          "bd",
+          "be",
+          "bf",
+          "cd",
+          "ce",
+          "cf"
+        ]
+      },
+      {
+        "input": {
+          "digits": ""
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "digits": "2"
+        },
+        "output": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "digits": "23"
+        },
+        "output": [
+          "ad",
+          "ae",
+          "af",
+          "bd",
+          "be",
+          "bf",
+          "cd",
+          "ce",
+          "cf"
+        ]
+      },
+      {
+        "input": {
+          "digits": ""
+        },
+        "output": []
+      },
+      {
+        "input": {
+          "digits": "2"
+        },
+        "output": [
+          "a",
+          "b",
+          "c"
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "digits": "9"
+        },
+        "output": [
+          "w",
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      {
+        "input": {
+          "digits": "234"
+        },
+        "output": [
+          "adg",
+          "adh",
+          "adi",
+          "aeg",
+          "aeh",
+          "aei",
+          "afg",
+          "afh",
+          "afi",
+          "bdg",
+          "bdh",
+          "bdi",
+          "beg",
+          "beh",
+          "bei",
+          "bfg",
+          "bfh",
+          "bfi",
+          "cdg",
+          "cdh",
+          "cdi",
+          "ceg",
+          "ceh",
+          "cei",
+          "cfg",
+          "cfh",
+          "cfi"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "majority_element",
+    "title": "Majority Element",
+    "topic": "arrays",
+    "difficulty": "easy",
+    "question": "Given array nums of size n, return the majority element (appears more than n/2 times). Guaranteed to exist.",
+    "hints": [
+      "HashMap: count frequencies.",
+      "Boyer-Moore Voting: O(1) space.",
+      "Sort and return middle element."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Facebook"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def majorityElement(self, nums: List[int]) -> int:\n        pass\n\ndef solve(nums):\n    return Solution().majorityElement(nums)",
+    "optimal_solution": "def solve(nums):\n    count, candidate = 0, None\n    for n in nums:\n        if count == 0: candidate = n\n        count += 1 if n == candidate else -1\n    return candidate",
+    "optimal_explanation": "Boyer-Moore Voting. Track candidate and count. Majority survives all cancellations. O(n) time, O(1) space.",
+    "test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            3
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
+        },
+        "output": 2
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "nums": [
+            3,
+            2,
+            3
+          ]
+        },
+        "output": 3
+      },
+      {
+        "input": {
+          "nums": [
+            2,
+            2,
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
+        },
+        "output": 2
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "nums": [
+            1
+          ]
+        },
+        "output": 1
+      },
+      {
+        "input": {
+          "nums": [
+            1,
+            1,
+            2
+          ]
+        },
+        "output": 1
+      }
+    ]
+  },
+  {
+    "id": "spiral_matrix",
+    "title": "Spiral Matrix",
+    "topic": "arrays",
+    "difficulty": "medium",
+    "question": "Given an m×n matrix, return all elements in spiral order.",
+    "hints": [
+      "Use four boundaries: top, bottom, left, right.",
+      "Traverse right, down, left, up, shrink boundaries.",
+      "Stop when boundaries cross."
+    ],
+    "companies": [
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Apple"
+    ],
+    "starter_code": "from typing import List\n\nclass Solution:\n    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:\n        pass\n\ndef solve(matrix):\n    return Solution().spiralOrder(matrix)",
+    "optimal_solution": "def solve(matrix):\n    result = []\n    top, bottom, left, right = 0, len(matrix)-1, 0, len(matrix[0])-1\n    while top <= bottom and left <= right:\n        for c in range(left, right+1): result.append(matrix[top][c])\n        top += 1\n        for r in range(top, bottom+1): result.append(matrix[r][right])\n        right -= 1\n        if top <= bottom:\n            for c in range(right, left-1, -1): result.append(matrix[bottom][c])\n            bottom -= 1\n        if left <= right:\n            for r in range(bottom, top-1, -1): result.append(matrix[r][left])\n            left += 1\n    return result",
+    "optimal_explanation": "Four boundaries. Traverse each side, shrink. O(m×n) time, O(1) space.",
+    "test_cases": [
+      {
+        "input": {
+          "matrix": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ],
+            [
+              7,
+              8,
+              9
+            ]
+          ]
+        },
+        "output": [
+          1,
+          2,
+          3,
+          6,
+          9,
+          8,
+          7,
+          4,
+          5
+        ]
+      },
+      {
+        "input": {
+          "matrix": [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            [
+              5,
+              6,
+              7,
+              8
+            ],
+            [
+              9,
+              10,
+              11,
+              12
+            ]
+          ]
+        },
+        "output": [
+          1,
+          2,
+          3,
+          4,
+          8,
+          12,
+          11,
+          10,
+          9,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "visible_test_cases": [
+      {
+        "input": {
+          "matrix": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4,
+              5,
+              6
+            ],
+            [
+              7,
+              8,
+              9
+            ]
+          ]
+        },
+        "output": [
+          1,
+          2,
+          3,
+          6,
+          9,
+          8,
+          7,
+          4,
+          5
+        ]
+      },
+      {
+        "input": {
+          "matrix": [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            [
+              5,
+              6,
+              7,
+              8
+            ],
+            [
+              9,
+              10,
+              11,
+              12
+            ]
+          ]
+        },
+        "output": [
+          1,
+          2,
+          3,
+          4,
+          8,
+          12,
+          11,
+          10,
+          9,
+          5,
+          6,
+          7
+        ]
+      }
+    ],
+    "hidden_test_cases": [
+      {
+        "input": {
+          "matrix": [
+            [
+              1
+            ]
+          ]
+        },
+        "output": [
+          1
+        ]
+      },
+      {
+        "input": {
+          "matrix": [
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        },
+        "output": [
+          1,
+          2,
+          4,
+          3
+        ]
+      }
+    ]
+  }
+]

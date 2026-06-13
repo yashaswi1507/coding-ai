@@ -12,7 +12,7 @@ from database import get_connection
 import json
 
 def evaluate_solution(problem, user_code, thinking_text,
-                      user_id="guest", is_daily=False):
+                      user_id="guest", is_daily=False, language="Python"):
 
     # No code written — return early, no XP, no score
     def _is_empty_solution(code: str) -> bool:
@@ -61,7 +61,7 @@ def evaluate_solution(problem, user_code, thinking_text,
     hidden_passed = total_passed = 0
 
     for test in visible_cases:
-        execution = run_code(user_code, test["input"])
+        execution = run_code(user_code, test["input"], language)
         if not execution["success"]:
             visible_results.append({"passed": False, "message": execution["error"],
                                     "expected": test["output"], "got": None})
@@ -71,7 +71,7 @@ def evaluate_solution(problem, user_code, thinking_text,
         visible_results.append(v)
 
     for test in hidden_cases:
-        execution = run_code(user_code, test["input"])
+        execution = run_code(user_code, test["input"], language)
         if not execution["success"]: continue
         v = validate_output(test["output"], execution["output"])
         if v["passed"]:
@@ -82,15 +82,18 @@ def evaluate_solution(problem, user_code, thinking_text,
     visible_pass = sum(1 for r in visible_results if r["passed"])
     all_passed   = total_passed == total_cases
 
+    # Analyze thinking — Ollama handles all languages, fallback for Python only
     thinking_analysis = analyze_thinking(
         user_code=user_code, thinking_text=thinking_text,
         problem=problem, passed_tests=total_passed, total_tests=total_cases,
+        language=language
     )
-    followup_questions = generate_followup_questions(user_code, thinking_text, problem)
+    # Edge case detection — Python only (rule-based)
+    missing_edge_cases = detect_missing_edge_cases(user_code, problem.get("topic",""))         if language == "Python" else []
 
-    features = thinking_analysis.get("features", [0]*25)
+    followup_questions = generate_followup_questions(user_code, thinking_text, problem)
+    features           = thinking_analysis.get("features", [0]*25)
     score_breakdown    = get_score_breakdown(features, thinking_text, thinking_analysis.get("code_approach","basic"))
-    missing_edge_cases = detect_missing_edge_cases(user_code, problem.get("topic",""))
 
     # Save to DB
     conn = get_connection()
